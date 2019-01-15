@@ -1,0 +1,19 @@
+\babel@toc {french}{}
+\babel@toc {french}{}
+\contentsline {part}{Partie 1\hspace {1em}Le moteur de jeu}{7}
+\contentsline {chapter}{\numberline {1}Le jeu T\IeC {\'e}tris}{9}
+\contentsline {section}{\numberline {1}Histoire}{9}
+\contentsline {section}{\numberline {2}R\IeC {\`e}gles du jeu adapt\IeC {\'e}es au projet}{9}
+\contentsline {chapter}{\numberline {2}Impl\IeC {\'e}mentation du moteur de jeu}{11}
+\contentsline {section}{\numberline {1}Structures de donn\IeC {\'e}es}{11}
+\contentsline {section}{\numberline {2}La classe Tetramino}{11}
+\contentsline {section}{\numberline {3}La classe Board}{11}
+\contentsline {section}{\numberline {4}La classe TetrisEngine}{11}
+\contentsline {chapter}{\numberline {3}Les agents}{13}
+\contentsline {section}{\numberline {1}G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s}{13}
+\contentsline {section}{\numberline {2}Joueur humain en mode texte}{13}
+\contentsline {section}{\numberline {3}Agent al\IeC {\'e}atoire}{13}
+\contentsline {section}{\numberline {4}Agent par \IeC {\'e}valuation des coups}{13}
+\contentsline {section}{\numberline {5}Agent par filtrage}{13}
+\contentsline {part}{Partie 2\hspace {1em}Optimisation par algorithmes g\IeC {\'e}n\IeC {\'e}tiques}{15}
+\contentsline {part}{Partie 3\hspace {1em}Optimisation par reinforcement learning}{17}

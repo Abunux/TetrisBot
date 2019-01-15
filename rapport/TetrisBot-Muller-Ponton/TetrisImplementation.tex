@@ -1,0 +1,26 @@
+\chapter{Implémentation du moteur de jeu}
+
+\section{Structures de données}
+Le moteur de jeu est construit autour de trois classes :
+\begin{itemize}
+	\item \pyth{Tetramino} : les blocs 
+	\item \pyth{Board} : la grille de jeu
+	\item \pyth{TetrisEngine} : le moteur de jeu qui fait le lien entre les deux classes précédentes
+\end{itemize} 
+
+\section{La classe Tetramino}
+La classe \pyth{Tetramino} est responsable de le gestion des blocs et de leurs rotations. Elle est implémentée dans le fichier \pyth{tetramino.py}.
+
+Un bloc est défini par :
+\begin{itemize}
+	\item Un \pyth{id} qui permet d'identifier son type
+	\item Un glyphe de base qui représente la pièce sans rotation dans une matrice carrée. Chaque case occupée par le bloc est codée par son \pyth{id} et les cases vides par 0.
+	\item Le nombre de rotations (par exemple le O n'a qu'une seul rotation, le I en a deux et le T en a quatre)
+\end{itemize}
+
+
+
+\section{La classe Board}
+
+\section{La classe TetrisEngine}
+

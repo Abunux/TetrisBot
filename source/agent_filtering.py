@@ -22,6 +22,7 @@ from agent import *
 
 class AgentFiltering(Agent):
     def __init__(self,  temporisation=0.1, silent=False):
+        super().__init__(name="Filtering")
         self.engine = TetrisEngine(
             self.getMove, temporisation=temporisation, silent=silent)
 

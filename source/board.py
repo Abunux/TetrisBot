@@ -17,7 +17,6 @@ from copy import deepcopy
 
 
 class Board:
-
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height
@@ -30,6 +29,9 @@ class Board:
         self.nb_holes = 0
         self.nb_lines = 0
 
+    #=========================================================================
+    # Gestion des cellules de la grille
+    #=========================================================================
     def getCell(self, i, j):
         """ Renvoie le contenu de la cellule (i,j) """
         return self.grid[i][j]
@@ -52,6 +54,14 @@ class Board:
                 return False
         return True
 
+    def removeLine(self, i):
+        """ Supprime la ligne i """
+        del self.grid[i]
+        self.grid.append([0] * self.width)
+
+    #=========================================================================
+    # Satistiques de la grille
+    #=========================================================================
     def columnHeight(self, j):
         """ Renvoie la hauteur de la colonne j """
         i = self.height + 1
@@ -73,25 +83,6 @@ class Board:
         """ Renvoie la somme des hauteurs des colonnes """
         self.sum_heights = sum(self.column_heights)
         return self.sum_heights
-
-    def removeLine(self, i):
-        """ Supprime la ligne i """
-        del self.grid[i]
-        self.grid.append([0] * self.width)
-
-    def processLines(self):
-        """ Enlève les lignes finies """
-        self.nb_lines = 0
-        max_height = self.height
-        i = 0
-        while i < max_height:
-            if self.isLineFull(i):
-                self.removeLine(i)
-                max_height -= 1
-                self.nb_lines += 1
-            else:
-                i += 1
-        return self.nb_lines
 
     def getBumpiness(self):
         """ Renvoie la somme des valeurs absolues des différences
@@ -130,6 +121,26 @@ class Board:
         self.getBumpiness()
         self.getNbHoles()
 
+    #=========================================================================
+    # Gestion des lignes
+    #=========================================================================
+    def processLines(self):
+        """ Enlève les lignes finies et renvoie le nombre de lignes enlevées """
+        self.nb_lines = 0
+        max_height = self.height
+        i = 0
+        while i < max_height:
+            if self.isLineFull(i):
+                self.removeLine(i)
+                max_height -= 1
+                self.nb_lines += 1
+            else:
+                i += 1
+        return self.nb_lines
+
+    #=========================================================================
+    # Méthodes utilitaires
+    #=========================================================================
     def copy(self):
         """ Renvoie une copie de la grille """
         return deepcopy(self)
@@ -177,10 +188,10 @@ if __name__ == "__main__":
     board.setCell(1, 1, 0)
     board.setCell(1, 2, 2)
     board.setCell(2, 0, 3)
-    board.setCell(2, 1, 3)
+    board.setCell(2, 1, 0)
     board.setCell(2, 2, 3)
-    board.setCell(3, 0, 4)
-    board.setCell(3, 1, 0)
+    board.setCell(3, 0, 0)
+    board.setCell(3, 1, 4)
     board.setCell(3, 2, 4)
 
     board.printInfos()

@@ -36,14 +36,14 @@ def mergeChains(string1, string2):
 
 
 def center(string, length):
-    """Centre la string sur la longueur"""
+    """Centre la chaîne string sur la longueur"""
     c = len(string)
     l = length
     return ' ' * ((l - c) // 2) + string + ' ' * ((l - c) // 2 + (l - c) % 2) + '\n'
 
 
 def boxed(text, prefix='', window_width=0, window_height=0):
-    """Affiche chaque ligne de text précédée d'un préfixe
+    """Affiche chaque ligne de texte précédée d'un préfixe
     dans une boîte de largeur window_width"""
     lines = text.split('\n')
     if window_width == 0:

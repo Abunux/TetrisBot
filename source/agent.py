@@ -30,28 +30,6 @@ class Agent:
         self.name = name
         self.decription = description
 
-#     def allMovesStats(self):
-#         """ Renvoie les stats de chaque mouvement """
-#         self.all_moves = {}
-#         for (j, r) in self.engine.getPossibleMovesDirect():
-#             engine = self.engine.copy()
-#             engine.placeBlockDirect(j, r)
-#             block_height = engine.getBlockHeight()
-#             nb_lines = engine.board.processLines()
-#             max_height = engine.board.getMaxHeight()
-#             sum_heights = engine.board.getSumHeights()
-#             nb_holes = engine.board.getNbHoles()
-#             bumpiness = engine.board.getBumpiness()
-#             self.all_moves[(j, r)] = {
-#                 "block_height": block_height,
-#                 "nb_lines": nb_lines,
-#                 "max_height": max_height,
-#                 "sum_heights": sum_heights,
-#                 "nb_holes": nb_holes,
-#                 "bumpiness": bumpiness
-#             }
-#         return self.all_moves
-
     def allMovesStats(self):
         """ Renvoie les stats de chaque mouvement """
         self.all_moves = {}

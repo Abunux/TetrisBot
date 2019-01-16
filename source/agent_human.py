@@ -22,6 +22,7 @@ import os
 
 class AgentHuman(Agent):
     def __init__(self, temporisation=0, silent=False):
+        super().__init__(name="Human")
         self.engine = TetrisEngine(
             self.getMove, temporisation=temporisation, silent=silent)
 

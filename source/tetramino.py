@@ -53,8 +53,8 @@ class Tetramino:
                 j += 1
             if j > jmax:
                 jmax = j - 1
-
-        return (imin, jmin, imax, jmax)
+        self.bounding_box = (imin, jmin, imax, jmax)
+        return self.bounding_box
 
     def makeRotations(self):
         """ Crée les differentes rotations de la pièce """
@@ -108,7 +108,9 @@ class Tetramino:
         return strGlyph.strip()
 
 
+#=========================================================================
 # Création des blocs
+#=========================================================================
 ID_IBLOCK = 1
 IBLOCK = Tetramino(ID_IBLOCK,
                    [[0, 0, 0, 0],

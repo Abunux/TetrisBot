@@ -2,6 +2,8 @@ from tetris_engine import *
 from random import *
 from time import time
 from stats import *
+# from queue import Queue
+# import threading
 
 #-----------------------------------------------------
 #
@@ -29,31 +31,79 @@ class Agent:
     def __init__(self, name="", description=""):
         self.name = name
         self.decription = description
+#         self.q = Queue()
+
+    def getMoveStats(self, move):
+        (j, r) = move
+        engine = self.engine.copy()
+        engine.placeBlockDirect(j, r)
+        nb_lines = engine.board.processLines()
+        engine.board.updateStats()
+        max_height = engine.board.max_height
+        sum_heights = engine.board.sum_heights
+        nb_holes = engine.board.nb_holes
+        bumpiness = engine.board.bumpiness
+        self.all_moves[move] = {
+            "nb_lines": nb_lines,
+            "max_height": max_height,
+            "sum_heights": sum_heights,
+            "nb_holes": nb_holes,
+            "bumpiness": bumpiness
+        }
 
     def allMovesStats(self):
         """ Renvoie les stats de chaque mouvement """
         self.all_moves = {}
         for (j, r) in self.engine.getPossibleMovesDirect():
-            engine = self.engine.copy()
-            engine.placeBlockDirect(j, r)
-            block_height = engine.getBlockHeight()
-            nb_lines = engine.board.processLines()
-            engine.board.updateStats()
-            max_height = engine.board.max_height
-            sum_heights = engine.board.sum_heights
-            nb_holes = engine.board.nb_holes
-            bumpiness = engine.board.bumpiness
-            self.all_moves[(j, r)] = {
-                "block_height": block_height,
-                "nb_lines": nb_lines,
-                "max_height": max_height,
-                "sum_heights": sum_heights,
-                "nb_holes": nb_holes,
-                "bumpiness": bumpiness
-            }
+            self.getMoveStats((j, r))
         return self.all_moves
 
-    def playMove(self, move):
+    #=========================================================================
+    # Essais de multithreading, pas concluant (perd en performances)
+    #=========================================================================
+#     def allMovesStats(self):
+#         """ Renvoie les stats de chaque mouvement """
+#         self.all_moves = {}
+#         threads = []
+#         for (j, r) in self.engine.getPossibleMovesDirect():
+#             t = threading.Thread(target=self.getMoveStats, args=((j, r),))
+#             threads.append(t)
+#         for t in threads:
+#             t.start()
+#         for t in threads:
+#             t.join()
+#         return self.all_moves
+#-----------------------------------------------------------------------------
+# Autre essai
+#-----------------------------------------------------------------------------
+#     def createQueue(self):
+#         for (j, r) in self.engine.getPossibleMovesDirect():
+#             self.q.put((j, r))
+#
+#     def worker(self):
+#         while True:
+#             move = self.q.get()
+#             self.getMoveStats(move)
+#             self.q.task_done()
+#
+#     def allMovesStats(self):
+#         """ Renvoie les stats de chaque mouvement """
+#         self.all_moves = {}
+#         self.createQueue()
+#         threads = []
+#         for i in range(2):
+#             t = threading.Thread(target=self.worker)
+# #             t.daemon = True
+#             t.start()
+#             threads.append(t)
+#         self.q.join()
+#         for i in range(2):
+#             self.q.put(None)
+#         for t in threads:
+#             t.join()
+#         return self.all_moves
+
+    def commandFromMove(self, move):
         """ Joue un coup (crée la commande pour engine) """
         return "P:%d:%d" % (move[0], move[1])
 

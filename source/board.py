@@ -172,6 +172,7 @@ class Board:
         for j in range(self.width):
             print("Column %d Height : %d" % (j, self.column_heights[j]))
         print("MaxHeight : %d " % self.max_height)
+        print("SumHeights : %d " % self.sum_heights)
         print("Bumpiness : %d" % self.bumpiness)
         print("Holes : %d" % self.nb_holes)
         print()

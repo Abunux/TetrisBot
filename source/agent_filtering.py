@@ -52,21 +52,15 @@ class AgentFiltering(Agent):
         self.all_moves = all_moves
 
     def getMove(self):
-        """ Optimistation en filtrant successivement les mouvements suivants
-            les différentes stats """
+        """ Optimisation en filtrant successivement les mouvements 
+        suivant les différentes stats """
         self.allMovesStats()
 
         min_holes = self.minStat("nb_holes")
         self.filterMoves("nb_holes", min_holes)
 
-#         min_sum_heights = self.minStat("sum_heights")
-#         self.filterMoves("sum_heights", min_sum_heights)
-
-        min_height = self.minStat("max_height")
-        self.filterMoves("max_height", min_height)
-
-        min_block_height = self.minStat("block_height")
-        self.filterMoves("block_height", min_block_height)
+        min_sum_heights = self.minStat("sum_heights")
+        self.filterMoves("sum_heights", min_sum_heights)
 
         min_bumpiness = self.minStat("bumpiness")
         self.filterMoves("bumpiness", min_bumpiness)
@@ -75,7 +69,7 @@ class AgentFiltering(Agent):
         self.filterMoves("nb_lines", max_lines)
 
         best_move = choice(list(self.all_moves.keys()))
-        return self.playMove(best_move)
+        return self.commandFromMove(best_move)
 
 
 if __name__ == "__main__":

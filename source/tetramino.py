@@ -28,7 +28,7 @@ class Tetramino:
         self.glyph = self.rotations[0]
 
     def getBoundingBox(self):
-        """ Renvoie un tuple contanant les coordonnées des coins de la pièce 
+        """ Renvoie un tuple contenant les coordonnées des coins de la pièce 
             de la forme (imin, jmin, imax, jmax) """
         glyph = self.glyph
         n = self.size

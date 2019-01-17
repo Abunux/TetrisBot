@@ -41,8 +41,4 @@ Q : Quit""")
 
 
 if __name__ == "__main__":
-    player = AgentHuman()
-    player.engine.run()
-    print("End of game")
-    input("Press Enter to continue or CTRL+C to quit")
-    os.system("clear")
+    playGameWithAgent(AgentHuman)

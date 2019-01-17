@@ -35,27 +35,36 @@ class TetrisEngine:
     def __init__(self, getMove, width=10, height=22, max_blocks=0, temporisation=0, silent=False):
         self.width = width
         self.height = height
+
+        # La grille "dynamique" dans laquelle les pièces tombent
         self.board = Board(width, height)
+        # La grille constituée des pièces placées
         self.fixed_board = Board(width, height)
 
+        # La fonction de callback à appeler pour jouer un coup
         self.getMove = getMove
 
+        # Gestion des blocs
         self.generateNewBlockBag()
         self.block = None
+        self.block_position = [0, 0]
         self.next_block = self.block_bag.pop()
 
         self.max_blocks = max_blocks
         self.nb_blocks_played = 0
-        self.block_position = [0, 0]
 
+        # Scores
         self.score = 0
         self.total_lines = 0
 
+        # La,cement du moteur
         self.isRunning = True
 
-        self.temporisation = temporisation
+        # Affichage ou non
         self.silent = silent
 
+        # Timings
+        self.temporisation = temporisation
         self.time_for_move = 0
         self.time_total_for_moves = 0
         self.time_mean = 0
@@ -93,15 +102,15 @@ class TetrisEngine:
     #=========================================================================
     # Déplacements et rotations des pièces
     #=========================================================================
-    def getUsedCellsByBlock(self):
-        """ Renvoie la liste des cases occupées par le bloc courant """
-        self.used_cells_by_block = []
-        for i in range(self.block.size):
-            for j in range(self.block.size):
-                if self.block.glyph[i][j] != 0:
-                    self.used_cells_by_block.append(
-                        [self.block_position[0] - i, self.block_position[1] + j])
-        return self.used_cells_by_block
+#     def getUsedCellsByBlock(self):
+#         """ Renvoie la liste des cases occupées par le bloc courant """
+#         self.used_cells_by_block = []
+#         for i in range(self.block.size):
+#             for j in range(self.block.size):
+#                 if self.block.glyph[i][j] != 0:
+#                     self.used_cells_by_block.append(
+#                         [self.block_position[0] - i, self.block_position[1] + j])
+#         return self.used_cells_by_block
 
     def isMoveValid(self, block, new_position):
         """ Teste si une position est valide pour un bloc """
@@ -110,12 +119,10 @@ class TetrisEngine:
                 or new_position[1] + jmin < 0 or new_position[1] + jmax >= self.board.width:
             return False
 
-        self.getUsedCellsByBlock()
         for i in range(block.size):
             for j in range(block.size):
                 if block.glyph[i][j] != 0 \
-                        and not self.board.isCellEmpty(new_position[0] - i, new_position[1] + j)\
-                        and [new_position[0] - i, new_position[1] + j] not in self.used_cells_by_block:
+                        and not self.fixed_board.isCellEmpty(new_position[0] - i, new_position[1] + j):
                     return False
         return True
 
@@ -161,7 +168,7 @@ class TetrisEngine:
             return False
 
     def dropBlock(self):
-        """ Fais tomber le bloc en bas """
+        """ Fait tomber le bloc en bas """
         while self.moveBlockInDirection(''):
             self.score += self.getScoreFromMove()
 
@@ -211,10 +218,9 @@ class TetrisEngine:
             return True
         return False
 
-    def getBlockHeight(self):
-        """ Renvoie la hauteur du bloc """
-#         print(self.getUsedCellsByBlock())
-        return max(pos[0] for pos in self.getUsedCellsByBlock())
+#     def getBlockHeight(self):
+#         """ Renvoie la hauteur du bloc """
+#         return max(pos[0] for pos in self.getUsedCellsByBlock())
 
     #=========================================================================
     # Commandes

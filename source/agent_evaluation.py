@@ -33,7 +33,7 @@ class AgentEvaluation(Agent):
         """ Évalue un mouvement """
         # Si le mouvement fait perdre la partie, on lui donne une évaluation
         # fortement négative
-        if self.all_moves[move]["max_height"] > self.engine.height - 1:
+        if self.all_moves[move]["max_height"] > self.engine.height:
             return -10000000
         # Sinon l'évaluation est une combinaaison linéaires de critères
         return self.eval_coeffs[0] * self.all_moves[move]["nb_lines"] \
@@ -51,7 +51,7 @@ class AgentEvaluation(Agent):
             if move_eval > best_eval:
                 best_eval = move_eval
                 best_move = move
-        return self.playMove(best_move)
+        return self.commandFromMove(best_move)
 
 
 if __name__ == "__main__":
@@ -66,16 +66,16 @@ if __name__ == "__main__":
     best_coeffs = [0, 0, 0, 0]
     best_liste = []
     no_dumb_liste = []
-#     coeffs = [0.2, 0.4, 0.6, 0.8, 1]
-#     nb_samples = 3
-#     nb_samples2 = 100
-#     max_nb_blocks = 500
-#     max_nb_blocks2 = 1000
-    coeffs = [0.2, 0.4]
-    nb_samples = 1
-    nb_samples2 = 1
-    max_nb_blocks = 1000
-    max_nb_blocks2 = 100
+    coeffs = [0.2, 0.4, 0.6, 0.8, 1]
+    nb_samples = 3
+    nb_samples2 = 100
+    max_nb_blocks = 500
+    max_nb_blocks2 = 1000
+#     coeffs = [0.2, 0.4]
+#     nb_samples = 1
+#     nb_samples2 = 1
+#     max_nb_blocks = 1000
+#     max_nb_blocks2 = 100
 
     print("Start : " + strftime("%d/%m/%y - %H:%M:%S", localtime()))
     rest = len(coeffs)**4

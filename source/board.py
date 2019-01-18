@@ -41,6 +41,7 @@ class Board:
         self.grid[i][j] = value
 
     def emptyCell(self, i, j):
+        """ Vide la cellule (i,j) """
         self.setCell(i, j, 0)
 
     def isCellEmpty(self, i, j):
@@ -98,7 +99,7 @@ class Board:
         if not self.isCellEmpty(i, j):
             return False
         else:
-            for k in range(i + 1, self.max_height):
+            for k in range(i + 1, self.column_heights[j]):
                 if not self.isCellEmpty(k, j):
                     return True
             return False

@@ -74,7 +74,7 @@ class Agent:
 #             t.join()
 #         return self.all_moves
 #-----------------------------------------------------------------------------
-# Autre essai
+# Autre essai (marche pas)
 #-----------------------------------------------------------------------------
 #     def createQueue(self):
 #         for (j, r) in self.engine.getPossibleMovesDirect():
@@ -141,7 +141,7 @@ def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
 
 def plotBench(AgentToTest, nb_samples, filename="", title="", nb_bars=10, max_blocks=0):
     """ Réalise un bench de AgentToTest en jouant nb_samples parties
-        Affiche les réusltats sous la forme d'un histogramme avec nb_bars classes """
+        Affiche les résultats sous la forme d'un histogramme avec nb_bars classes """
     s = benchAgent(AgentToTest, nb_samples=nb_samples, max_blocks=max_blocks)
     stats = Stats(data=s["scores"], mean_time=s["mean_time"],
                   filename=filename, title=title, nb_bars=nb_bars)

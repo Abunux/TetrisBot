@@ -45,6 +45,7 @@ class TetrisEngine:
         self.getMove = getMove
 
         # Gestion des blocs
+        self.block_bag = []
         self.generateNewBlockBag()
         self.block = None
         self.block_position = [0, 0]
@@ -57,7 +58,7 @@ class TetrisEngine:
         self.score = 0
         self.total_lines = 0
 
-        # La,cement du moteur
+        # Lancement du moteur
         self.isRunning = True
 
         # Affichage ou non
@@ -331,6 +332,20 @@ class TetrisEngine:
     #=========================================================================
     def run(self):
         """ Boucle principale du jeu """
+        # L'algo est le suivant :
+        # -----------------------
+        # Tant que le jeu tourne :
+        #     Met un nouveau bloc en jeu
+        #     Tant que la pièce peut descendre :
+        #         Met à jour le score sur un mouvement
+        #         Met à jour l'affichage
+        #         Récupère le prochain mouvement
+        #         Joue ce mouvement
+        #         Traite les lignes faites
+        #         Met à jour le score sur les lignes
+        #     Fixe la grille
+        #     Teste la fin du jeu
+        # Retourne le score
         while self.isRunning and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
             self.getNewBlock()
             self.time_total = time() - self.time_start

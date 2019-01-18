@@ -30,7 +30,7 @@ class AgentEvaluation(Agent):
             self.getMove, temporisation=temporisation, silent=silent)
 
     def moveEvaluation(self, move):
-        """ Évalue un mouvement """
+        """ Évalue le mouvement move=(j, r) """
         # Si le mouvement fait perdre la partie, on lui donne une évaluation
         # fortement négative
         if self.all_moves[move]["max_height"] > self.engine.height:

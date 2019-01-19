@@ -77,6 +77,9 @@ class TetrisEngine:
     #=========================================================================
     def generateNewBlockBag(self):
         """ Génère un nouveau sac de pièces """
+        # On utilise la règle du "7-random bag" :
+        # On crée un sac de 7 pièces qu'on mélange
+        # Dès qu'il est vide, on regénère un nouveau sac
         self.block_bag = BLOCK_BAG[:]
         shuffle(self.block_bag)
 
@@ -89,6 +92,7 @@ class TetrisEngine:
 
     def setBlockInitPosition(self):
         """ Position initiale pour un nouveau bloc """
+        # Un nouveau bloc est placé sur la ligne cachée au milieu
         self.block_position[0] = self.board.height + 1
         self.block_position[1] = self.board.width // 2 - \
             ceil(self.block.size / 2)
@@ -115,11 +119,13 @@ class TetrisEngine:
 
     def isMoveValid(self, block, new_position):
         """ Teste si une position est valide pour un bloc """
+        # Teste si le bloc sort de la grille
         (imin, jmin, imax, jmax) = block.getBoundingBox()
         if new_position[0] - imax < 0 or new_position[0] - imin > self.board.height + 1 \
                 or new_position[1] + jmin < 0 or new_position[1] + jmax >= self.board.width:
             return False
 
+        # Teste si les nouvelles cases occupées par le bloc sont vides
         for i in range(block.size):
             for j in range(block.size):
                 if block.glyph[i][j] != 0 \
@@ -190,6 +196,7 @@ class TetrisEngine:
             dans la colonne et la rotation donnée """
         new_block = self.block.copy()
         new_block.setRotation(rotation)
+        # On essaie de placer le bloc sur sa ligne dans la colonne donnée
         new_position = [self.block_position[0], column]
         if self.isMoveValid(new_block, new_position):
             return True
@@ -199,7 +206,10 @@ class TetrisEngine:
         """ Renvoie la liste de tous les placements directs possibles
             sous la forme de tuples (column, rotation) """
         self.direct_placements = []
-        for column in range(-2, self.width):
+        # On commence avec la colonne -2 à cause du bloc I vertical
+        # On arrête à l'avant dernière colonne car aucune pièce n'a
+        # son coin gauche sur la dernière colonne.
+        for column in range(-2, self.width - 1):
             for rotation in range(self.block.nb_rotations):
                 if self.canPlaceBlockDirect(column, rotation):
                     self.direct_placements.append((column, rotation))
@@ -336,7 +346,8 @@ class TetrisEngine:
         # -----------------------
         # Tant que le jeu tourne :
         #     Met un nouveau bloc en jeu
-        #     Tant que la pièce peut descendre :
+        #     Tant que la pièce peut descendre et le jeu tourne :
+        #         Descendre la pièce d'un cran
         #         Met à jour le score sur un mouvement
         #         Met à jour l'affichage
         #         Récupère le prochain mouvement

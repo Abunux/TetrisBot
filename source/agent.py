@@ -31,9 +31,13 @@ class Agent:
     def __init__(self, name="", description=""):
         self.name = name
         self.decription = description
+        # Dictionnaire content les stats de chaque mouvement
+        self.all_moves = {}
 #         self.q = Queue()
 
     def getMoveStats(self, move):
+        """ Remplit le dictionnaire contenant les statistiques de la grille
+            après que le mouvement move ait été joué """
         (j, r) = move
         engine = self.engine.copy()
         engine.placeBlockDirect(j, r)
@@ -52,9 +56,11 @@ class Agent:
         }
 
     def allMovesStats(self):
-        """ Renvoie les stats de chaque mouvement """
+        """ Renvoie un dictionnaire contenant les stats de chaque mouvement possible 
+            Les clefs sont les mouvement et les valeurs sont els stats de ce mouvement """
         self.all_moves = {}
-        for (j, r) in self.engine.getPossibleMovesDirect():
+        possible_moves_direct = self.engine.getPossibleMovesDirect()
+        for (j, r) in possible_moves_direct:
             self.getMoveStats((j, r))
         return self.all_moves
 
@@ -104,8 +110,23 @@ class Agent:
 #         return self.all_moves
 
     def commandFromMove(self, move):
-        """ Joue un coup (crée la commande pour engine) """
+        """ Renvoie la commande d'un mouvement à passer à l'engine """
         return "P:%d:%d" % (move[0], move[1])
+
+
+#=========================================================================
+# Fonctions pour lancer des parties
+#=========================================================================
+def playGameWithAgent(AgentToTest, temporisation=0.1):
+    """ Lance des parties avec l'agent """
+    input("Press enter to start")
+    os.system("clear")
+    while True:
+        player = AgentToTest(temporisation=temporisation, silent=False)
+        player.engine.run()
+        print("End of game")
+        input("Press Enter to continue or CTRL+C to quit")
+        os.system("clear")
 
 
 def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
@@ -146,15 +167,3 @@ def plotBench(AgentToTest, nb_samples, filename="", title="", nb_bars=10, max_bl
     stats = Stats(data=s["scores"], mean_time=s["mean_time"],
                   filename=filename, title=title, nb_bars=nb_bars)
     stats.histogram()
-
-
-def playGameWithAgent(AgentToTest, temporisation=0.1):
-    """ Joue avec l'agent """
-    input("Press enter to start")
-    os.system("clear")
-    while True:
-        player = AgentToTest(temporisation=temporisation)
-        player.engine.run()
-        print("End of game")
-        input("Press Enter to continue or CTRL+C to quit")
-        os.system("clear")

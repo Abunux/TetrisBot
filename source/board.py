@@ -64,7 +64,8 @@ class Board:
     # Satistiques de la grille
     #=========================================================================
     def columnHeight(self, j):
-        """ Renvoie la hauteur de la colonne j """
+        """ Renvoie la hauteur de la colonne j 
+            Attention, cette fonction renvoie la hauteur et non l'indice de la dernière pièce """
         i = self.height + 1
         while i >= 0 and self.isCellEmpty(i, j):
             i -= 1
@@ -95,7 +96,7 @@ class Board:
         return self.bumpiness
 
     def isDominated(self, i, j):
-        """ Teste si une case vide est dominée par une autre case au-dessus """
+        """ Teste si une case est vide et est dominée par une case au-dessus """
         if not self.isCellEmpty(i, j):
             return False
         else:

@@ -39,7 +39,7 @@ class TetrisEngine:
         # La grille "dynamique" dans laquelle les pièces tombent
         self.board = Board(width, height)
         # La grille constituée des pièces placées
-        self.fixed_board = Board(width, height)
+        self.fixed_board = self.board.copy()
 
         # La fonction de callback à appeler pour jouer un coup
         self.getMove = getMove
@@ -346,7 +346,7 @@ class TetrisEngine:
         # -----------------------
         # Tant que le jeu tourne :
         #     Met un nouveau bloc en jeu
-        #     Tant que la pièce peut descendre et le jeu tourne :
+        #     Tant que la pièce peut descendre et que le jeu tourne :
         #         Descendre la pièce d'un cran
         #         Met à jour le score sur un mouvement
         #         Met à jour l'affichage

@@ -17,7 +17,6 @@ from copy import deepcopy
 
 
 class Board:
-
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height
@@ -30,6 +29,9 @@ class Board:
         self.nb_holes = 0
         self.nb_lines = 0
 
+    #=========================================================================
+    # Gestion des cellules de la grille
+    #=========================================================================
     def getCell(self, i, j):
         """ Renvoie le contenu de la cellule (i,j) """
         return self.grid[i][j]
@@ -39,6 +41,7 @@ class Board:
         self.grid[i][j] = value
 
     def emptyCell(self, i, j):
+        """ Vide la cellule (i,j) """
         self.setCell(i, j, 0)
 
     def isCellEmpty(self, i, j):
@@ -52,8 +55,17 @@ class Board:
                 return False
         return True
 
+    def removeLine(self, i):
+        """ Supprime la ligne i """
+        del self.grid[i]
+        self.grid.append([0] * self.width)
+
+    #=========================================================================
+    # Satistiques de la grille
+    #=========================================================================
     def columnHeight(self, j):
-        """ Renvoie la hauteur de la colonne j """
+        """ Renvoie la hauteur de la colonne j 
+            Attention, cette fonction renvoie la hauteur et non l'indice de la dernière pièce """
         i = self.height + 1
         while i >= 0 and self.isCellEmpty(i, j):
             i -= 1
@@ -74,25 +86,6 @@ class Board:
         self.sum_heights = sum(self.column_heights)
         return self.sum_heights
 
-    def removeLine(self, i):
-        """ Supprime la ligne i """
-        del self.grid[i]
-        self.grid.append([0] * self.width)
-
-    def processLines(self):
-        """ Enlève les lignes finies """
-        self.nb_lines = 0
-        max_height = self.height
-        i = 0
-        while i < max_height:
-            if self.isLineFull(i):
-                self.removeLine(i)
-                max_height -= 1
-                self.nb_lines += 1
-            else:
-                i += 1
-        return self.nb_lines
-
     def getBumpiness(self):
         """ Renvoie la somme des valeurs absolues des différences
             de hauteurs entre les colonnes consécutives """
@@ -103,11 +96,11 @@ class Board:
         return self.bumpiness
 
     def isDominated(self, i, j):
-        """ Teste si une case vide est dominée par une autre case au-dessus """
+        """ Teste si une case est vide et est dominée par une case au-dessus """
         if not self.isCellEmpty(i, j):
             return False
         else:
-            for k in range(i + 1, self.max_height):
+            for k in range(i + 1, self.column_heights[j]):
                 if not self.isCellEmpty(k, j):
                     return True
             return False
@@ -130,6 +123,26 @@ class Board:
         self.getBumpiness()
         self.getNbHoles()
 
+    #=========================================================================
+    # Gestion des lignes
+    #=========================================================================
+    def processLines(self):
+        """ Enlève les lignes finies et renvoie le nombre de lignes enlevées """
+        self.nb_lines = 0
+        max_height = self.height
+        i = 0
+        while i < max_height:
+            if self.isLineFull(i):
+                self.removeLine(i)
+                max_height -= 1
+                self.nb_lines += 1
+            else:
+                i += 1
+        return self.nb_lines
+
+    #=========================================================================
+    # Méthodes utilitaires
+    #=========================================================================
     def copy(self):
         """ Renvoie une copie de la grille """
         return deepcopy(self)
@@ -161,6 +174,7 @@ class Board:
         for j in range(self.width):
             print("Column %d Height : %d" % (j, self.column_heights[j]))
         print("MaxHeight : %d " % self.max_height)
+        print("SumHeights : %d " % self.sum_heights)
         print("Bumpiness : %d" % self.bumpiness)
         print("Holes : %d" % self.nb_holes)
         print()
@@ -177,10 +191,10 @@ if __name__ == "__main__":
     board.setCell(1, 1, 0)
     board.setCell(1, 2, 2)
     board.setCell(2, 0, 3)
-    board.setCell(2, 1, 3)
+    board.setCell(2, 1, 0)
     board.setCell(2, 2, 3)
-    board.setCell(3, 0, 4)
-    board.setCell(3, 1, 0)
+    board.setCell(3, 0, 0)
+    board.setCell(3, 1, 4)
     board.setCell(3, 2, 4)
 
     board.printInfos()

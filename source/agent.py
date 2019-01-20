@@ -2,6 +2,8 @@ from tetris_engine import *
 from random import *
 from time import time
 from stats import *
+# from queue import Queue
+# import threading
 
 #-----------------------------------------------------
 #
@@ -29,55 +31,102 @@ class Agent:
     def __init__(self, name="", description=""):
         self.name = name
         self.decription = description
+        # Dictionnaire content les stats de chaque mouvement
+        self.all_moves = {}
+#         self.q = Queue()
 
+    def getMoveStats(self, move):
+        """ Remplit le dictionnaire contenant les statistiques de la grille
+            après que le mouvement move ait été joué """
+        (j, r) = move
+        engine = self.engine.copy()
+        engine.placeBlockDirect(j, r)
+        nb_lines = engine.board.processLines()
+        engine.board.updateStats()
+        max_height = engine.board.max_height
+        sum_heights = engine.board.sum_heights
+        nb_holes = engine.board.nb_holes
+        bumpiness = engine.board.bumpiness
+        self.all_moves[move] = {
+            "nb_lines": nb_lines,
+            "max_height": max_height,
+            "sum_heights": sum_heights,
+            "nb_holes": nb_holes,
+            "bumpiness": bumpiness
+        }
+
+    def allMovesStats(self):
+        """ Renvoie un dictionnaire contenant les stats de chaque mouvement possible 
+            Les clefs sont les mouvements et les valeurs sont els stats de ce mouvement """
+        self.all_moves = {}
+        possible_moves_direct = self.engine.getPossibleMovesDirect()
+        for (j, r) in possible_moves_direct:
+            self.getMoveStats((j, r))
+        return self.all_moves
+
+    #=========================================================================
+    # Essais de multithreading, pas concluant (perd en performances)
+    #=========================================================================
 #     def allMovesStats(self):
 #         """ Renvoie les stats de chaque mouvement """
 #         self.all_moves = {}
+#         threads = []
 #         for (j, r) in self.engine.getPossibleMovesDirect():
-#             engine = self.engine.copy()
-#             engine.placeBlockDirect(j, r)
-#             block_height = engine.getBlockHeight()
-#             nb_lines = engine.board.processLines()
-#             max_height = engine.board.getMaxHeight()
-#             sum_heights = engine.board.getSumHeights()
-#             nb_holes = engine.board.getNbHoles()
-#             bumpiness = engine.board.getBumpiness()
-#             self.all_moves[(j, r)] = {
-#                 "block_height": block_height,
-#                 "nb_lines": nb_lines,
-#                 "max_height": max_height,
-#                 "sum_heights": sum_heights,
-#                 "nb_holes": nb_holes,
-#                 "bumpiness": bumpiness
-#             }
+#             t = threading.Thread(target=self.getMoveStats, args=((j, r),))
+#             threads.append(t)
+#         for t in threads:
+#             t.start()
+#         for t in threads:
+#             t.join()
+#         return self.all_moves
+#-----------------------------------------------------------------------------
+# Autre essai (marche pas)
+#-----------------------------------------------------------------------------
+#     def createQueue(self):
+#         for (j, r) in self.engine.getPossibleMovesDirect():
+#             self.q.put((j, r))
+#
+#     def worker(self):
+#         while True:
+#             move = self.q.get()
+#             self.getMoveStats(move)
+#             self.q.task_done()
+#
+#     def allMovesStats(self):
+#         """ Renvoie les stats de chaque mouvement """
+#         self.all_moves = {}
+#         self.createQueue()
+#         threads = []
+#         for i in range(2):
+#             t = threading.Thread(target=self.worker)
+# #             t.daemon = True
+#             t.start()
+#             threads.append(t)
+#         self.q.join()
+#         for i in range(2):
+#             self.q.put(None)
+#         for t in threads:
+#             t.join()
 #         return self.all_moves
 
-    def allMovesStats(self):
-        """ Renvoie les stats de chaque mouvement """
-        self.all_moves = {}
-        for (j, r) in self.engine.getPossibleMovesDirect():
-            engine = self.engine.copy()
-            engine.placeBlockDirect(j, r)
-            block_height = engine.getBlockHeight()
-            nb_lines = engine.board.processLines()
-            engine.board.updateStats()
-            max_height = engine.board.max_height
-            sum_heights = engine.board.sum_heights
-            nb_holes = engine.board.nb_holes
-            bumpiness = engine.board.bumpiness
-            self.all_moves[(j, r)] = {
-                "block_height": block_height,
-                "nb_lines": nb_lines,
-                "max_height": max_height,
-                "sum_heights": sum_heights,
-                "nb_holes": nb_holes,
-                "bumpiness": bumpiness
-            }
-        return self.all_moves
-
-    def playMove(self, move):
-        """ Joue un coup (crée la commande pour engine) """
+    def commandFromMove(self, move):
+        """ Renvoie la commande d'un mouvement à passer à l'engine """
         return "P:%d:%d" % (move[0], move[1])
+
+
+#=========================================================================
+# Fonctions pour lancer des parties
+#=========================================================================
+def playGameWithAgent(AgentToTest, temporisation=0.1):
+    """ Lance des parties avec l'agent """
+    input("Press enter to start")
+    os.system("clear")
+    while True:
+        player = AgentToTest(temporisation=temporisation, silent=False)
+        player.engine.run()
+        print("End of game")
+        input("Press Enter to continue or CTRL+C to quit")
+        os.system("clear")
 
 
 def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
@@ -113,20 +162,8 @@ def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
 
 def plotBench(AgentToTest, nb_samples, filename="", title="", nb_bars=10, max_blocks=0):
     """ Réalise un bench de AgentToTest en jouant nb_samples parties
-        Affiche les réusltats sous la forme d'un histogramme avec nb_bars classes """
+        Affiche les résultats sous la forme d'un histogramme avec nb_bars classes """
     s = benchAgent(AgentToTest, nb_samples=nb_samples, max_blocks=max_blocks)
     stats = Stats(data=s["scores"], mean_time=s["mean_time"],
                   filename=filename, title=title, nb_bars=nb_bars)
     stats.histogram()
-
-
-def playGameWithAgent(AgentToTest, temporisation=0.1):
-    """ Joue avec l'agent """
-    input("Press enter to start")
-    os.system("clear")
-    while True:
-        player = AgentToTest(temporisation=temporisation)
-        player.engine.run()
-        print("End of game")
-        input("Press Enter to continue or CTRL+C to quit")
-        os.system("clear")

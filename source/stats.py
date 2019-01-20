@@ -14,6 +14,14 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Analyse statistique avec création d'un
+#    histogramme et d'un diagramme en boîte
+#
+#    Code récupéré et adapté d'un de mes anciens
+#    projets : https://github.com/Abunux/pyBatNav
+#
+#-----------------------------------------------------
 
 from math import *
 
@@ -52,9 +60,9 @@ class Stats:
 
         self.mean_time = mean_time
 
-    #
+    #=========================================================================
     # Chargement et sauvegarde des données (pour analyse future)--------
-    #
+    #=========================================================================
     def loadData(self):
         """Charge les données à partir d'un fichier texte"""
         self.data = []
@@ -74,10 +82,10 @@ class Stats:
                 datafile.write(str(k) + " & " +
                                str(self.data[k]) + r'\\' + '\n')
                 datafile.write(r"\hline" + '\n')
-    #
-    # Récupération des paramètres statistiques basiques ----------------
-    #
 
+    #==========================================================================
+    # Récupération des paramètres statistiques basiques ----------------
+    #==========================================================================
     def getAllStats(self):
         """Récupère tous les indicateurs statistiques"""
         self.getEffectif()
@@ -88,31 +96,41 @@ class Stats:
         self.getSigma()
 
     def getEffectif(self):
+        """ Renvoie le nombre de données """
         self.effectif = len(self.data)
 
     def getMini(self):
+        """ Renvoie le minimum des données """
         self.min = min(self.data)
 
     def getMaxi(self):
+        """ Renvoie le maximum des données """
         self.max = max(self.data)
 
     def getQuartiles(self):
+        """ Renvoie un tuple (Q1, Médiane, Q3) """
+        # À revoir
         self.quartiles = (
-            self.data[ceil(self.effectif / 4)],
-            self.data[ceil(self.effectif / 2)],
-            self.data[ceil(3 * self.effectif / 4)]
+            self.data[min(self.effectif - 1, ceil(self.effectif / 4))],
+            self.data[min(self.effectif - 1, ceil(self.effectif / 2))],
+            self.data[min(self.effectif - 1, ceil(3 * self.effectif / 4))]
         )
 
     def getMean(self):
+        """ Renvoie la moyenne des données """
         self.mean = sum(self.data) / self.effectif
 
     def getSigma(self):
+        """ Renvoie l'écart-type des données """
         self.sigma = sqrt(sum(
             [((self.data[k] - self.mean)**2) / self.effectif for k in range(self.effectif)]))
 
+    #=========================================================================
+    # Histogramme
+    #=========================================================================
     def histogram(self, save=True):
-        # Récupération des indicateurs statistiques et des paramètres de la
-        # grille
+        """ Crée et affiche l'histogramme """
+        # Récupération des indicateurs statistiques
         n = self.effectif
         mini = self.min
         maxi = self.max
@@ -131,9 +149,11 @@ Création de la figure statistique impossible
 (numpy et matplotlib manquants)
 """)
             return
+
+        # Histogramme
         plt.rcParams["patch.force_edgecolor"] = True
-        n, bins, patches = plt.hist(
-            self.data, self.nb_bars, density=True, facecolor='g', alpha=0.75)
+        plt.hist(self.data, self.nb_bars, density=True,
+                 facecolor='g', alpha=0.75)
 
         # Création du diagramme en boite
         # Dimensions de la grille et des objets graphiques
@@ -181,15 +201,16 @@ Création de la figure statistique impossible
 
 
 if __name__ == "__main__":
-    #     stats = Stats(data=[1, 2, 5, 6, 9, 7, 10, 3, 1, 1, 1])
-    #     print(stats.effectif)
-    #     print(stats.min)
-    #     print(stats.max)
-    #     print(stats.quartiles)
-    #     print(stats.mean)
-    #     print(stats.sigma)
-    #     stats.histogram()
-    from agent_filtering import *
-    s = benchAgent(AgentFiltering, 10)
-    stats = Stats(data=s["scores"], mean_time=s["mean_time"])
+    stats = Stats(data=[1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,
+                        5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 10])
+    print(stats.effectif)
+    print(stats.min)
+    print(stats.max)
+    print(stats.quartiles)
+    print(stats.mean)
+    print(stats.sigma)
     stats.histogram()
+#     from agent_filtering import *
+#     s = benchAgent(AgentFiltering, 10)
+#     stats = Stats(data=s["scores"], mean_time=s["mean_time"])
+#     stats.histogram()

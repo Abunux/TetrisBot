@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+#=========================================================================
+# À mettre à la poubelle
+# Un fichier pour faire différents essais sur des agents
+#=========================================================================
+
+
 from tetris_engine import *
 from random import *
 from time import time

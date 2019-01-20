@@ -22,6 +22,7 @@ import os
 
 class AgentHuman(Agent):
     def __init__(self, temporisation=0, silent=False):
+        super().__init__(name="Human")
         self.engine = TetrisEngine(
             self.getMove, temporisation=temporisation, silent=silent)
 
@@ -40,8 +41,4 @@ Q : Quit""")
 
 
 if __name__ == "__main__":
-    player = AgentHuman()
-    player.engine.run()
-    print("End of game")
-    input("Press Enter to continue or CTRL+C to quit")
-    os.system("clear")
+    playGameWithAgent(AgentHuman)

@@ -28,10 +28,12 @@ class Tetramino:
         self.glyph = self.rotations[0]
 
     def getBoundingBox(self):
-        """ Renvoie un tuple contanant les coordonnées des coins de la pièce 
+        """ Renvoie un tuple contenant les coordonnées des coins internes de la pièce 
             de la forme (imin, jmin, imax, jmax) """
         glyph = self.glyph
         n = self.size
+
+        # Parcours des lignes
         i = 0
         while i < n and glyph[i] == [0] * n:
             i += 1
@@ -40,6 +42,7 @@ class Tetramino:
             i += 1
         imax = i - 1
 
+        # Parcours des colonnes
         jmin = n
         jmax = 0
 
@@ -53,8 +56,8 @@ class Tetramino:
                 j += 1
             if j > jmax:
                 jmax = j - 1
-
-        return (imin, jmin, imax, jmax)
+        self.bounding_box = (imin, jmin, imax, jmax)
+        return self.bounding_box
 
     def makeRotations(self):
         """ Crée les differentes rotations de la pièce """
@@ -108,7 +111,9 @@ class Tetramino:
         return strGlyph.strip()
 
 
+#=========================================================================
 # Création des blocs
+#=========================================================================
 ID_IBLOCK = 1
 IBLOCK = Tetramino(ID_IBLOCK,
                    [[0, 0, 0, 0],

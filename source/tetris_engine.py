@@ -86,6 +86,7 @@ class TetrisEngine:
     def generateNewBlock(self):
         """ Remplace le bloc courant par le suivant et fabrique un nouveau bloc suivant """
         self.block = self.next_block.copy()
+        # Si le sac est vide, on en recrée un nouveau
         if len(self.block_bag) == 0:
             self.generateNewBlockBag()
         self.next_block = self.block_bag.pop()

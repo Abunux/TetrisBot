@@ -57,7 +57,7 @@ class Agent:
 
     def allMovesStats(self):
         """ Renvoie un dictionnaire contenant les stats de chaque mouvement possible 
-            Les clefs sont les mouvement et les valeurs sont els stats de ce mouvement """
+            Les clefs sont les mouvements et les valeurs sont els stats de ce mouvement """
         self.all_moves = {}
         possible_moves_direct = self.engine.getPossibleMovesDirect()
         for (j, r) in possible_moves_direct:

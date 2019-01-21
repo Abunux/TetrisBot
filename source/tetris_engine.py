@@ -32,7 +32,9 @@ from copy import deepcopy
 
 
 class TetrisEngine:
-    def __init__(self, getMove, width=10, height=22, max_blocks=0, temporisation=0, silent=False, random_generator_seed=None, agent_name="", agent_description=""):
+    def __init__(self, getMove, width=10, height=22, max_blocks=0,
+                 temporisation=0, silent=False, random_generator_seed=None,
+                 agent_name="", agent_description=""):
         self.width = width
         self.height = height
 

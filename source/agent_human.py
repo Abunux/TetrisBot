@@ -24,7 +24,7 @@ class AgentHuman(Agent):
     def __init__(self, temporisation=0, silent=False):
         super().__init__(name="Human")
         self.engine = TetrisEngine(
-            self.getMove, temporisation=temporisation, silent=silent)
+            self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
 
     def getMove(self):
         print("""L : Move Left

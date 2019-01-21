@@ -32,7 +32,7 @@ from copy import deepcopy
 
 
 class TetrisEngine:
-    def __init__(self, getMove, width=10, height=22, max_blocks=0, temporisation=0, silent=False):
+    def __init__(self, getMove, width=10, height=22, max_blocks=0, temporisation=0, silent=False, random_generator_seed=None, agent_name="", agent_description=""):
         self.width = width
         self.height = height
 
@@ -45,6 +45,7 @@ class TetrisEngine:
         self.getMove = getMove
 
         # Gestion des blocs
+        seed(random_generator_seed)
         self.block_bag = []
         self.generateNewBlockBag()
         self.block = None
@@ -63,6 +64,10 @@ class TetrisEngine:
 
         # Affichage ou non
         self.silent = silent
+
+        # Nom de l'agent
+        self.agent_name = agent_name
+        self.agent_description = agent_description
 
         # Timings
         self.temporisation = temporisation
@@ -321,9 +326,15 @@ class TetrisEngine:
         """ Renvoie la chaîne correspondant au côté droit de l'affichage """
         return self.getStrInfos() + "\n\n" + self.getStrNextBlock()
 
+    def getStrAgentName(self):
+        """ Renvoie la chaîne contenant les nom et la description de l'agent """
+        if not self.agent_name:
+            return ""
+        return boxed(self.agent_name) + "\n\n"
+
     def __str__(self):
         """ Renvoie une chaîne représentant l'état de la partie """
-        return mergeChains(str(self.board), self.printRightColumn())
+        return self.getStrAgentName() + mergeChains(str(self.board), self.printRightColumn())
 
     #=========================================================================
     # Méthodes utilitaires
@@ -404,5 +415,5 @@ S : Restart
 Q : Quit""")
         move = input("Mouvement : ")
         return move.upper()
-    engine = TetrisEngine(getMove)
+    engine = TetrisEngine(getMove, agent_name="Toto")
     engine.run()

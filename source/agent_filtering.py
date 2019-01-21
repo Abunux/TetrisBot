@@ -24,7 +24,7 @@ class AgentFiltering(Agent):
     def __init__(self,  temporisation=0.1, silent=False):
         super().__init__(name="Filtering")
         self.engine = TetrisEngine(
-            self.getMove, temporisation=temporisation, silent=silent)
+            self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
 
     def minStat(self, stat):
         """ Renvoie la valeur mini d'une stat """

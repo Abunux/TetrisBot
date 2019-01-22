@@ -59,6 +59,7 @@ class TetrisEngine:
 
         # Scores
         self.score = 0
+        self.score_on_move = 0
         self.total_lines = 0
 
         # Lancement du moteur
@@ -374,8 +375,9 @@ class TetrisEngine:
         while self.isRunning and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
             self.getNewBlock()
             self.time_total = time() - self.time_start
+            self.score_on_move = 0
             while self.moveBlockInDirection('') and self.isRunning:
-                self.score += self.getScoreFromMove()
+                self.score_on_move += self.getScoreFromMove()
 
                 if not self.silent:
                     print(self)
@@ -393,7 +395,9 @@ class TetrisEngine:
 
                 nb_lines = self.board.processLines()
                 self.total_lines += nb_lines
-                self.score += self.getScoreFromLines(nb_lines)
+                self.score_on_move += self.getScoreFromLines(nb_lines)
+
+                self.score += self.score_on_move
 
             self.fixed_board = self.board.copy()
             self.fixed_board.updateStats()

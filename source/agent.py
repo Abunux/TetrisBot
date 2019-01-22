@@ -35,6 +35,10 @@ class Agent:
         self.all_moves = {}
 #         self.q = Queue()
 
+    def commandFromMove(self, move):
+        """ Renvoie la commande d'un mouvement à passer à l'engine """
+        return "P:%d:%d" % (move[0], move[1])
+
     def getMoveStats(self, move):
         """ Remplit le dictionnaire contenant les statistiques de la grille
             après que le mouvement move ait été joué """
@@ -109,13 +113,9 @@ class Agent:
 #             t.join()
 #         return self.all_moves
 
-    def commandFromMove(self, move):
-        """ Renvoie la commande d'un mouvement à passer à l'engine """
-        return "P:%d:%d" % (move[0], move[1])
-
 
 #=========================================================================
-# Fonctions pour lancer des parties
+# Fonctions pour lancer des parties ou des tests
 #=========================================================================
 def playGameWithAgent(AgentToTest, temporisation=0.1):
     """ Lance des parties avec l'agent """

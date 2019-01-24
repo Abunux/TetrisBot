@@ -42,7 +42,7 @@ class AgentEvaluation(Agent):
             - self.eval_coeffs[3] * self.all_moves[move]["bumpiness"]
 
     def getMove(self):
-        """ Optimistaion à partir de la fonction d'évaluation """
+        """ Optimisation à partir de la fonction d'évaluation """
         all_moves = self.allMovesStats()
         best_move = list(all_moves.keys())[0]
         best_eval = self.moveEvaluation(best_move)

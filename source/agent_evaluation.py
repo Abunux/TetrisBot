@@ -27,7 +27,7 @@ class AgentEvaluation(Agent):
         super().__init__(name="Evaluation %s" % str(eval_coeffs))
         self.eval_coeffs = eval_coeffs
         self.engine = TetrisEngine(
-            self.getMove, temporisation=temporisation, silent=silent)
+            self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
 
     def moveEvaluation(self, move):
         """ Évalue le mouvement move=(j, r) """
@@ -42,7 +42,7 @@ class AgentEvaluation(Agent):
             - self.eval_coeffs[3] * self.all_moves[move]["bumpiness"]
 
     def getMove(self):
-        """ Optimistaion à partir de la fonction d'évaluation """
+        """ Optimisation à partir de la fonction d'évaluation """
         all_moves = self.allMovesStats()
         best_move = list(all_moves.keys())[0]
         best_eval = self.moveEvaluation(best_move)

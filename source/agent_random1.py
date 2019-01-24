@@ -25,7 +25,7 @@ class AgentRandom1(Agent):
     def __init__(self, temporisation=0.1, silent=False):
         super().__init__(name="Random 1")
         self.engine = TetrisEngine(
-            self.getMove, temporisation=temporisation, silent=silent)
+            self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
 
     def getMove(self):
         move = choice(['L', 'R', 'N', 'T', 'H'])

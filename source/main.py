@@ -60,7 +60,7 @@ if __name__ == "__main__":
     else:
         print("""Type de travail : 
         1 : Voir des parties
-        2 : Satistiques""")
+        2 : Satistiques (attention, peut être très long)""")
         work_type = int(input("Votre choix : "))
         if work_type == 1:
             temporisation = input("Temporisation [0.1] : ")
@@ -75,4 +75,11 @@ if __name__ == "__main__":
                 nb_samples = int(nb_samples)
             else:
                 nb_samples = 100
-            plotBench(AgentType, nb_samples)
+            max_blocks = input(
+                "Nombre de blocs maximum (0 pour illimité) [500] : ")
+            if max_blocks:
+                max_blocks = int(max_blocks)
+            else:
+                max_blocks = 500
+
+            plotBench(AgentType, nb_samples=nb_samples, max_blocks=max_blocks)

@@ -13,13 +13,17 @@
 #
 #-----------------------------------------------------
 
+import re
+
 
 def mergeChains(string1, string2):
     """ Fusionne deux chaînes cote à cote pour l'affichage """
     lines1 = string1.split('\n')
     lines2 = string2.split('\n')
     result = ""
-    max_length_string1 = max([len(s) for s in lines1])
+    # Utilisation d'une expression rrégulière pour supprimer
+    # les caractères spéciaux de couleurs
+    max_length_string1 = max([len(re.sub(r"\033.+?m", "", s)) for s in lines1])
     min_height = min(len(lines1), len(lines2))
 
     for k in range(min_height):

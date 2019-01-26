@@ -14,6 +14,7 @@
 #-----------------------------------------------------
 
 from copy import deepcopy
+from tetramino import *
 
 
 class Board:
@@ -97,13 +98,14 @@ class Board:
 
     def isDominated(self, i, j):
         """ Teste si une case est vide et est dominée par une case au-dessus """
-        if not self.isCellEmpty(i, j):
-            return False
-        else:
-            for k in range(i + 1, self.column_heights[j]):
-                if not self.isCellEmpty(k, j):
-                    return True
-            return False
+        return self.isCellEmpty(i, j) and i < self.column_heights[j]
+#         if not self.isCellEmpty(i, j):
+#             return False
+#         else:
+#             for k in range(i + 1, self.column_heights[j]):
+#                 if not self.isCellEmpty(k, j):
+#                     return True
+#             return False
 
     def getNbHoles(self):
         """ Renvoie le nombre de trous dans la grille
@@ -150,6 +152,7 @@ class Board:
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
+        """
         for i in range(self.height + 2 - 1, -1, -1):
             chain += "%2d ║ %s ║\n" % \
                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
@@ -157,14 +160,46 @@ class Board:
 #             chain += "%2d ║ %s ║\n" % \
 #                 (i, " ".join(["█" if self.grid[i][j] else "."
 #                               for j in range(self.width)]))
-
+        """
+        for i in range(self.height + 2 - 1, -1, -1):
+            colors = {ID_IBLOCK: "\033[48;5;50m",
+                      ID_JBLOCK: "\033[48;5;27m",
+                      ID_LBLOCK: "\033[48;5;202m",
+                      ID_OBLOCK: "\033[48;5;226m",
+                      ID_SBLOCK: "\033[48;5;82m",
+                      ID_ZBLOCK: "\033[48;5;196m",
+                      ID_TBLOCK: "\033[48;5;165m"
+                      }
+            chain += "%2d \033[48;5;232m\033[97m║\033[0m" % i
+            for j in range(self.width):
+                if self.grid[i][j]:
+                    #                     chain += colors[self.grid[i][j]
+                    #                                     ] + str(self.grid[i][j]) + "\033[0m"
+                    chain += colors[self.grid[i][j]
+                                    ] + "." + "\033[0m"
+                else:
+                    chain += "\033[48;5;232m\033[97m.\033[0m"
+            chain += "\033[48;5;232m\033[97m║\033[0m\n"
             if i == self.height:
-                chain += "   ║" + "-" * (2 * self.width + 1) + "║\n"
-        chain += "   ╚" + "═" * (2 * self.width + 1) + "╝\n"
-        chain += "     "
+                chain += "   \033[48;5;232m\033[97m║\033[0m" + \
+                    "\033[48;5;237m\033[97m-\033[0m" * \
+                    (self.width) + "\033[48;5;232m\033[97m║\033[0m\n"
+        chain += "   \033[48;5;232m\033[97m╚" + \
+            "═" * (self.width) + "╝\033[0m\n"
+        chain += "    "
         for j in range(self.width):
-            chain += "%d " % j
+            chain += "%d" % j
         chain += "\n"
+#             chain += "%2d ║ %s ║\n" % \
+#                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
+#                               for j in range(self.width)]))
+#             if i == self.height:
+#                 chain += "   ║" + "-" * (2 * self.width + 1) + "║\n"
+#         chain += "   ╚" + "═" * (2 * self.width + 1) + "╝\n"
+#         chain += "     "
+#         for j in range(self.width):
+#             chain += "%d " % j
+#         chain += "\n"
         return chain
 
     def printInfos(self):

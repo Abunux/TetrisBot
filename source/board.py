@@ -15,6 +15,7 @@
 
 from copy import deepcopy
 from tetramino import *
+from textutil import *
 
 
 class Board:
@@ -162,44 +163,31 @@ class Board:
 #                               for j in range(self.width)]))
         """
         for i in range(self.height + 2 - 1, -1, -1):
-            colors = {ID_IBLOCK: "\033[48;5;50m",
-                      ID_JBLOCK: "\033[48;5;27m",
-                      ID_LBLOCK: "\033[48;5;202m",
-                      ID_OBLOCK: "\033[48;5;226m",
-                      ID_SBLOCK: "\033[48;5;82m",
-                      ID_ZBLOCK: "\033[48;5;196m",
-                      ID_TBLOCK: "\033[48;5;165m"
+            colors = {ID_IBLOCK: CCYAN,
+                      ID_JBLOCK: CBLUE,
+                      ID_LBLOCK: CORANGE,
+                      ID_OBLOCK: CYELLOW,
+                      ID_SBLOCK: CGREEN,
+                      ID_ZBLOCK: CRED,
+                      ID_TBLOCK: CPURPLE
                       }
-            chain += "%2d \033[48;5;232m\033[97m║\033[0m" % i
+            chain += textColor("%2d ║" % i, bg=CBLACK, fg=CWHITE)
             for j in range(self.width):
-                if self.grid[i][j]:
-                    #                     chain += colors[self.grid[i][j]
-                    #                                     ] + str(self.grid[i][j]) + "\033[0m"
-                    chain += colors[self.grid[i][j]
-                                    ] + "." + "\033[0m"
+                if i == self.height:
+                    char = "~"
                 else:
-                    chain += "\033[48;5;232m\033[97m.\033[0m"
-            chain += "\033[48;5;232m\033[97m║\033[0m\n"
-            if i == self.height:
-                chain += "   \033[48;5;232m\033[97m║\033[0m" + \
-                    "\033[48;5;237m\033[97m-\033[0m" * \
-                    (self.width) + "\033[48;5;232m\033[97m║\033[0m\n"
-        chain += "   \033[48;5;232m\033[97m╚" + \
-            "═" * (self.width) + "╝\033[0m\n"
-        chain += "    "
+                    char = "."
+                if self.grid[i][j]:
+                    chain += textColor(char, bg=colors[self.grid[i][j]])
+                else:
+                    chain += textColor(char, bg=CBLACK, fg=CWHITE)
+            chain += textColor("║", bg=CBLACK, fg=CWHITE) + "\n"
+        chain += textColor("   ╚" + "═" * (self.width) +
+                           "╝", bg=CBLACK, fg=CWHITE) + "\n"
+        chain += textColor("    ", bg=CBLACK, fg=CWHITE)
         for j in range(self.width):
-            chain += "%d" % j
-        chain += "\n"
-#             chain += "%2d ║ %s ║\n" % \
-#                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
-#                               for j in range(self.width)]))
-#             if i == self.height:
-#                 chain += "   ║" + "-" * (2 * self.width + 1) + "║\n"
-#         chain += "   ╚" + "═" * (2 * self.width + 1) + "╝\n"
-#         chain += "     "
-#         for j in range(self.width):
-#             chain += "%d " % j
-#         chain += "\n"
+            chain += textColor("%d" % j, bg=CBLACK, fg=CWHITE)
+        chain += textColor(" \n", bg=CBLACK, fg=CWHITE)
         return chain
 
     def printInfos(self):

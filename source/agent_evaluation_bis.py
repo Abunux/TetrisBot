@@ -15,11 +15,11 @@
 #
 #-----------------------------------------------------
 
-from tetris_engine import *
+# from tetris_engine import *
 from random import *
 import itertools
 from time import *
-from agent import *
+from agent_bis import *
 
 
 class AgentEvaluation(Agent):

@@ -31,7 +31,7 @@ class Agent:
     def __init__(self, name="", description=""):
         self.name = name
         self.decription = description
-        # Dictionnaire content les stats de chaque mouvement
+        # Dictionnaire contenant les stats de chaque mouvement
         self.all_moves = {}
 #         self.q = Queue()
 
@@ -61,7 +61,7 @@ class Agent:
 
     def allMovesStats(self):
         """ Renvoie un dictionnaire contenant les stats de chaque mouvement possible 
-            Les clefs sont les mouvements et les valeurs sont els stats de ce mouvement """
+            Les clefs sont les mouvements et les valeurs sont les stats de ce mouvement """
         self.all_moves = {}
         possible_moves_direct = self.engine.getPossibleMovesDirect()
         for (j, r) in possible_moves_direct:
@@ -167,3 +167,12 @@ def plotBench(AgentToTest, nb_samples, filename="", title="", nb_bars=10, max_bl
     stats = Stats(data=s["scores"], mean_time=s["mean_time"],
                   filename=filename, title=title, nb_bars=nb_bars)
     stats.histogram()
+
+
+def benchTime(AgentToTest, max_blocks=0):
+    start = time()
+    player = AgentToTest(silent=True)
+    player.engine.max_blocks = max_blocks
+    player.engine.run()
+    total_time = time() - start
+    print(total_time / (player.engine.nb_blocks_played))

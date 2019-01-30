@@ -13,18 +13,23 @@
 #
 #-----------------------------------------------------
 
+#=========================================================================
+# Essai de refactoring avec numpy
+#=========================================================================
+
+
 from copy import deepcopy
 from tetramino import *
 from textutil import *
+import numpy as np
 
 
 class Board:
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height
-        self.grid = [[0] * width for _ in range(height + 2)]
-
-        self.column_heights = [0] * self.width
+        self.grid = np.zeros([self.height + 2, self.width], dtype=np.int8)
+        self.column_heights = np.zeros(self.width, dtype=np.int8)
         self.max_height = 0
         self.sum_heights = 0
         self.bumpiness = 0
@@ -36,11 +41,11 @@ class Board:
     #=========================================================================
     def getCell(self, i, j):
         """ Renvoie le contenu de la cellule (i,j) """
-        return self.grid[i][j]
+        return self.grid[i, j]
 
     def setCell(self, i, j, value):
         """ Met value dans la cellule (i,j) """
-        self.grid[i][j] = value
+        self.grid[i, j] = value
 
     def emptyCell(self, i, j):
         """ Vide la cellule (i,j) """
@@ -59,8 +64,11 @@ class Board:
 
     def removeLine(self, i):
         """ Supprime la ligne i """
-        del self.grid[i]
-        self.grid.append([0] * self.width)
+#         for k in range(i, self.height + 1):
+#             self.grid[k, :] = self.grid[k + 1, :]
+        self.grid[i:self.height + 1, :] = self.grid[i + 1:, :]
+        self.grid[self.height + 1, :] = 0
+#         self.grid[self.height + 1] = np.zeros(self.width, dtype=np.int8)
 
     #=========================================================================
     # Satistiques de la grille
@@ -75,17 +83,18 @@ class Board:
 
     def getColumnHeights(self):
         """ Renvoie la liste des hauteurs des colonnes """
-        self.column_heights = [self.columnHeight(j) for j in range(self.width)]
+        self.column_heights = np.array(
+            [self.columnHeight(j) for j in range(self.width)])
         return self.column_heights
 
     def getMaxHeight(self):
         """ Renvoie la hauteur maximum des pièces du jeu """
-        self.max_height = max(self.column_heights)
+        self.max_height = np.max(self.column_heights)
         return self.max_height
 
     def getSumHeights(self):
         """ Renvoie la somme des hauteurs des colonnes """
-        self.sum_heights = sum(self.column_heights)
+        self.sum_heights = np.sum(self.column_heights)
         return self.sum_heights
 
     def getBumpiness(self):
@@ -100,13 +109,6 @@ class Board:
     def isDominated(self, i, j):
         """ Teste si une case est vide et est dominée par une case au-dessus """
         return self.isCellEmpty(i, j) and i < self.column_heights[j]
-#         if not self.isCellEmpty(i, j):
-#             return False
-#         else:
-#             for k in range(i + 1, self.column_heights[j]):
-#                 if not self.isCellEmpty(k, j):
-#                     return True
-#             return False
 
     def getNbHoles(self):
         """ Renvoie le nombre de trous dans la grille
@@ -148,13 +150,16 @@ class Board:
     #=========================================================================
     def copy(self):
         """ Renvoie une copie de la grille """
+#         new_board = Board(width=self.width, height=self.height)
+#         new_board.grid = np.copy(self.grid)
+#         new_board.updateStats()
+#         return new_board
         return deepcopy(self)
 
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
 
-        """
         for i in range(self.height + 2 - 1, -1, -1):
             chain += "%2d ║ %s ║\n" % \
                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
@@ -166,8 +171,8 @@ class Board:
         for j in range(self.width):
             chain += "%d " % j
         chain += "\n"
-        """
 
+        """
         for i in range(self.height + 2 - 1, -1, -1):
             colors = {ID_IBLOCK: CCYAN,
                       ID_JBLOCK: CBLUE,
@@ -194,6 +199,8 @@ class Board:
         for j in range(self.width):
             chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
         chain += textColor(" \n", bg=CBLACK, fg=CWHITE)
+        """
+
         return chain
 
     def printInfos(self):
@@ -225,7 +232,7 @@ if __name__ == "__main__":
     board.setCell(3, 0, 0)
     board.setCell(3, 1, 4)
     board.setCell(3, 2, 4)
-
+    board.setCell(6, 2, 4)
     board.printInfos()
 
     board.processLines()

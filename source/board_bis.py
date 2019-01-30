@@ -19,7 +19,7 @@
 
 
 from copy import deepcopy
-from tetramino import *
+from tetramino_bis import *
 from textutil import *
 import numpy as np
 

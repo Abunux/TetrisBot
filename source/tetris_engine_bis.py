@@ -28,7 +28,6 @@ from random import *
 from math import *
 from time import *
 import os
-# from copy import deepcopy
 
 
 class TetrisEngine:
@@ -197,13 +196,9 @@ class TetrisEngine:
         self.direct_placements = []
         index = self.block.glyph_index
         for rotation in range(self.block.nb_rotations):
-            #             new_block = self.block.copy()
-            #             new_block.setRotation(rotation)
-            #             jmax = new_block.jmax
             self.block.setRotation(rotation)
             jmax = self.block.jmax
             for column in range(0, self.width - jmax):
-                # if self.canPlaceBlockDirect(column, rotation):
                 if self.isMoveValid(self.block, [self.block_position[0], column]):
                     self.direct_placements.append((column, rotation))
         self.block.setRotation(index)
@@ -323,9 +318,9 @@ class TetrisEngine:
     #=========================================================================
     # Méthodes utilitaires
     #=========================================================================
-#     def copy(self):
-#         """ Renvoie une copie de l'environnement """
-#         return deepcopy(self)
+    def copy(self):
+        """ Renvoie une copie de l'environnement """
+        return self.minimalCopy()
 
     def minimalCopy(self):
         """ Renvoie une copie minimale de l'environnement

@@ -13,24 +13,16 @@
 #
 #-----------------------------------------------------
 
-#=========================================================================
-# Essai de refactoring avec numpy
-#=========================================================================
 
-
-# from copy import deepcopy
 from tetramino_bis import *
 from textutil import *
-# import numpy as np
 
 
 class Board:
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height
-#         self.grid = np.zeros([self.height + 2, self.width], dtype=np.int8)
-        self.grid = [[0] * width for _ in range(height + 2)]
-#         self.column_heights = np.zeros(self.width, dtype=np.int8)
+        self.grid = [[0] * width for i in range(height + 2)]
         self.column_heights = [0] * self.width
         self.max_height = 0
         self.sum_heights = 0
@@ -43,12 +35,10 @@ class Board:
     #=========================================================================
     def getCell(self, i, j):
         """ Renvoie le contenu de la cellule (i,j) """
-#         return self.grid[i, j]
         return self.grid[i][j]
 
     def setCell(self, i, j, value):
         """ Met value dans la cellule (i,j) """
-#         self.grid[i, j] = value
         self.grid[i][j] = value
 
     def emptyCell(self, i, j):
@@ -91,20 +81,16 @@ class Board:
 
     def getColumnHeights(self):
         """ Renvoie la liste des hauteurs des colonnes """
-#         self.column_heights = np.array(
-#             [self.columnHeight(j) for j in range(self.width)])
         self.column_heights = [self.columnHeight(j) for j in range(self.width)]
         return self.column_heights
 
     def getMaxHeight(self):
         """ Renvoie la hauteur maximum des pièces du jeu """
-#         self.max_height = np.max(self.column_heights)
         self.max_height = max(self.column_heights)
         return self.max_height
 
     def getSumHeights(self):
         """ Renvoie la somme des hauteurs des colonnes """
-#         self.sum_heights = np.sum(self.column_heights)
         self.sum_heights = sum(self.column_heights)
         return self.sum_heights
 
@@ -126,7 +112,7 @@ class Board:
             (en fait ici juste les cases dominées) """
         self.nb_holes = 0
         for j in range(self.width):
-            for i in range(self.column_heights[j]):
+            for i in range(self.column_heights[j] - 1):
                 if self.isDominated(i, j):
                     self.nb_holes += 1
         return self.nb_holes
@@ -165,7 +151,6 @@ class Board:
         new_board.grid = [g[:] for g in self.grid]
         new_board.updateStats()
         return new_board
-#         return deepcopy(self)
 
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """

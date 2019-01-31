@@ -13,46 +13,29 @@
 #
 #-----------------------------------------------------
 
-# from copy import deepcopy
-# import numpy as np
-
 
 class Tetramino:
     def __init__(self, id, rotations, corners):
         self.id = id
-#         self.rotations = np.array(rotations, dtype=np.int8)
         self.rotations = rotations
         self.nb_rotations = len(self.rotations)
         self.corners = None
 #         self.corners = corners
-#         self.getCorners()
         self.glyph_index = 0
         self.glyph = self.rotations[0]
         self.getCorner()
-#         self.imax = self.getImax()
-#         self.jmax = self.getJmax()
 
     def getCorner(self):
         #         (self.imax, self.jmax) = self.corners[self.glyph_index]
         (self.imax, self.jmax) = (self.getImax(), self.getJmax())
 
     def getImax(self):
-        #         return np.max(self.glyph[:, 0])
         return max([self.glyph[k][0] for k in range(len(self.glyph))])
 #         return self.corners[self.glyph_index][0]
 
     def getJmax(self):
-        #         return np.max(self.glyph[:, 1])
         return max([self.glyph[k][1] for k in range(len(self.glyph))])
 #         return self.corners[self.glyph_index][1]
-
-#     def getCorners(self):
-#         self.corners = []
-#         for k in range(self.nb_rotations):
-#             self.corners.append((max([self.rotations[k][i][0] for i in range(len(self.rotations[k]))]),
-#                                  max([self.rotations[k][i][1]
-#                                       for i in range(len(self.rotations[k]))])
-#                                  ))
 
     def rotate(self, direction='H'):
         """ Tourne la pièce dans la direction donnée 
@@ -65,8 +48,6 @@ class Tetramino:
             self.glyph_index = (self.glyph_index - 1) % self.nb_rotations
         self.glyph = self.rotations[self.glyph_index]
         self.getCorner()
-#         self.imax = self.getImax()
-#         self.jmax = self.getJmax()
 
     def setRotation(self, i):
         """ Tourne directement une pièce """
@@ -74,12 +55,9 @@ class Tetramino:
         self.glyph_index = i
         self.glyph = self.rotations[i]
         self.getCorner()
-#         self.imax = self.getImax()
-#         self.jmax = self.getJmax()
 
     def copy(self):
         """ Renvoie une copie de la pièce """
-#         return deepcopy(self)
         new_block = Tetramino(self.id, self.rotations, self.corners)
         new_block.setRotation(self.glyph_index)
         new_block.getCorner()
@@ -102,6 +80,11 @@ class Tetramino:
 #=========================================================================
 # Création des blocs
 #=========================================================================
+# Chaque bloc est défini par :
+#    - Son id
+#    - La liste de ses rotations : un tableau contenant les coordonnées de toutes ses cellules
+#    - La liste de ses coins (non utilisée pour le moment)
+
 # I Block
 ID_IBLOCK = 1
 I0 = [[0, 0],
@@ -211,86 +194,9 @@ JBLOCK = Tetramino(ID_JBLOCK, [J0, J1, J2, J3], (
 
 BLOCK_BAG = [IBLOCK, OBLOCK, TBLOCK, SBLOCK, ZBLOCK, LBLOCK, JBLOCK]
 
-#=========================================================================
-# Création des blocs
-#=========================================================================
-# ID_IBLOCK = 1
-# IBLOCK = Tetramino(ID_IBLOCK,
-#                    [[0, 0, 0, 0],
-#                     [1, 1, 1, 1],
-#                     [0, 0, 0, 0],
-#                     [0, 0, 0, 0]],
-#                    2)
-#
-# ID_JBLOCK = 2
-# JBLOCK = Tetramino(ID_JBLOCK,
-#                    [[2, 0, 0],
-#                     [2, 2, 2],
-#                     [0, 0, 0]],
-#                    4)
-#
-# ID_LBLOCK = 3
-# LBLOCK = Tetramino(ID_LBLOCK,
-#                    [[0, 0, 3],
-#                     [3, 3, 3],
-#                     [0, 0, 0]],
-#                    4)
-#
-# ID_OBLOCK = 4
-# OBLOCK = Tetramino(ID_OBLOCK,
-#                    [[4, 4],
-#                     [4, 4]],
-#                    1)
-#
-# ID_SBLOCK = 5
-# SBLOCK = Tetramino(ID_SBLOCK,
-#                    [[0, 5, 5],
-#                     [5, 5, 0],
-#                     [0, 0, 0]],
-#                    2)
-#
-# ID_ZBLOCK = 6
-# ZBLOCK = Tetramino(ID_ZBLOCK,
-#                    [[6, 6, 0],
-#                     [0, 6, 6],
-#                     [0, 0, 0]],
-#                    2)
-#
-# ID_TBLOCK = 7
-# TBLOCK = Tetramino(ID_TBLOCK,
-#                    [[0, 7, 0],
-#                     [7, 7, 7],
-#                     [0, 0, 0]],
-#                    4)
-#
-# BLOCK_BAG = [IBLOCK, JBLOCK, LBLOCK, OBLOCK, SBLOCK, ZBLOCK, TBLOCK]
 
 if __name__ == "__main__":
-    #     t = Tetramino(1,
-    #                   [[[0, 0],
-    #                     [1, 0],
-    #                     [1, 1],
-    #                     [1, 2]],
-    #
-    #                    [[2, 0],
-    #                     [2, 1],
-    #                     [1, 1],
-    #                     [0, 1]]
-    #                    ]
-    #                   )
-    #     t = Tetramino(1, [I0, I1])
-    #     print(t.nb_rotations
-    #           )
-    #     print(t)
-    #     print(t.imax())
-    #     print(t.jmax())
-    #
-    #     t.rotate('H')
-    #     print(t)
-    #     print(t.imax())
-    #     print(t.jmax())
     for t in BLOCK_BAG:
-        #         print(t.id)
         for k in range(t.nb_rotations):
             print(t)
             print(t.imax, t.jmax)

@@ -3,7 +3,8 @@ from random import *
 from time import time
 from stats import *
 # from queue import Queue
-import threading
+# import threading
+# import multiprocessing
 
 #-----------------------------------------------------
 #
@@ -33,7 +34,6 @@ class Agent:
         self.decription = description
         # Dictionnaire contenant les stats de chaque mouvement
         self.all_moves = {}
-#         self.q = Queue()
 
     def commandFromMove(self, move):
         """ Renvoie la commande d'un mouvement à passer à l'engine """
@@ -88,6 +88,7 @@ class Agent:
 # Autre essai (marche pas)
 #-----------------------------------------------------------------------------
 #     def createQueue(self):
+#         self.q = Queue()
 #         for (j, r) in self.engine.getPossibleMovesDirect():
 #             self.q.put((j, r))
 #
@@ -108,10 +109,48 @@ class Agent:
 #             t.start()
 #             threads.append(t)
 #         self.q.join()
-#         for i in range(2):
-#             self.q.put(None)
+# #         for i in range(2):
+# #             self.q.put(None)
 #         for t in threads:
 #             t.join()
+#         return self.all_moves
+
+#     def createQueue(self):
+#         self.q = Queue()
+#         possible_moves_direct = self.engine.getPossibleMovesDirect()
+#         for (j, r) in possible_moves_direct:
+#             self.q.put((j, r))
+#
+#     def worker(self):
+#         while True:
+#             move = self.q.get()
+#             self.getMoveStats(move)
+#             self.q.task_done()
+#
+#     def allMovesStats(self):
+#         """ Renvoie les stats de chaque mouvement """
+#         self.all_moves = {}
+#         self.createQueue()
+#         cpus = multiprocessing.cpu_count()
+#         for i in range(cpus):
+#             t = threading.Thread(target=self.worker)
+#             t.daemon = True
+#             t.start()
+#         self.q.join()
+#         return self.all_moves
+
+#     def allMovesStats(self):
+#         self.all_moves = {}
+#         possible_moves_direct = self.engine.getPossibleMovesDirect()
+#         processes = []
+#         for (j, r) in possible_moves_direct:
+#             processes.append(multiprocessing.Process(
+#                 target=self.getMoveStats, args=((j, r),)))
+#         for p in processes:
+#             p.start()
+#         for p in processes:
+#             p.join()
+#         print(self.all_moves)
 #         return self.all_moves
 
 

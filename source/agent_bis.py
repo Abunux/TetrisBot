@@ -3,7 +3,7 @@ from random import *
 from time import time
 from stats import *
 # from queue import Queue
-# import threading
+import threading
 
 #-----------------------------------------------------
 #
@@ -43,7 +43,7 @@ class Agent:
         """ Remplit le dictionnaire contenant les statistiques de la grille
             après que le mouvement move ait été joué """
         (j, r) = move
-        engine = self.engine.copy()
+        engine = self.engine.minimalCopy()
         engine.placeBlockDirect(j, r)
         nb_lines = engine.board.processLines()
         engine.board.updateStats()
@@ -60,7 +60,7 @@ class Agent:
         }
 
     def allMovesStats(self):
-        """ Renvoie un dictionnaire contenant les stats de chaque mouvement possible 
+        """ Renvoie un dictionnaire contenant les stats de chaque mouvement possible
             Les clefs sont les mouvements et les valeurs sont les stats de ce mouvement """
         self.all_moves = {}
         possible_moves_direct = self.engine.getPossibleMovesDirect()
@@ -75,7 +75,8 @@ class Agent:
 #         """ Renvoie les stats de chaque mouvement """
 #         self.all_moves = {}
 #         threads = []
-#         for (j, r) in self.engine.getPossibleMovesDirect():
+#         possible_moves_direct = self.engine.getPossibleMovesDirect()
+#         for (j, r) in possible_moves_direct:
 #             t = threading.Thread(target=self.getMoveStats, args=((j, r),))
 #             threads.append(t)
 #         for t in threads:
@@ -176,3 +177,4 @@ def benchTime(AgentToTest, max_blocks=0):
     player.engine.run()
     total_time = time() - start
     print(total_time / (player.engine.nb_blocks_played))
+    return total_time / (player.engine.nb_blocks_played)

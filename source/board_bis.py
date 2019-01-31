@@ -18,18 +18,20 @@
 #=========================================================================
 
 
-from copy import deepcopy
+# from copy import deepcopy
 from tetramino_bis import *
 from textutil import *
-import numpy as np
+# import numpy as np
 
 
 class Board:
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height
-        self.grid = np.zeros([self.height + 2, self.width], dtype=np.int8)
-        self.column_heights = np.zeros(self.width, dtype=np.int8)
+#         self.grid = np.zeros([self.height + 2, self.width], dtype=np.int8)
+        self.grid = [[0] * width for _ in range(height + 2)]
+#         self.column_heights = np.zeros(self.width, dtype=np.int8)
+        self.column_heights = [0] * self.width
         self.max_height = 0
         self.sum_heights = 0
         self.bumpiness = 0
@@ -41,11 +43,13 @@ class Board:
     #=========================================================================
     def getCell(self, i, j):
         """ Renvoie le contenu de la cellule (i,j) """
-        return self.grid[i, j]
+#         return self.grid[i, j]
+        return self.grid[i][j]
 
     def setCell(self, i, j, value):
         """ Met value dans la cellule (i,j) """
-        self.grid[i, j] = value
+#         self.grid[i, j] = value
+        self.grid[i][j] = value
 
     def emptyCell(self, i, j):
         """ Vide la cellule (i,j) """
@@ -64,11 +68,15 @@ class Board:
 
     def removeLine(self, i):
         """ Supprime la ligne i """
+        del self.grid[i]
+        self.grid.append([0] * self.width)
+        """
 #         for k in range(i, self.height + 1):
 #             self.grid[k, :] = self.grid[k + 1, :]
         self.grid[i:self.height + 1, :] = self.grid[i + 1:, :]
         self.grid[self.height + 1, :] = 0
 #         self.grid[self.height + 1] = np.zeros(self.width, dtype=np.int8)
+        """
 
     #=========================================================================
     # Satistiques de la grille
@@ -83,23 +91,26 @@ class Board:
 
     def getColumnHeights(self):
         """ Renvoie la liste des hauteurs des colonnes """
-        self.column_heights = np.array(
-            [self.columnHeight(j) for j in range(self.width)])
+#         self.column_heights = np.array(
+#             [self.columnHeight(j) for j in range(self.width)])
+        self.column_heights = [self.columnHeight(j) for j in range(self.width)]
         return self.column_heights
 
     def getMaxHeight(self):
         """ Renvoie la hauteur maximum des pièces du jeu """
-        self.max_height = np.max(self.column_heights)
+#         self.max_height = np.max(self.column_heights)
+        self.max_height = max(self.column_heights)
         return self.max_height
 
     def getSumHeights(self):
         """ Renvoie la somme des hauteurs des colonnes """
-        self.sum_heights = np.sum(self.column_heights)
+#         self.sum_heights = np.sum(self.column_heights)
+        self.sum_heights = sum(self.column_heights)
         return self.sum_heights
 
     def getBumpiness(self):
         """ Renvoie la somme des valeurs absolues des différences
-            de hauteurs entre les colonnes consécutives """
+#             de hauteurs entre les colonnes consécutives """
         self.bumpiness = 0
         for j in range(1, self.width):
             self.bumpiness += abs(self.column_heights[j] -
@@ -150,11 +161,11 @@ class Board:
     #=========================================================================
     def copy(self):
         """ Renvoie une copie de la grille """
-#         new_board = Board(width=self.width, height=self.height)
-#         new_board.grid = np.copy(self.grid)
-#         new_board.updateStats()
-#         return new_board
-        return deepcopy(self)
+        new_board = Board(width=self.width, height=self.height)
+        new_board.grid = [g[:] for g in self.grid]
+        new_board.updateStats()
+        return new_board
+#         return deepcopy(self)
 
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
@@ -237,3 +248,6 @@ if __name__ == "__main__":
 
     board.processLines()
     board.printInfos()
+
+    new = board.copy()
+    new.printInfos()

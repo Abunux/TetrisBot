@@ -56,9 +56,16 @@ class AgentEvaluation(Agent):
 
 
 if __name__ == "__main__":
-    #     benchTime(AgentEvaluation, max_blocks=1000)
-    #     input()
-    #     quit()
+    pass
+#     t = 0
+#     n = 10
+#     max_blocks = 2000
+#     for k in range(n):
+#         t += benchTime(AgentEvaluation, max_blocks=max_blocks)
+#         print("(", t / (k + 1), ")")
+#     print("Total :", t / n)
+#     input()
+#     quit()
 
     playGameWithAgent(AgentEvaluation, temporisation=0)
     quit()

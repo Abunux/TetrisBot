@@ -48,11 +48,11 @@ class TetrisEngine:
 
         # Gestion des blocs
         seed(random_generator_seed)
-        self.block_bag = []
+        self.blocks_bag = []
         self.generateNewBlockBag()
         self.block = None
         self.block_position = [0, 0]
-        self.next_block = self.block_bag.pop()
+        self.next_block = self.blocks_bag.pop()
 
         self.max_blocks = max_blocks
         self.nb_blocks_played = 0
@@ -88,16 +88,16 @@ class TetrisEngine:
         # On utilise la règle du "7-random bag" :
         # On crée un sac de 7 pièces qu'on mélange
         # Dès qu'il est vide, on regénère un nouveau sac
-        self.block_bag = BLOCK_BAG[:]
-        shuffle(self.block_bag)
+        self.blocks_bag = RAPID_BLOCK_BAG[:]
+        shuffle(self.blocks_bag)
 
     def generateNewBlock(self):
         """ Remplace le bloc courant par le suivant et fabrique un nouveau bloc suivant """
         self.block = self.next_block.copy()
         # Si le sac est vide, on en recrée un nouveau
-        if len(self.block_bag) == 0:
+        if len(self.blocks_bag) == 0:
             self.generateNewBlockBag()
-        self.next_block = self.block_bag.pop()
+        self.next_block = self.blocks_bag.pop()
 
     def setBlockInitPosition(self):
         """ Position initiale pour un nouveau bloc """
@@ -305,7 +305,7 @@ class TetrisEngine:
         chain = "Score : %d\n" % self.score
         chain += "\n"
         chain += "BlocksBag : %s\n" % " ".join([str(b.id)
-                                                for b in self.block_bag])
+                                                for b in self.blocks_bag])
         chain += "\n"
         chain += "MaxHeight  : %d\n" % self.fixed_board.getMaxHeight()
         chain += "SumHeights : %d\n" % self.fixed_board.getSumHeights()

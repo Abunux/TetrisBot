@@ -19,23 +19,17 @@ class Tetramino:
         self.id = id
         self.rotations = rotations
         self.nb_rotations = len(self.rotations)
-        self.corners = None
-#         self.corners = corners
+        self.corners = corners
         self.glyph_index = 0
         self.glyph = self.rotations[0]
-        self.getCorner()
+        self.getCorners()
+        self.size = max(self.imax + 1, self.jmax + 1)
 
-    def getCorner(self):
-        #         (self.imax, self.jmax) = self.corners[self.glyph_index]
-        (self.imax, self.jmax) = (self.getImax(), self.getJmax())
-
-    def getImax(self):
-        return max([self.glyph[k][0] for k in range(len(self.glyph))])
-#         return self.corners[self.glyph_index][0]
-
-    def getJmax(self):
-        return max([self.glyph[k][1] for k in range(len(self.glyph))])
-#         return self.corners[self.glyph_index][1]
+    def getCorners(self):
+        """ Renvoie les coordonées des coins de la pièce """
+        (self.imin, self.jmin, self.imax,
+            self.jmax) = self.corners[self.glyph_index]
+        return (self.imin, self.jmin, self.imax, self.jmax)
 
     def rotate(self, direction='H'):
         """ Tourne la pièce dans la direction donnée 
@@ -47,34 +41,37 @@ class Tetramino:
         else:
             self.glyph_index = (self.glyph_index - 1) % self.nb_rotations
         self.glyph = self.rotations[self.glyph_index]
-        self.getCorner()
+        self.getCorners()
 
     def setRotation(self, i):
         """ Tourne directement une pièce """
         i = i % self.nb_rotations
         self.glyph_index = i
         self.glyph = self.rotations[i]
-        self.getCorner()
+        self.getCorners()
 
     def copy(self):
         """ Renvoie une copie de la pièce """
         new_block = Tetramino(self.id, self.rotations, self.corners)
         new_block.setRotation(self.glyph_index)
-        new_block.getCorner()
         return new_block
+
+    def toArray(self):
+        """ Renvoie la représentation du bloc sous forme de matrice carrée """
+        self.getCorners()
+        self.array = [[0] * self.size for i in range(self.size)]
+        for (i, j) in self.glyph:
+            self.array[i][j] = self.id
+        return self.array
 
     def __str__(self):
         """ Renvoie une représentation textuelle des blocs """
-        self.getCorner()
-        charsGlyph = [["."] * (self.jmax + 1) for i in range(self.imax + 1)]
-        for (i, j) in self.glyph:
-            charsGlyph[i][j] = str(self.id)
-        strGlyph = ""
-        for i in range(self.imax + 1):
-            for j in range(self.jmax + 1):
-                strGlyph += charsGlyph[i][j]
-            strGlyph += "\n"
-        return strGlyph
+        self.getCorners()
+        self.array = self.toArray()
+        return "\n".join(
+            ["".join([str(self.array[i][j]) if self.array[i][j] else "."
+                      for j in range(self.size)])
+             for i in range(self.size)])
 
 
 #=========================================================================
@@ -83,122 +80,327 @@ class Tetramino:
 # Chaque bloc est défini par :
 #    - Son id
 #    - La liste de ses rotations : un tableau contenant les coordonnées de toutes ses cellules
-#    - La liste de ses coins (non utilisée pour le moment)
+#    - La liste de ses coins sous la forme (imin, jmin, imax, jmax)
+#
+# Par exemple, le T sur le dos :
+#
+#   0 1 2
+# 0 . # .
+# 1 # # #
+# 2 . . .
+#
+# sera codé par ma liste [[0,1],[1,0],[1,1],[2,1]]
+# et aura pour coins (0,0,1,2)
+#
+# Avantage : avoir un même système de codage pour les blocs rapides (coin
+# en haut à gauche toujours en (0,0) et nombre minimum de rotations)
+# et les blocs classiques (4 rotations autour du centre de leur matrice)
 
-# I Block
 ID_IBLOCK = 1
-I0 = [[0, 0],
-      [0, 1],
-      [0, 2],
-      [0, 3]]
-I1 = [[0, 0],
-      [1, 0],
-      [2, 0],
-      [3, 0]]
-IBLOCK = Tetramino(ID_IBLOCK, [I0, I1], ((0, 3), (3, 0)))
+ID_OBLOCK = 2
+ID_TBLOCK = 3
+ID_SBLOCK = 4
+ID_ZBLOCK = 5
+ID_LBLOCK = 6
+ID_JBLOCK = 7
+
+#------------------------------------------------------------------------------
+# Blocs rapides
+#  - Coins en haut à gauche en (0,0)
+#  - Nombre minimum de rotations
+#------------------------------------------------------------------------------
+# I Block (rapid)
+RAPID_I0 = [[0, 0],
+            [0, 1],
+            [0, 2],
+            [0, 3]]
+RAPID_I1 = [[0, 0],
+            [1, 0],
+            [2, 0],
+            [3, 0]]
+RAPID_IBLOCK = Tetramino(ID_IBLOCK,
+                         [RAPID_I0, RAPID_I1],
+                         ((0, 0, 0, 3), (0, 0, 3, 0))
+                         )
 
 # O Block
-ID_OBLOCK = 2
-O0 = [[0, 0],
-      [0, 1],
-      [1, 0],
-      [1, 1]]
-OBLOCK = Tetramino(ID_OBLOCK, [O0], ((1, 1),))
+RAPID_O0 = [[0, 0],
+            [0, 1],
+            [1, 0],
+            [1, 1]]
+RAPID_OBLOCK = Tetramino(ID_OBLOCK,
+                         [RAPID_O0],
+                         ((0, 0, 1, 1),)
+                         )
 
 # T Block
-ID_TBLOCK = 3
-T0 = [[0, 1],
-      [1, 0],
-      [1, 1],
-      [1, 2]]
-T1 = [[0, 0],
-      [1, 0],
-      [1, 1],
-      [2, 0]]
-T2 = [[0, 0],
-      [0, 1],
-      [0, 2],
-      [1, 1]]
-T3 = [[0, 1],
-      [1, 0],
-      [1, 1],
-      [2, 1]]
-TBLOCK = Tetramino(ID_TBLOCK, [T0, T1, T2, T3], (
-                   (1, 2), (2, 1), (1, 2), (2, 1)))
+RAPID_T0 = [[0, 1],
+            [1, 0],
+            [1, 1],
+            [1, 2]]
+RAPID_T1 = [[0, 0],
+            [1, 0],
+            [1, 1],
+            [2, 0]]
+RAPID_T2 = [[0, 0],
+            [0, 1],
+            [0, 2],
+            [1, 1]]
+RAPID_T3 = [[0, 1],
+            [1, 0],
+            [1, 1],
+            [2, 1]]
+RAPID_TBLOCK = Tetramino(ID_TBLOCK,
+                         [RAPID_T0, RAPID_T1, RAPID_T2, RAPID_T3],
+                         ((0, 0, 1, 2), (0, 0, 2, 1), (0, 0, 1, 2), (0, 0, 2, 1))
+                         )
 
 # S Block
-ID_SBLOCK = 4
-S0 = [[0, 1],
-      [0, 2],
-      [1, 0],
-      [1, 1]]
-S1 = [[0, 0],
-      [1, 0],
-      [1, 1],
-      [2, 1]]
-SBLOCK = Tetramino(ID_SBLOCK, [S0, S1], ((1, 2), (2, 1)))
+RAPID_S0 = [[0, 1],
+            [0, 2],
+            [1, 0],
+            [1, 1]]
+RAPID_S1 = [[0, 0],
+            [1, 0],
+            [1, 1],
+            [2, 1]]
+RAPID_SBLOCK = Tetramino(ID_SBLOCK,
+                         [RAPID_S0, RAPID_S1],
+                         ((0, 0, 1, 2), (0, 0, 2, 1))
+                         )
 
 # Z Block
-ID_ZBLOCK = 5
-Z0 = [[0, 0],
-      [0, 1],
-      [1, 1],
-      [1, 2]]
-Z1 = [[0, 1],
-      [1, 0],
-      [1, 1],
-      [2, 0]]
-ZBLOCK = Tetramino(ID_ZBLOCK, [Z0, Z1],  ((1, 2), (2, 1)))
+RAPID_Z0 = [[0, 0],
+            [0, 1],
+            [1, 1],
+            [1, 2]]
+RAPID_Z1 = [[0, 1],
+            [1, 0],
+            [1, 1],
+            [2, 0]]
+RAPID_ZBLOCK = Tetramino(ID_ZBLOCK,
+                         [RAPID_Z0, RAPID_Z1],
+                         ((0, 0, 1, 2), (0, 0, 2, 1))
+                         )
 
 # L Block
-ID_LBLOCK = 6
-L0 = [[0, 0],
-      [1, 0],
-      [1, 1],
-      [1, 2]]
-L1 = [[0, 0],
-      [0, 1],
-      [1, 0],
-      [2, 0]]
-L2 = [[0, 0],
-      [0, 1],
-      [0, 2],
-      [1, 2]]
-L3 = [[0, 1],
-      [1, 1],
-      [2, 0],
-      [2, 1]]
-LBLOCK = Tetramino(ID_LBLOCK, [L0, L1, L2, L3], (
-                   (1, 2), (2, 1), (1, 2), (2, 1)))
+RAPID_L0 = [[0, 0],
+            [1, 0],
+            [1, 1],
+            [1, 2]]
+RAPID_L1 = [[0, 0],
+            [0, 1],
+            [1, 0],
+            [2, 0]]
+RAPID_L2 = [[0, 0],
+            [0, 1],
+            [0, 2],
+            [1, 2]]
+RAPID_L3 = [[0, 1],
+            [1, 1],
+            [2, 0],
+            [2, 1]]
+RAPID_LBLOCK = Tetramino(ID_LBLOCK,
+                         [RAPID_L0, RAPID_L1, RAPID_L2, RAPID_L3],
+                         ((0, 0, 1, 2), (0, 0, 2, 1), (0, 0, 1, 2), (0, 0, 2, 1))
+                         )
 
 # J Block
-ID_JBLOCK = 7
-J0 = [[0, 2],
-      [1, 0],
-      [1, 1],
-      [1, 2]]
-J1 = [[0, 0],
-      [1, 0],
-      [2, 0],
-      [2, 1]]
-J2 = [[0, 0],
-      [0, 1],
-      [0, 2],
-      [1, 0]]
-J3 = [[0, 0],
-      [0, 1],
-      [1, 1],
-      [2, 1]]
-JBLOCK = Tetramino(ID_JBLOCK, [J0, J1, J2, J3], (
-                   (1, 2), (2, 1), (1, 2), (2, 1)))
+RAPID_J0 = [[0, 2],
+            [1, 0],
+            [1, 1],
+            [1, 2]]
+RAPID_J1 = [[0, 0],
+            [1, 0],
+            [2, 0],
+            [2, 1]]
+RAPID_J2 = [[0, 0],
+            [0, 1],
+            [0, 2],
+            [1, 0]]
+RAPID_J3 = [[0, 0],
+            [0, 1],
+            [1, 1],
+            [2, 1]]
+RAPID_JBLOCK = Tetramino(ID_JBLOCK,
+                         [RAPID_J0, RAPID_J1, RAPID_J2, RAPID_J3],
+                         ((0, 0, 1, 2), (0, 0, 2, 1), (0, 0, 1, 2), (0, 0, 2, 1))
+                         )
 
-BLOCK_BAG = [IBLOCK, OBLOCK, TBLOCK, SBLOCK, ZBLOCK, LBLOCK, JBLOCK]
+# Block bag
+RAPID_BLOCK_BAG = [
+    RAPID_IBLOCK,
+    RAPID_OBLOCK,
+    RAPID_TBLOCK,
+    RAPID_SBLOCK,
+    RAPID_ZBLOCK,
+    RAPID_LBLOCK,
+    RAPID_JBLOCK
+]
 
+#------------------------------------------------------------------------------
+# Blocs classiques
+#  - Rotations dans une matrice carrée
+#  - 4 rotations par pièce (sauf le O qui n'en n'a qu'une)
+#------------------------------------------------------------------------------
+# I Block
+CLASSIC_I0 = [[1, 0],
+              [1, 1],
+              [1, 2],
+              [1, 3]]
+CLASSIC_I1 = [[0, 2],
+              [1, 2],
+              [2, 2],
+              [3, 2]]
+CLASSIC_I2 = [[2, 0],
+              [2, 1],
+              [2, 2],
+              [2, 3]]
+CLASSIC_I3 = [[0, 1],
+              [1, 1],
+              [2, 1],
+              [3, 1]]
+CLASSIC_IBLOCK = Tetramino(ID_IBLOCK,
+                           [CLASSIC_I0, CLASSIC_I1, CLASSIC_I2, CLASSIC_I3],
+                           ((1, 0, 1, 3), (0, 2, 3, 2), (2, 0, 2, 3), (0, 1, 3, 1))
+                           )
+
+# O Block
+CLASSIC_O0 = [[0, 0],
+              [0, 1],
+              [1, 0],
+              [1, 1]]
+CLASSIC_OBLOCK = Tetramino(ID_OBLOCK,
+                           [CLASSIC_O0],
+                           ((0, 0, 1, 1),)
+                           )
+
+# T Block
+CLASSIC_T0 = [[0, 1],
+              [1, 0],
+              [1, 1],
+              [1, 2]]
+CLASSIC_T1 = [[0, 1],
+              [1, 1],
+              [1, 2],
+              [2, 1]]
+CLASSIC_T2 = [[1, 0],
+              [1, 1],
+              [1, 2],
+              [2, 1]]
+CLASSIC_T3 = [[0, 1],
+              [1, 0],
+              [1, 1],
+              [2, 1]]
+CLASSIC_TBLOCK = Tetramino(ID_TBLOCK,
+                           [CLASSIC_T0, CLASSIC_T1, CLASSIC_T2, CLASSIC_T3],
+                           ((0, 0, 1, 2), (0, 1, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
+                           )
+
+# S Block
+CLASSIC_S0 = [[0, 1],
+              [0, 2],
+              [1, 0],
+              [1, 1]]
+CLASSIC_S1 = [[0, 1],
+              [1, 1],
+              [1, 2],
+              [2, 2]]
+CLASSIC_S2 = [[1, 1],
+              [1, 2],
+              [2, 0],
+              [2, 1]]
+CLASSIC_S3 = [[0, 0],
+              [1, 0],
+              [1, 1],
+              [2, 1]]
+CLASSIC_SBLOCK = Tetramino(ID_SBLOCK,
+                           [CLASSIC_S0, CLASSIC_S1, CLASSIC_S2, CLASSIC_S3],
+                           ((0, 0, 1, 2), (0, 1, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
+                           )
+
+# Z Block
+CLASSIC_Z0 = [[0, 0],
+              [0, 1],
+              [1, 1],
+              [1, 2]]
+CLASSIC_Z1 = [[0, 2],
+              [1, 1],
+              [1, 2],
+              [2, 1]]
+CLASSIC_Z2 = [[1, 0],
+              [1, 1],
+              [2, 1],
+              [2, 2]]
+CLASSIC_Z3 = [[0, 1],
+              [1, 0],
+              [1, 1],
+              [2, 0]]
+CLASSIC_ZBLOCK = Tetramino(ID_ZBLOCK,
+                           [CLASSIC_Z0, CLASSIC_Z1, CLASSIC_Z2, CLASSIC_Z3],
+                           ((0, 0, 1, 2), (0, 0, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
+                           )
+
+# L Block
+CLASSIC_L0 = [[0, 0],
+              [1, 0],
+              [1, 1],
+              [1, 2]]
+CLASSIC_L1 = [[0, 1],
+              [0, 2],
+              [1, 1],
+              [2, 1]]
+CLASSIC_L2 = [[1, 0],
+              [1, 1],
+              [1, 2],
+              [2, 2]]
+CLASSIC_L3 = [[0, 1],
+              [1, 1],
+              [2, 0],
+              [2, 1]]
+CLASSIC_LBLOCK = Tetramino(ID_LBLOCK,
+                           [CLASSIC_L0, CLASSIC_L1, CLASSIC_L2, CLASSIC_L3],
+                           ((0, 0, 1, 2), (0, 1, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
+                           )
+
+# J Block
+CLASSIC_J0 = [[0, 2],
+              [1, 0],
+              [1, 1],
+              [1, 2]]
+CLASSIC_J1 = [[0, 1],
+              [1, 1],
+              [2, 1],
+              [2, 2]]
+CLASSIC_J2 = [[1, 0],
+              [1, 1],
+              [1, 2],
+              [2, 0]]
+CLASSIC_J3 = [[0, 0],
+              [0, 1],
+              [1, 1],
+              [2, 1]]
+CLASSIC_JBLOCK = Tetramino(ID_JBLOCK,
+                           [CLASSIC_J0, CLASSIC_J1, CLASSIC_J2, CLASSIC_J3],
+                           ((0, 0, 1, 2), (0, 1, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
+                           )
+
+# Block bag
+CLASSIC_BLOCK_BAG = [
+    CLASSIC_IBLOCK,
+    CLASSIC_OBLOCK,
+    CLASSIC_TBLOCK,
+    CLASSIC_SBLOCK,
+    CLASSIC_ZBLOCK,
+    CLASSIC_LBLOCK,
+    CLASSIC_JBLOCK
+]
 
 if __name__ == "__main__":
-    for t in BLOCK_BAG:
+    for t in CLASSIC_BLOCK_BAG:
         for k in range(t.nb_rotations):
             print(t)
-            print(t.imax, t.jmax)
+            print(t.imin, t.jmin, t.imax, t.jmax)
+            print(t.toArray())
             print()
             t.rotate("H")

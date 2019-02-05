@@ -115,7 +115,7 @@ class Tetramino:
 # Création des blocs
 #=========================================================================
 ID_IBLOCK = 1
-IBLOCK = Tetramino(ID_IBLOCK,
+RAPID_IBLOCK = Tetramino(ID_IBLOCK,
                    [[0, 0, 0, 0],
                     [1, 1, 1, 1],
                     [0, 0, 0, 0],
@@ -123,50 +123,50 @@ IBLOCK = Tetramino(ID_IBLOCK,
                    2)
 
 ID_JBLOCK = 2
-JBLOCK = Tetramino(ID_JBLOCK,
+RAPID_JBLOCK = Tetramino(ID_JBLOCK,
                    [[2, 0, 0],
                     [2, 2, 2],
                     [0, 0, 0]],
                    4)
 
 ID_LBLOCK = 3
-LBLOCK = Tetramino(ID_LBLOCK,
+RAPID_LBLOCK = Tetramino(ID_LBLOCK,
                    [[0, 0, 3],
                     [3, 3, 3],
                     [0, 0, 0]],
                    4)
 
 ID_OBLOCK = 4
-OBLOCK = Tetramino(ID_OBLOCK,
+RAPID_OBLOCK = Tetramino(ID_OBLOCK,
                    [[4, 4],
                     [4, 4]],
                    1)
 
 ID_SBLOCK = 5
-SBLOCK = Tetramino(ID_SBLOCK,
+RAPID_SBLOCK = Tetramino(ID_SBLOCK,
                    [[0, 5, 5],
                     [5, 5, 0],
                     [0, 0, 0]],
                    2)
 
 ID_ZBLOCK = 6
-ZBLOCK = Tetramino(ID_ZBLOCK,
+RAPID_ZBLOCK = Tetramino(ID_ZBLOCK,
                    [[6, 6, 0],
                     [0, 6, 6],
                     [0, 0, 0]],
                    2)
 
 ID_TBLOCK = 7
-TBLOCK = Tetramino(ID_TBLOCK,
+RAPID_TBLOCK = Tetramino(ID_TBLOCK,
                    [[0, 7, 0],
                     [7, 7, 7],
                     [0, 0, 0]],
                    4)
 
-BLOCK_BAG = [IBLOCK, JBLOCK, LBLOCK, OBLOCK, SBLOCK, ZBLOCK, TBLOCK]
+RAPID_BLOCK_BAG = [RAPID_IBLOCK, RAPID_JBLOCK, RAPID_LBLOCK, RAPID_OBLOCK, RAPID_SBLOCK, RAPID_ZBLOCK, RAPID_TBLOCK]
 
 if __name__ == "__main__":
-    for t in BLOCK_BAG:
+    for t in RAPID_BLOCK_BAG:
         print(t)
         print(t.getBoundingBox())
         print()

@@ -32,6 +32,7 @@ import os
 
 class TetrisEngine:
     def __init__(self, getMove, width=10, height=22, max_blocks=0,
+                 base_blocks_bag=RAPID_BLOCK_BAG,
                  temporisation=0, silent=False, random_generator_seed=None,
                  agent_name="", agent_description=""):
         self.width = width
@@ -41,17 +42,17 @@ class TetrisEngine:
         self.board = Board(width, height)
         # La grille constituée des pièces placées
         self.fixed_board = self.board.copy()
-#         self.fixed_board = Board(width, height)
         # La fonction de callback à appeler pour jouer un coup
         self.getMove = getMove
 
         # Gestion des blocs
         seed(random_generator_seed)
-        self.block_bag = []
+        self.base_blocks_bag = base_blocks_bag
+        self.blocks_bag = []
         self.generateNewBlockBag()
         self.block = None
         self.block_position = [0, 0]
-        self.next_block = self.block_bag.pop()
+        self.next_block = self.blocks_bag.pop()
 
         self.max_blocks = max_blocks
         self.nb_blocks_played = 0
@@ -87,16 +88,16 @@ class TetrisEngine:
         # On utilise la règle du "7-random bag" :
         # On crée un sac de 7 pièces qu'on mélange
         # Dès qu'il est vide, on regénère un nouveau sac
-        self.block_bag = BLOCK_BAG[:]
-        shuffle(self.block_bag)
+        self.blocks_bag = self.base_blocks_bag[:]
+        shuffle(self.blocks_bag)
 
     def generateNewBlock(self):
         """ Remplace le bloc courant par le suivant et fabrique un nouveau bloc suivant """
         self.block = self.next_block.copy()
         # Si le sac est vide, on en recrée un nouveau
-        if len(self.block_bag) == 0:
+        if len(self.blocks_bag) == 0:
             self.generateNewBlockBag()
-        self.next_block = self.block_bag.pop()
+        self.next_block = self.blocks_bag.pop()
 
     def setBlockInitPosition(self):
         """ Position initiale pour un nouveau bloc """
@@ -119,7 +120,7 @@ class TetrisEngine:
         """ Teste si une position est valide pour un bloc """
         # Teste si le bloc sort de la grille
         if new_position[1] + block.jmax >= self.board.width or new_position[0] - block.imax < 0 \
-                or new_position[0] > self.board.height + 1 or new_position[1] < 0:
+                or new_position[0] - block.imin > self.board.height + 1 or new_position[1] + block.jmin < 0:
             return False
 
         # Teste si les nouvelles cases occupées par le bloc sont vides
@@ -197,8 +198,9 @@ class TetrisEngine:
         index = self.block.glyph_index
         for rotation in range(self.block.nb_rotations):
             self.block.setRotation(rotation)
+            jmin = self.block.jmin
             jmax = self.block.jmax
-            for column in range(0, self.width - jmax):
+            for column in range(0 - jmin, self.width - jmax):
                 if self.isMoveValid(self.block, [self.block_position[0], column]):
                     self.direct_placements.append((column, rotation))
         self.block.setRotation(index)
@@ -281,7 +283,7 @@ class TetrisEngine:
         chain = "Score : %d\n" % self.score
         chain += "\n"
         chain += "BlocksBag : %s\n" % " ".join([str(b.id)
-                                                for b in self.block_bag])
+                                                for b in self.blocks_bag])
         chain += "\n"
         chain += "MaxHeight  : %d\n" % self.fixed_board.getMaxHeight()
         chain += "SumHeights : %d\n" % self.fixed_board.getSumHeights()

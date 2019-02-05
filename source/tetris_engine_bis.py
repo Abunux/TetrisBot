@@ -31,7 +31,7 @@ import os
 
 
 class TetrisEngine:
-    def __init__(self, getMove, width=10, height=22, max_blocks=0,
+    def __init__(self, getMove=lambda: '', width=10, height=22, max_blocks=0,
                  base_blocks_bag=RAPID_BLOCK_BAG,
                  temporisation=0, silent=False, random_generator_seed=None,
                  agent_name="", agent_description=""):
@@ -411,5 +411,6 @@ S : Restart
 Q : Quit""")
         move = input("Mouvement : ")
         return move.upper()
-    engine = TetrisEngine(getMove, agent_name="Toto")
+    engine = TetrisEngine(
+        getMove=getMove, base_blocks_bag=CLASSIC_BLOCK_BAG, agent_name="Toto")
     engine.run()

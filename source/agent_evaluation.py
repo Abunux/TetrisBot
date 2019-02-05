@@ -15,7 +15,7 @@
 #
 #-----------------------------------------------------
 
-from tetris_engine import *
+# from tetris_engine import *
 from random import *
 import itertools
 from time import *
@@ -27,7 +27,9 @@ class AgentEvaluation(Agent):
         super().__init__(name="Evaluation %s" % str(eval_coeffs))
         self.eval_coeffs = eval_coeffs
         self.engine = TetrisEngine(
-            self.getMove, temporisation=temporisation, silent=silent,
+            self.getMove,
+            base_blocks_bag=RAPID_BLOCK_BAG,
+            temporisation=temporisation, silent=silent,
             agent_name=self.name, agent_description=self.decription)
 
     def moveEvaluation(self, move):
@@ -56,9 +58,16 @@ class AgentEvaluation(Agent):
 
 
 if __name__ == "__main__":
-    #     benchTime(AgentEvaluation, max_blocks=1000)
-    #     input()
-    #     quit()
+    pass
+#     t = 0
+#     n = 20
+#     max_blocks = 1000
+#     for k in range(n):
+#         t += benchTime(AgentEvaluation, max_blocks=max_blocks)
+#         print("(", t / (k + 1), ")")
+#     print("Total :", t / n)
+#     input()
+#     quit()
 
     playGameWithAgent(AgentEvaluation, temporisation=0)
     quit()

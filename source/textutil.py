@@ -14,7 +14,7 @@
 #-----------------------------------------------------
 
 import re
-
+from time import *
 
 # Contantes de couleurs en mode 2566 couleurs VTE
 CRED = 196
@@ -85,6 +85,10 @@ def boxed(text, prefix='', window_width=0, window_height=0):
             (window_width + len(prefix) - 1) + '║' + '\n'
     chain += '╚' + '═' * window_width + '╝ '
     return chain
+
+
+def dateNow():
+    return strftime("%d/%m/%y - %H:%M:%S", localtime())
 
 
 if __name__ == "__main__":

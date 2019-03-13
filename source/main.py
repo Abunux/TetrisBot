@@ -26,6 +26,7 @@ from agent_random1 import *
 from agent_random2 import *
 from agent_evaluation import *
 from agent_filtering import *
+from optimizer_algogen import *
 import os
 
 
@@ -35,7 +36,8 @@ def menuAgentType():
     2 : Aléatoire 1
     3 : Aléatoire 2
     4 : Évaluation
-    5 : Filtrage""")
+    5 : Filtrage
+    6 : Algorithme génétique""")
     agent = int(input("Votre choix : "))
     if agent == 1:
         AgentType = AgentHuman

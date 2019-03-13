@@ -46,6 +46,7 @@ class TetrisEngine:
         self.getMove = getMove
 
         # Gestion des blocs
+        self.random_generator_seed = random_generator_seed
         seed(random_generator_seed)
         self.base_blocks_bag = base_blocks_bag
         self.blocks_bag = []
@@ -61,9 +62,11 @@ class TetrisEngine:
         self.score = 0
         self.score_on_move = 0
         self.total_lines = 0
+#         self.max_height_on_game = 0
+#         self.max_sum_heights_on_game = 0
 
         # Lancement du moteur
-        self.isRunning = True
+        self.is_running = True
 
         # Affichage ou non
         self.silent = silent
@@ -180,7 +183,7 @@ class TetrisEngine:
         if self.isMoveValid(new_block, self.block_position):
             self.eraseBlock()
             self.block.rotate(direction)
-            self.placeBloc_bisk(self.block, self.block_position)
+            self.placeBlock(self.block, self.block_position)
 
     def canPlaceBlockDirect(self, column, rotation):
         """ Teste si on peut placer directement un bloc 
@@ -247,13 +250,9 @@ class TetrisEngine:
         elif command == 'S':
             self.__init__(self.width, self.height)
         elif command == 'Q':
-            self.isRunning = False
+            self.is_running = False
         else:
             pass
-
-    def isEndGame(self):
-        """ Teste la fin du jeu """
-        return self.fixed_board.max_height > self.board.height
 
     #=========================================================================
     # Scores
@@ -345,6 +344,10 @@ class TetrisEngine:
     #=========================================================================
     # Boucle principale
     #=========================================================================
+    def isEndGame(self):
+        """ Teste la fin du jeu """
+        return self.fixed_board.max_height > self.board.height
+
     def run(self):
         """ Boucle principale du jeu """
         # L'algo est le suivant :
@@ -362,11 +365,11 @@ class TetrisEngine:
         #     Fixe la grille
         #     Teste la fin du jeu
         # Retourne le score
-        while self.isRunning and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
+        while self.is_running and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
             self.getNewBlock()
             self.time_total = time() - self.time_start
             self.score_on_move = 0
-            while self.moveBlockInDirection('') and self.isRunning:
+            while self.moveBlockInDirection('') and self.is_running:
                 self.score_on_move += self.getScoreFromMove()
 
                 if not self.silent:
@@ -391,11 +394,14 @@ class TetrisEngine:
 
             self.fixed_board = self.board.copy()
             self.fixed_board.updateStats()
-
+#             self.max_height_on_game = max(
+#                 self.max_height_on_game, self.fixed_board.max_height)
+#             self.max_sum_heights_on_game = max(
+#                 self.max_sum_heights_on_game, self.fixed_board.sum_heights)
             if self.isEndGame():
                 if not self.silent:
                     print(self)
-                self.isRunning = False
+                self.is_running = False
         return self.score
 
 

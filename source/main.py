@@ -131,11 +131,11 @@ if __name__ == "__main__":
             os.system("clear")
             playGameWithAgentEvaluation(best_coeffs)
         elif choix == 2:
-            population_size = input("Taille de la population [10] : ")
+            population_size = input("Taille de la population [20] : ")
             if population_size:
                 population_size = int(population_size)
             else:
-                population_size = 10
+                population_size = 20
             nb_gen = input("Nombre de générations [10] : ")
             if nb_gen:
                 nb_gen = int(nb_gen)

@@ -25,7 +25,9 @@ from agent import *
 class AgentEvaluation(Agent):
     # def __init__(self, eval_coeffs=[0.8, 0.6, 0.4, 0.2], temporisation=0.1,
     # silent=False):
-    def __init__(self, eval_coeffs=[0.0615, 0.1197, 0.940, 0.1373], temporisation=0.1, silent=False):
+    # def __init__(self, eval_coeffs=[0.0615, 0.1197, 0.940, 0.1373],
+    # temporisation=0.1, silent=False):
+    def __init__(self, eval_coeffs=[0.548, 0.5218, 0.6267, 0.1862], temporisation=0.1, silent=False):
         super().__init__(name="Evaluation %s" % str(eval_coeffs))
         self.eval_coeffs = eval_coeffs
         self.engine = TetrisEngine(
@@ -38,8 +40,8 @@ class AgentEvaluation(Agent):
         """ Évalue le mouvement move=(j, r) """
         # Si le mouvement fait perdre la partie, on lui donne une évaluation
         # fortement négative
-        if self.all_moves[move]["max_height"] > self.engine.height:
-            return -10000000
+#         if self.all_moves[move]["max_height"] > self.engine.height:
+#             return -10000000
         # Sinon l'évaluation est une combinaaison linéaires de critères
         return self.eval_coeffs[0] * self.all_moves[move]["nb_lines"] \
             - self.eval_coeffs[1] * self.all_moves[move]["sum_heights"] \
@@ -57,6 +59,17 @@ class AgentEvaluation(Agent):
                 best_eval = move_eval
                 best_move = move
         return self.commandFromMove(best_move)
+
+
+def playGameWithAgentEvaluation(coeffs):
+    os.system("clear")
+    while True:
+        player = AgentEvaluation(
+            eval_coeffs=coeffs, temporisation=0, silent=False)
+        player.engine.run()
+        print("End of game")
+        input("Press Enter to continue or CTRL+C to quit")
+        os.system("clear")
 
 
 if __name__ == "__main__":

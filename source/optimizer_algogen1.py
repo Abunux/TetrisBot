@@ -39,7 +39,7 @@ class Individual:
         return self.values
 
 
-class Optimizer_AlgoGen:
+class OptimizerAlgoGen:
     def __init__(self, nb_genes=16, population_size=10, proba_mutation=0.01,
                  max_nb_blocks=500, elitism_percentage=5, nb_generations=10):
         self.nb_genes = nb_genes
@@ -154,7 +154,7 @@ class Optimizer_AlgoGen:
 
 
 if __name__ == "__main__":
-    optimizer = Optimizer_AlgoGen(
+    optimizer = OptimizerAlgoGen(
         population_size=50, nb_generations=50, max_nb_blocks=1000)
     best_coeffs = optimizer.process()
     input("Press enter to see the agent in action...")

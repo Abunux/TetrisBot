@@ -23,7 +23,7 @@ from math import sqrt
 import matplotlib.pyplot as plt
 
 
-class Optimzer_AlgoGen2:
+class OptimzerAlgoGen2:
     def __init__(self, population_size=50, nb_generations=100, max_nb_blocks=500, nb_games_played=10,
                  proba_mutation=0.05, mutation_rate=0.2,
                  percentage_for_tournament=0.10, percentage_new_offspring=0.30):
@@ -204,7 +204,7 @@ class Optimzer_AlgoGen2:
 
 
 if __name__ == "__main__":
-    optimizer = Optimzer_AlgoGen2()
+    optimizer = OptimzerAlgoGen2()
     best_coeffs = optimizer.process()
 
     input("Press enter to see the agent in action...")

@@ -88,7 +88,7 @@ class OptimizerAlgoGen:
             crossover_point = randrange(0, self.nb_genes)
             child1.genom[k] = parent1.genom[k][:crossover_point] + \
                 parent2.genom[k][crossover_point:]
-            child1.genom[k] = parent2.genom[k][:crossover_point] + \
+            child2.genom[k] = parent2.genom[k][:crossover_point] + \
                 parent1.genom[k][crossover_point:]
         return [child1, child2]
 

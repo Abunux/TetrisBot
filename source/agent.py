@@ -5,6 +5,7 @@ from stats import *
 # from queue import Queue
 # import threading
 # import multiprocessing
+from copy import deepcopy
 
 #-----------------------------------------------------
 #
@@ -157,19 +158,83 @@ class Agent:
 #=========================================================================
 # Fonctions pour lancer des parties ou des tests
 #=========================================================================
-def playGameWithAgent(AgentToTest, temporisation=0.1):
+# def playGameWithAgent(AgentToTest, temporisation=0.1):
+#     """ Lance des parties avec l'agent """
+#     input("Press enter to start")
+#     os.system("clear")
+#     while True:
+#         player = AgentToTest(temporisation=temporisation, silent=False)
+#         player.engine.run()
+#         print("End of game")
+#         input("Press Enter to continue or CTRL+C to quit")
+#         os.system("clear")
+#
+#
+# def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
+#     """ Réalise un bench de AgentToTest en jouant nb_samples parties """
+#     stats = {}
+#     scores = []
+#     start = time()
+#     print("Lancement du bench avec un échantillon de taille %d" % nb_samples)
+#     for k in range(nb_samples):
+#         if k == 1:
+#             print("Temps total estimé : %.0f sec" %
+#                   ((time() - start) * (nb_samples - 1)))
+#         if k > 0 and k % (nb_samples / 10) == 0:
+#             print("Avancement du bench: %.2f %% (Temps restant estimé : %.0f sec)" %
+#                   ((100 * k / nb_samples), (nb_samples - k) * (time() - start) / k))
+#         player = AgentToTest(silent=True)
+#         player.engine.max_blocks = max_blocks
+#         score = player.engine.run()
+#         scores.append(score)
+#     print("Avancement du bench : %.2f %%" % (100))
+#     total_time = time() - start
+#     total_score = sum(scores)
+#     stats["scores"] = scores
+#     stats["min_score"] = min(scores)
+#     stats["max_score"] = max(scores)
+#     stats["total_score"] = total_score
+#     stats["mean_score"] = total_score / nb_samples
+#     stats["total_time"] = total_time
+#     stats["mean_time"] = total_time / nb_samples
+#     print("Temps total : %.2f secondes" % total_time)
+#     return stats
+#
+#
+# def plotBench(AgentToTest, nb_samples, filename="", title="", nb_bars=10, max_blocks=0):
+#     """ Réalise un bench de AgentToTest en jouant nb_samples parties
+#         Affiche les résultats sous la forme d'un histogramme avec nb_bars classes """
+#     s = benchAgent(AgentToTest, nb_samples=nb_samples, max_blocks=max_blocks)
+#     stats = Stats(data=s["scores"], mean_time=s["mean_time"],
+#                   filename=filename, title=title, nb_bars=nb_bars)
+#     stats.histogram()
+#
+#
+# def benchTime(AgentToTest, max_blocks=0):
+#     start = time()
+#     player = AgentToTest(silent=True)
+#     player.engine.max_blocks = max_blocks
+#     player.engine.run()
+#     total_time = time() - start
+#     print(total_time / (player.engine.nb_blocks_played))
+#     return total_time / (player.engine.nb_blocks_played)
+#
+
+
+def playGame(player_init, temporisation=0.1):
     """ Lance des parties avec l'agent """
     input("Press enter to start")
     os.system("clear")
     while True:
-        player = AgentToTest(temporisation=temporisation, silent=False)
+        player = deepcopy(player_init)
+        player.engine.temporisation = temporisation
         player.engine.run()
         print("End of game")
         input("Press Enter to continue or CTRL+C to quit")
         os.system("clear")
 
 
-def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
+def benchPlayer(player_init, nb_samples=100, max_blocks=0):
     """ Réalise un bench de AgentToTest en jouant nb_samples parties """
     stats = {}
     scores = []
@@ -182,7 +247,8 @@ def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
         if k > 0 and k % (nb_samples / 10) == 0:
             print("Avancement du bench: %.2f %% (Temps restant estimé : %.0f sec)" %
                   ((100 * k / nb_samples), (nb_samples - k) * (time() - start) / k))
-        player = AgentToTest(silent=True)
+        player = deepcopy(player_init)
+        player.engine.silent = True
         player.engine.max_blocks = max_blocks
         score = player.engine.run()
         scores.append(score)
@@ -200,18 +266,17 @@ def benchAgent(AgentToTest, nb_samples=100, max_blocks=0):
     return stats
 
 
-def plotBench(AgentToTest, nb_samples, filename="", title="", nb_bars=10, max_blocks=0):
+def plotBenchPlayer(player_init, nb_samples, filename="", title="", nb_bars=10, max_blocks=0):
     """ Réalise un bench de AgentToTest en jouant nb_samples parties
         Affiche les résultats sous la forme d'un histogramme avec nb_bars classes """
-    s = benchAgent(AgentToTest, nb_samples=nb_samples, max_blocks=max_blocks)
+    s = benchPlayer(player_init, nb_samples=nb_samples, max_blocks=max_blocks)
     stats = Stats(data=s["scores"], mean_time=s["mean_time"],
                   filename=filename, title=title, nb_bars=nb_bars)
     stats.histogram()
 
 
-def benchTime(AgentToTest, max_blocks=0):
+def benchTimePlayer(player, max_blocks=0):
     start = time()
-    player = AgentToTest(silent=True)
     player.engine.max_blocks = max_blocks
     player.engine.run()
     total_time = time() - start

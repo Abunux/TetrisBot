@@ -61,11 +61,11 @@ class AgentEvaluation(Agent):
         return self.commandFromMove(best_move)
 
 
-def playGameWithAgentEvaluation(coeffs):
+def playGameWithAgentEvaluation(coeffs, temporisation=0):
     os.system("clear")
     while True:
         player = AgentEvaluation(
-            eval_coeffs=coeffs, temporisation=0, silent=False)
+            eval_coeffs=coeffs, temporisation=temporisation, silent=False)
         player.engine.run()
         print("End of game")
         input("Press Enter to continue or CTRL+C to quit")
@@ -83,8 +83,8 @@ if __name__ == "__main__":
 #     print("Total :", t / n)
 #     input()
 #     quit()
-
-    playGameWithAgent(AgentEvaluation, temporisation=0)
+    player = AgentEvaluation()
+    playGame(player, temporisation=0)
     quit()
 
     #=========================================================================

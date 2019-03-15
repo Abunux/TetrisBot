@@ -39,7 +39,7 @@ class Individual:
         return self.values
 
 
-class OptimizerAlgoGen:
+class OptimizerAlgoGen1:
     def __init__(self, nb_genes=16, population_size=10, proba_mutation=0.01,
                  max_nb_blocks=500, elitism_percentage=5, nb_generations=10):
         self.nb_genes = nb_genes
@@ -100,13 +100,13 @@ class OptimizerAlgoGen:
         return [population[scores.index(sorted_scores[k])]
                 for k in range(self.population_size - nb_conserves, self.population_size)]
 
-    def mutate(self, invdividual):
+    def mutate(self, individual):
         """ Mute un individu """
         for i in range(4):
             for k in range(self.nb_genes):
                 if random() < self.proba_mutation:
-                    invdividual.genom[i][k] = 1 - invdividual.genom[i][k]
-        return invdividual
+                    individual.genom[i][k] = 1 - individual.genom[i][k]
+        return individual
 
     def makeNewGeneration(self):
         """ Crée une nouvelle génération """
@@ -154,7 +154,7 @@ class OptimizerAlgoGen:
 
 
 if __name__ == "__main__":
-    optimizer = OptimizerAlgoGen(
+    optimizer = OptimizerAlgoGen1(
         population_size=50, nb_generations=50, max_nb_blocks=1000)
     best_coeffs = optimizer.process()
     input("Press enter to see the agent in action...")

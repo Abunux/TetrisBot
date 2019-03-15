@@ -156,6 +156,7 @@ class Board:
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
 
+        """
         for i in range(self.height + 2 - 1, -1, -1):
             chain += "%2d ║ %s ║\n" % \
                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
@@ -167,17 +168,16 @@ class Board:
         for j in range(self.width):
             chain += "%d " % j
         chain += "\n"
-
         """
+        colors = {ID_IBLOCK: CCYAN,
+                  ID_JBLOCK: CBLUE,
+                  ID_LBLOCK: CORANGE,
+                  ID_OBLOCK: CYELLOW,
+                  ID_SBLOCK: CGREEN,
+                  ID_ZBLOCK: CRED,
+                  ID_TBLOCK: CPURPLE
+                  }
         for i in range(self.height + 2 - 1, -1, -1):
-            colors = {ID_IBLOCK: CCYAN,
-                      ID_JBLOCK: CBLUE,
-                      ID_LBLOCK: CORANGE,
-                      ID_OBLOCK: CYELLOW,
-                      ID_SBLOCK: CGREEN,
-                      ID_ZBLOCK: CRED,
-                      ID_TBLOCK: CPURPLE
-                      }
             chain += textColor("%2d ║" % (i % 10), bg=CBLACK, fg=CWHITE)
             for j in range(self.width):
                 if i == self.height:
@@ -195,7 +195,6 @@ class Board:
         for j in range(self.width):
             chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
         chain += textColor(" \n", bg=CBLACK, fg=CWHITE)
-        """
 
         return chain
 

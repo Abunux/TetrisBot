@@ -84,7 +84,7 @@ if __name__ == "__main__":
 #     input()
 #     quit()
     player = AgentEvaluation()
-    playGame(player, temporisation=0)
+    playGame(player, temporisation=0.05)
     quit()
 
     #=========================================================================

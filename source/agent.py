@@ -278,7 +278,8 @@ def plotBenchPlayer(player_init, nb_samples, filename="", title="", nb_bars=10, 
 def benchTimePlayer(player, max_blocks=0):
     start = time()
     player.engine.max_blocks = max_blocks
+    player.engine.silent = True
     player.engine.run()
     total_time = time() - start
-    print(total_time / (player.engine.nb_blocks_played))
+#     print(total_time / (player.engine.nb_blocks_played))
     return total_time / (player.engine.nb_blocks_played)

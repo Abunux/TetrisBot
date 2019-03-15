@@ -26,7 +26,7 @@ from agent_random1 import *
 from agent_random2 import *
 from agent_evaluation import *
 from agent_filtering import *
-from optimizer_algogen1 import *
+from optimizer_algogen3 import *
 from optimizer_algogen2 import *
 import os
 
@@ -65,9 +65,9 @@ def menuAgentType():
     1 : Humain
     2 : Aléatoire 1
     3 : Aléatoire 2
-    4 : Évaluation
-    5 : Filtrage
-    6 : Algorithme génétique""")
+    4 : Filtrage
+    5 : Évaluation
+    """)
     agent = int(input("Votre choix : "))
     if agent == 1:
         player = AgentHuman()
@@ -76,14 +76,15 @@ def menuAgentType():
     elif agent == 3:
         player = AgentRandom2()
     elif agent == 4:
+        player = AgentFiltering()
+    elif agent == 5:
         c1 = inputFloat("Coeff 1 [0.8] : ", 0.8)
         c2 = inputFloat("Coeff 2 [0.6] : ", 0.6)
         c3 = inputFloat("Coeff 3 [0.4] : ", 0.4)
         c4 = inputFloat("Coeff 4 [0.2] : ", 0.2)
         coeffs = [c1, c2, c3, c4]
         player = AgentEvaluation(eval_coeffs=coeffs)
-    elif agent == 5:
-        player = AgentFiltering()
+
     return (agent, player)
 
 
@@ -120,21 +121,37 @@ if __name__ == "__main__":
                 plotBenchPlayer(player, nb_samples=nb_samples,
                                 max_blocks=max_blocks)
     elif choix == 2:
-        algo = menuOptimisationType()
-        if algo == 1:
-            population_size = inputInt("Taille de la population [10] : ", 10)
-            nb_gen = inputInt("Nombre de générations [10] : ", 10)
-            max_blocks = inputInt("Nombre max de blocs [500] : ", 500)
-            optimizer = OptimizerAlgoGen(
-                population_size=population_size, nb_generations=nb_gen, max_nb_blocks=max_blocks)
-        elif choix == 2:
-            population_size = inputInt("Taille de la population [20] : ", 20)
-            nb_gen = inputInt("Nombre de générations [10] : ", 10)
-            max_blocks = inputInt("Nombre max de blocs [500] : ", 500)
-            nb_games = inputInt("Nombre de parties par évaluation [10] : ", 10)
-            optimizer = OptimzerAlgoGen2(
-                population_size=population_size, nb_generations=nb_gen,
-                max_nb_blocks=max_blocks, nb_games_played=nb_games)
+        ok = False
+        while not ok:
+            algo = menuOptimisationType()
+            if algo == 1:
+                population_size = inputInt(
+                    "Taille de la population [20] : ", 20)
+                nb_gen = inputInt("Nombre de générations [10] : ", 10)
+                max_blocks = inputInt("Nombre max de blocs [500] : ", 500)
+                nb_games = inputInt(
+                    "Nombre de parties par évaluation [5] : ", 5)
+                optimizer = OptimizerAlgoGen3(
+                    population_size=population_size, nb_generations=nb_gen,
+                    max_nb_blocks=max_blocks, nb_games_played=nb_games)
+            elif choix == 2:
+                population_size = inputInt(
+                    "Taille de la population [20] : ", 20)
+                nb_gen = inputInt("Nombre de générations [10] : ", 10)
+                max_blocks = inputInt("Nombre max de blocs [500] : ", 500)
+                nb_games = inputInt(
+                    "Nombre de parties par évaluation [5] : ", 5)
+                optimizer = OptimzerAlgoGen2(
+                    population_size=population_size, nb_generations=nb_gen,
+                    max_nb_blocks=max_blocks, nb_games_played=nb_games)
+            print("Calul du temps estimé de l'optimisation....")
+            estimated_time = population_size * max_blocks * \
+                nb_games * nb_gen * benchTimePlayer(AgentEvaluation(), 50)
+            print("Le temps estimé est de %d secondes" % int(estimated_time))
+            ans = input("Voulez-vous continuer [O/n] : ")
+            if ans.lower() != "n":
+                ok = True
+        os.system("clear")
         best_coeffs = optimizer.process()
         input("Press enter to see the agent in action...")
         os.system("clear")

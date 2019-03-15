@@ -16,27 +16,42 @@
 #-----------------------------------------------------
 
 from agent_evaluation import *
-from textutil import *
 from random import *
 from time import time
-from math import sqrt
+from math import *
 import matplotlib.pyplot as plt
-# import matplotlib.animation as animation
 
 
-class OptimzerAlgoGen2:
-    def __init__(self, population_size=20, nb_generations=3, max_nb_blocks=5, nb_games_played=1,
-                 proba_mutation=0.05, mutation_rate=0.2,
-                 percentage_for_tournament=0.10, percentage_new_offspring=0.30):
-        # Paramètres de l'algo génétique
+# Fonctions utilitaires de conversion
+def binToFloat(bits):
+    """ Renvoie la représentation entre 0 et 1 d'une liste binaire 
+    Le chiffre des unités étant considéré comme le 1er élément de la liste
+    (ça n'a aucune importance vu qu'on va partir de listes aléatoires)"""
+    x = 0
+    m = 1
+    for bit in bits:
+        m *= 0.5
+        x += m * bit
+    return x
+
+
+def binVectorToFloat(bin_vector):
+    """ Convertit un vecteur de listes binaires en vecteur de float """
+    return [binToFloat(bin_vector[k]) for k in range(4)]
+
+
+class OptimizerAlgoGen3:
+    def __init__(self, nb_bits=16, population_size=50, nb_generations=20,
+                 max_nb_blocks=500, nb_games_played=10,
+                 proba_mutation=0.05, elitism_percentage=0.20):
+        self.nb_bits = nb_bits
         self.population_size = population_size
-        self.nb_generations = nb_generations
+        self.proba_mutation = proba_mutation
         self.max_nb_blocks = max_nb_blocks
         self.nb_games_played = nb_games_played
-        self.proba_mutation = proba_mutation
-        self.mutation_rate = mutation_rate
-        self.percentage_for_tournament = percentage_for_tournament
-        self.percentage_new_offspring = percentage_new_offspring
+        self.nb_generations = nb_generations
+        self.elitism_percentage = elitism_percentage
+#         self.percentage_new_offspring = percentage_new_offspring
 
         self.population = []
 
@@ -49,24 +64,27 @@ class OptimzerAlgoGen2:
         """ Trie la population par ordre décroissant de scores """
         self.population.sort(key=lambda p: p["score"], reverse=True)
 
-    def normalize(self, vector):
-        """ Normalise un vecteur """
-        norm = sqrt(sum([v**2 for v in vector]))
-        if norm != 0:
-            return [v / norm for v in vector]
-        else:
-            return self.normalize([1, 1, 1, 1])
+#     def sortPopulationAscending(self):
+#         """ Trie la population par ordre croissant de scores """
+#         self.population.sort(key=lambda p: p["score"])
+
+    def randomBinaryList(self):
+        """ Renvoie une liste de self.nb_bits chiffres binaires aléatoires """
+        return [randint(0, 1) for _ in range(self.nb_bits)]
 
     def initPopulation(self):
-        """ Initialise la population """
+        """ Initialisation de la population """
         print("%s - Initialisation de la population..." % dateNow())
         for k in range(self.population_size):
             print("%s - Individu %d/%d" %
                   (dateNow(), k + 1, self.population_size))
-            vector = self.normalize([random() for _ in range(4)])
-            self.population.append({"vector": vector, "score": -1})
-            self.updateScore(self.population[k])
-        self.population.sort(key=lambda p: p["score"], reverse=True)
+            bin_vector = [self.randomBinaryList() for _ in range(4)]
+            vector = binVectorToFloat(bin_vector)
+            score = self.fitness(vector)
+            self.population.append({"bin_vector": bin_vector,
+                                    "vector": vector,
+                                    "score": score})
+        self.sortPopulationDescending()
 
     def scoreOnOneGame(self, vector):
         """ Score sur une partie """
@@ -75,7 +93,6 @@ class OptimzerAlgoGen2:
         player.engine.max_blocks = self.max_nb_blocks
         player.engine.run()
         return player.engine.total_lines
-#         return score
 
     def fitness(self, vector):
         """ Fitness de l'individu : score total sur nb_games_played parties """
@@ -88,60 +105,81 @@ class OptimzerAlgoGen2:
         """ Met à jour le score de l'individu """
         individu["score"] = self.fitness(individu["vector"])
 
-    def getPopulationScores(self):
-        """ Calcule les scores de toute la population """
-        for k in range(self.population_size):
-            self.updateScore(self.population[k])
+    def updateBinaryIndivdu(self, individu):
+        """ Met à jour les paramètres d'un individu à partir de son vecteur binaire """
+        bin_vector = individu["bin_vector"]
+        vector = binVectorToFloat(bin_vector)
+        score = self.fitness(vector)
+        individu["vector"] = vector
+        individu["score"] = score
 
-    def linearCombination(self, a1, vector1, a2, vector2):
-        """ Renvoie la combinaison linéaire de deux vecteurs """
-        return [a1 * vector1[k] + a2 * vector2[k] for k in range(4)]
+    def wheelSelection(self):
+        """ Sélection d'un individu avec une roulette """
+        self.sortPopulationAscending()
+        score_total = sum([p["score"] for p in self.population])
+        probas = [p["score"] / score_total for p in self.population]
+        r = random()
+        k = 0
+        ptotal = probas[0]
+        while ptotal < r:
+            k += 1
+            ptotal += probas[k]
+        return self.population[k]
 
-    def crossover(self, i1, i2):
-        """ Croise les individus i1 et i2 """
-        return self.linearCombination(i1["score"], i1["vector"],
-                                      i2["score"], i2["vector"])
+    def crossover(self, parent1, parent2):
+        """ Renvoie les enfants de parent1 et parent2 """
+        bin_vector1 = []
+        bin_vector2 = []
+        for k in range(4):
+            crossover_point = randrange(0, self.nb_bits)
+            bin_vector1.append(parent1["bin_vector"][k][:crossover_point] +
+                               parent2["bin_vector"][k][crossover_point:])
+            bin_vector2.append(parent2["bin_vector"][k][:crossover_point] +
+                               parent1["bin_vector"][k][crossover_point:])
+        child1 = {"bin_vector": bin_vector1}
+        child2 = {"bin_vector": bin_vector2}
+        return [child1, child2]
 
-    def mutateVector(self, vector):
-        """ Mute un individu (son vecteur) """
-        if random() < self.proba_mutation:
-            delta = uniform(-self.mutation_rate, self.mutation_rate)
-            i = randrange(4)
-            vi = vector[i]
-            if 0 <= vi + delta <= 1:
-                vector[i] += delta
-                vector = self.normalize(vector)
-        return vector
+    def mutateBinVector(self, bin_vector):
+        """ Mute un vecteur """
+        for i in range(4):
+            for k in range(self.nb_bits):
+                if random() < self.proba_mutation:
+                    bin_vector[i][k] = 1 - bin_vector[i][k]
+        return bin_vector
 
     def generateNewOffspring(self):
         """ Renvoie la nouvelle génération """
         print("%s - Création des enfants... " % dateNow())
         new_offspring = []
-        nb_childs_to_create = int(
-            self.population_size * self.percentage_new_offspring)
-        # On crée un ecratin nombre d'enfants
+#         nb_childs_to_create = int(
+#             self.population_size * self.percentage_new_offspring)
+        nb_childs_to_create = ceil(
+            self.population_size * (1 - self.elitism_percentage))
+        # On crée un certain nombre d'enfants
         created_childs = 0
         while created_childs < nb_childs_to_create:
-            print("%s - Génération %d - Enfant %d/%d" %
-                  (dateNow(), self.num_generation, created_childs + 1, nb_childs_to_create))
-            # On sélectionne au hasard un pourcentage de la population
-            candidates = []
-            for k in range(int(self.population_size * self.percentage_for_tournament)):
-                candidates.append(choice(self.population))
-            candidates.sort(key=lambda p: p["score"], reverse=True)
-            # On croise les deux meilleurs qu'on ajoute dans la nouvelle
-            # génération
-            offspring_vector = self.normalize(
-                self.crossover(candidates[0], candidates[1]))
-            # On mute l'enfant créé
-            offspring_vector = self.mutateVector(offspring_vector)
-            # Calcul de son score
-            offspring_score = self.fitness(offspring_vector)
+            print("%s - Génération %d - Enfants %d,%d/%d" %
+                  (dateNow(), self.num_generation, created_childs + 1, created_childs + 2,
+                   nb_childs_to_create))
+            parent1 = self.wheelSelection()
+            parent2 = self.wheelSelection()
+            [child1, child2] = self.crossover(parent1, parent2)
+            # On mute les enfants créés
+            child1["bin_vector"] = self.mutateBinVector(child1["bin_vector"])
+            child2["bin_vector"] = self.mutateBinVector(child2["bin_vector"])
+            # Update des enfants créés
+            self.updateBinaryIndivdu(child1)
+            self.updateBinaryIndivdu(child2)
             # Ajout à la liste des enfants
-            new_offspring.append({"vector": offspring_vector,
-                                  "score": offspring_score})
-            created_childs += 1
+            new_offspring += [child1, child2]
+            created_childs += 2
         return new_offspring
+
+    def keepOnlyElite(self):
+        self.sortPopulationDescending()
+        self.population = self.population[:int(
+            self.elitism_percentage * self.population_size)]
 
     def deleteWorst(self):
         """ Enlève les moins bons éléments de la population """
@@ -151,33 +189,16 @@ class OptimzerAlgoGen2:
     def makeNewGeneration(self):
         """ Crée une nouvelle génération """
         self.num_generation += 1
+        self.keepOnlyElite()
         new_offspring = self.generateNewOffspring()
         self.population += new_offspring
-        self.deleteWorst()
+        self.deleteWorst()  # Au cas où on dépasse population_size
 
     def updateStats(self):
         """ Met à jours les statistiques """
         self.max_scores.append(self.population[0]["score"])
         self.average_scores.append(sum([self.population[k]["score"]
                                         for k in range(self.population_size)]) / self.population_size)
-#         self.plotAnimate()
-
-# Essai pour faire évoluer le graphique au fur et à mesure des générations
-# Pour l'instant ça marche pas...
-
-#     def plotInit(self):
-#         plt.title("pop_size=%d - nb_games=%d - max_blocks=%d" %
-#                   (self.population_size, self.nb_games_played, self.max_nb_blocks))
-# #         self.fig.legend()
-#         plt.xlabel("Génération")
-#         plt.ylabel("Score")
-#         plt.ion()
-#         plt.show()
-#
-#     def plotAnimate(self):
-#         plt.plot(self.average_scores, label="Average scores")
-#         plt.plot(self.max_scores, label="Max scores")
-#         plt.draw()
 
     def plotStats(self):
         """ Courbes de statistiques """
@@ -198,19 +219,12 @@ class OptimzerAlgoGen2:
         print("  - nb_games_played = %d" % self.nb_games_played)
         print("  - max_nb_blocks = %d" % self.max_nb_blocks)
         print("  - proba_mutation = %.2f" % self.proba_mutation)
-        print("  - mutation_rate = %.2f" % self.mutation_rate)
-        print("  - percentage_for_tournament = %.2f" %
-              self.percentage_for_tournament)
-        print("  - percentage_new_offspring = %.2f" %
-              self.percentage_new_offspring)
+        print("  - elitism_percentage = %.2f" %
+              self.elitism_percentage)
         print()
-
-#         self.plotInit()
-#         animation.FuncAnimation(self.fig, self.plotAnimate, interval=1000)
 
         self.initPopulation()
         self.updateStats()
-
         for k in range(self.nb_generations):
             print("Best : %s - Score : %d" % (str(self.population[0]["vector"]),
                                               self.population[0]["score"]))
@@ -232,7 +246,7 @@ class OptimzerAlgoGen2:
 
 
 if __name__ == "__main__":
-    optimizer = OptimzerAlgoGen2()
+    optimizer = OptimizerAlgoGen3()
     best_coeffs = optimizer.process()
 
     input("Press enter to see the agent in action...")

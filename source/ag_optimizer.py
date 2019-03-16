@@ -77,17 +77,14 @@ class AGOptimizer:
         self.elitism_percentage = elitism_percentage
 
         # Encodage du vecteur de coefficients
-        # "bin" ou "float"
         #    - "bin" encode le vecteur en binaire et croise les bits
         #    - "float" encode le vecteur en réel, normé et croise par combinaison linéaire
         self.vector_encoding = vector_encoding
         # Méthode de sélection de parents
-        # "wheel" ou "tournament"
         #    - "wheel" : sélection par roulette
         #    - "tournament" : selection par tournoi
         self.parents_selection_method = parents_selection_method
         # Conservation des anciens individus
-        # "elitism", "best" ou "none"
         #    - "elitism" : conserve un pourcentage des meilleurs de la génération d'avant
         #    - "best" : les enfants sont mélangé aux parents et on ne garde que les meilleurs
         #    - "none" : aucun parent n'est conservé
@@ -109,9 +106,11 @@ class AGOptimizer:
         return [randint(0, 1) for _ in range(self.nb_bits)]
 
     def randomBinaryVector(self):
+        """ Renvoie un vecteur binaire aléatoire """
         return [self.randomBinaryList() for _ in range(4)]
 
     def randomFloatVector(self):
+        """ Renvoie un vecteur aléatoire normé """
         return normalize([random() for _ in range(4)])
 
     def scoreOnOneGame(self, vector):
@@ -173,6 +172,7 @@ class AGOptimizer:
         return self.population[k]
 
     def tournamentSelection(self):
+        """ Sélection par tournoi """
         candidates = []
         # On sélectionne au hasard un pourcentage de la population
         for k in range(int(self.population_size * self.percentage_for_tournament)):
@@ -219,6 +219,7 @@ class AGOptimizer:
         return bin_vector
 
     def mutate(self, individu):
+        """ Mute un individu """
         if self.vector_encoding == "bin":
             individu["bin_vector"] = self.mutateBinVector(
                 individu["bin_vector"])
@@ -279,6 +280,7 @@ class AGOptimizer:
         return new_offspring
 
     def keepOnlyElite(self):
+        """ Garde le meilleurs élémen de la génération précédente """
         self.sortPopulationDescending()
         self.population = self.population[:int(
             self.elitism_percentage * self.population_size)]
@@ -319,10 +321,11 @@ class AGOptimizer:
         plt.show()
 
     def stringOfParameters(self):
+        """ Renvoie la chaine des paramètres de l'algorithme génétique """
         s = "Algorithme génétique de paramètres : \n"
-        s += "  - Vector encoding : %s\n" % self.vector_encoding
-        s += "  - Parents selection method : %s\n" % self.parents_selection_method
-        s += "  - Old generation policy : %s\n" % self.old_generation_policy
+        s += "  - vector_encoding : %s\n" % self.vector_encoding
+        s += "  - parents_selection_method : %s\n" % self.parents_selection_method
+        s += "  - old_generation_policy : %s\n" % self.old_generation_policy
         s += "  - nb_generations = %d\n" % self.nb_generations
         s += "  - population_size = %d\n" % self.population_size
         s += "  - max_nb_blocks = %d\n" % self.max_nb_blocks

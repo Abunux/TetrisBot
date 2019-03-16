@@ -41,7 +41,7 @@ def inputInt(text, default=0):
 
 def inputFloat(text, default=0):
     """ Demande un float et renvoie default si pas de valeur entrée """
-    x = input(text + "[" + str(default) + "] : ")
+    x = input(text + " [" + str(default) + "] : ")
     if x:
         return float(x)
     else:
@@ -52,7 +52,7 @@ def menuMain():
     """ Menu principal """
     print("""Que voulez-vous faire :
     1 : Utiliser un agent
-    2 : Optimisation""")
+    2 : Optimisation par algorithme génétique""")
     choix = int(input("Votre choix : "))
     return choix
 
@@ -75,10 +75,10 @@ def menuAgentType():
     elif agent == 4:
         player = AgentFiltering()
     elif agent == 5:
-        c1 = inputFloat("Coeff 1", 0.8)
-        c2 = inputFloat("Coeff 2", 0.6)
-        c3 = inputFloat("Coeff 3", 0.4)
-        c4 = inputFloat("Coeff 4", 0.2)
+        c1 = inputFloat("Coeff 0 (nb_lines)", 0.8)
+        c2 = inputFloat("Coeff 1 (sum_heights)", 0.6)
+        c3 = inputFloat("Coeff 2 (nb_holes)", 0.4)
+        c4 = inputFloat("Coeff 3 (bumpiness)", 0.2)
         coeffs = [c1, c2, c3, c4]
         player = AgentEvaluation(eval_coeffs=coeffs)
 

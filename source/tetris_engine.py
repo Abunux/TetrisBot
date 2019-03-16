@@ -62,7 +62,7 @@ class TetrisEngine:
         self.score = 0
         self.score_on_move = 0
         self.total_lines = 0
-#         self.max_height_on_game = 0
+        self.max_height_on_game = 0
 #         self.max_sum_heights_on_game = 0
 
         # Lancement du moteur
@@ -394,8 +394,8 @@ class TetrisEngine:
 
             self.fixed_board = self.board.copy()
             self.fixed_board.updateStats()
-#             self.max_height_on_game = max(
-#                 self.max_height_on_game, self.fixed_board.max_height)
+            self.max_height_on_game = max(
+                self.max_height_on_game, self.fixed_board.max_height)
 #             self.max_sum_heights_on_game = max(
 #                 self.max_sum_heights_on_game, self.fixed_board.sum_heights)
             if self.isEndGame():

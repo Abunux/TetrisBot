@@ -80,18 +80,22 @@ class AGOptimizer:
         #    - "bin" encode le vecteur en binaire et croise les bits
         #    - "float" encode le vecteur en réel, normé et croise par combinaison linéaire
         self.vector_encoding = vector_encoding
+
         # Méthode de sélection de parents
         #    - "wheel" : sélection par roulette
         #    - "tournament" : selection par tournoi
         self.parents_selection_method = parents_selection_method
+
         # Conservation des anciens individus
         #    - "elitism" : conserve un pourcentage des meilleurs de la génération d'avant
         #    - "best" : les enfants sont mélangé aux parents et on ne garde que les meilleurs
         #    - "none" : aucun parent n'est conservé
         self.old_generation_policy = old_generation_policy
+
         # Critère d'évaluation
         #    - "lines" : lignes créées
         #    - "score" : score total
+        #    - "height" : hauteur maximum atteinte
         self.evaluation_criteria = evaluation_criteria
 
         self.population = []
@@ -125,8 +129,10 @@ class AGOptimizer:
         score = player.engine.run()
         if self.evaluation_criteria == "lines":
             return player.engine.total_lines
-        elif self.evaluation_criteria == "score" or True:
+        elif self.evaluation_criteria == "score":
             return score
+        elif self.evaluation_criteria == "height" or True:
+            return -player.engine.max_height_on_game
 
     def fitness(self, vector):
         """ Fitness de l'individu : score total sur nb_games_played parties """

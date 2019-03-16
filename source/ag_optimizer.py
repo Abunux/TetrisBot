@@ -62,7 +62,7 @@ class AGOptimizer:
                  percentage_for_tournament=0.10, percentage_new_offspring=0.30,
                  elitism_percentage=0.20,
                  vector_encoding="float", parents_selection_method="tournament",
-                 old_generation_policy="best"
+                 old_generation_policy="best", evaluation_criteria="lines"
                  ):
         # Paramètres de l'algo génétique
         self.population_size = population_size
@@ -89,6 +89,10 @@ class AGOptimizer:
         #    - "best" : les enfants sont mélangé aux parents et on ne garde que les meilleurs
         #    - "none" : aucun parent n'est conservé
         self.old_generation_policy = old_generation_policy
+        # Critère d'évaluation
+        #    - "lines" : lignes créées
+        #    - "score" : score total
+        self.evaluation_criteria = evaluation_criteria
 
         self.population = []
 
@@ -118,8 +122,11 @@ class AGOptimizer:
         player = AgentEvaluation(
             eval_coeffs=vector, silent=True)
         player.engine.max_blocks = self.max_nb_blocks
-        player.engine.run()
-        return player.engine.total_lines
+        score = player.engine.run()
+        if self.evaluation_criteria == "lines":
+            return player.engine.total_lines
+        elif self.evaluation_criteria == "score" or True:
+            return score
 
     def fitness(self, vector):
         """ Fitness de l'individu : score total sur nb_games_played parties """
@@ -326,6 +333,7 @@ class AGOptimizer:
         s += "  - vector_encoding : %s\n" % self.vector_encoding
         s += "  - parents_selection_method : %s\n" % self.parents_selection_method
         s += "  - old_generation_policy : %s\n" % self.old_generation_policy
+        s += "  - evaluation_criteria : %s\n" % self.evaluation_criteria
         s += "  - nb_generations = %d\n" % self.nb_generations
         s += "  - population_size = %d\n" % self.population_size
         s += "  - max_nb_blocks = %d\n" % self.max_nb_blocks

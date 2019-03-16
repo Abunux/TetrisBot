@@ -53,7 +53,7 @@ def menuMain():
     print("""Que voulez-vous faire :
     1 : Utiliser un agent
     2 : Optimisation par algorithme génétique""")
-    choix = int(input("Votre choix : "))
+    choix = inputInt("Votre choix", 1)
     return choix
 
 
@@ -65,7 +65,7 @@ def menuAgentType():
     3 : Aléatoire 2
     4 : Filtrage
     5 : Évaluation""")
-    agent = int(input("Votre choix : "))
+    agent = inputInt("Votre choix", 5)
     if agent == 1:
         player = AgentHuman()
     elif agent == 2:
@@ -90,7 +90,7 @@ def menuAG():
     print("""Encodage des vecteurs :
     1 : Binaire
     2 : Réel """)
-    choix = inputInt("votre choix", 1)
+    choix = inputInt("Votre choix", 2)
     if choix == 1:
         vector_encoding = "bin"
     else:
@@ -104,7 +104,7 @@ def menuAG():
     print("""Méthode de sélection des parents :
     1 : Sélection
     2 : Tournoi""")
-    choix = inputInt("votre choix", 1)
+    choix = inputInt("Votre choix", 2)
     if choix == 1:
         parents_selection_method = "selection"
     else:
@@ -120,7 +120,7 @@ def menuAG():
     1 : Élitisme
     2 : Meilleurs
     3 : Aucun""")
-    choix = inputInt("votre choix", 2)
+    choix = inputInt("Votre choix", 2)
     if choix == 1:
         old_generation_policy = "elitism"
     elif choix == 2:
@@ -129,8 +129,7 @@ def menuAG():
         old_generation_policy = "none"
 
     if old_generation_policy == "elitism":
-        elitism_percentage = inputFloat(
-            "Pourcentage d'élitisme", 0.05)
+        elitism_percentage = inputFloat("Pourcentage d'élitisme", 0.05)
     else:
         elitism_percentage = 0
 
@@ -144,6 +143,14 @@ def menuAG():
     nb_generations = inputInt("Nombre de générations", 10)
     max_nb_blocks = inputInt("Nombre max de blocs", 500)
     nb_games_played = inputInt("Nombre de parties par évaluation", 5)
+    print("""Critère d'évaluation :
+    1 : Lignes
+    2 : Score""")
+    choix = inputInt("Votre choix", 1)
+    if choix == 1:
+        evaluation_criteria = "lines"
+    else:
+        evaluation_criteria = "score"
 
     return AGOptimizer(population_size=population_size, nb_generations=nb_generations,
                        max_nb_blocks=max_nb_blocks, nb_games_played=nb_games_played,
@@ -151,7 +158,7 @@ def menuAG():
                        percentage_for_tournament=percentage_for_tournament, percentage_new_offspring=percentage_new_offspring,
                        elitism_percentage=elitism_percentage,
                        vector_encoding=vector_encoding, parents_selection_method=parents_selection_method,
-                       old_generation_policy=old_generation_policy)
+                       old_generation_policy=old_generation_policy, evaluation_criteria=evaluation_criteria)
 
 
 if __name__ == "__main__":
@@ -180,6 +187,7 @@ if __name__ == "__main__":
         ok = False
         while not ok:
             optimizer = menuAG()
+            print(optimizer.stringOfParameters())
             print("Calul du temps estimé de l'optimisation....")
             estimated_time = optimizer.population_size * optimizer.max_nb_blocks * \
                 optimizer.nb_games_played * optimizer.nb_generations * \

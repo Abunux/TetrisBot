@@ -22,8 +22,12 @@ from time import time
 from math import sqrt
 import matplotlib.pyplot as plt
 
+# Taille du c=vecteur de coefficients
+VECTOR_SIZE = 4
 
 # Fonctions utilitaires de calcul
+
+
 def binToFloat(bits):
     """ Renvoie la représentation entre 0 et 1 d'une liste binaire 
     Le chiffre des unités étant considéré comme le 1er élément de la liste
@@ -38,7 +42,7 @@ def binToFloat(bits):
 
 def binVectorToFloat(bin_vector):
     """ Convertit un vecteur de listes binaires en vecteur de float """
-    return [binToFloat(bin_vector[k]) for k in range(4)]
+    return [binToFloat(bin_vector[k]) for k in range(VECTOR_SIZE)]
 
 
 def normalize(vector):
@@ -47,12 +51,12 @@ def normalize(vector):
     if norm != 0:
         return [v / norm for v in vector]
     else:
-        return normalize([1, 1, 1, 1])
+        return normalize([1] * VECTOR_SIZE)
 
 
 def linearCombination(a1, vector1, a2, vector2):
     """ Renvoie la combinaison linéaire de deux vecteurs """
-    return [a1 * vector1[k] + a2 * vector2[k] for k in range(4)]
+    return [a1 * vector1[k] + a2 * vector2[k] for k in range(VECTOR_SIZE)]
 
 
 class AGOptimizer:
@@ -115,11 +119,11 @@ class AGOptimizer:
 
     def randomBinaryVector(self):
         """ Renvoie un vecteur binaire aléatoire """
-        return [self.randomBinaryList() for _ in range(4)]
+        return [self.randomBinaryList() for _ in range(VECTOR_SIZE)]
 
     def randomFloatVector(self):
         """ Renvoie un vecteur aléatoire normé """
-        return normalize([random() for _ in range(4)])
+        return normalize([random() for _ in range(VECTOR_SIZE)])
 
     def scoreOnOneGame(self, vector):
         """ Score sur une partie """
@@ -216,7 +220,7 @@ class AGOptimizer:
         """ Mute un individu (son vecteur) """
         if random() < self.proba_mutation:
             delta = uniform(-self.mutation_rate, self.mutation_rate)
-            i = randrange(4)
+            i = randrange(VECTOR_SIZE)
             vi = vector[i]
             if 0 <= vi + delta <= 1:
                 vector[i] += delta
@@ -293,7 +297,7 @@ class AGOptimizer:
         return new_offspring
 
     def keepOnlyElite(self):
-        """ Garde le meilleurs élémen de la génération précédente """
+        """ Garde les meilleurs éléments de la génération précédente """
         self.sortPopulationDescending()
         self.population = self.population[:int(
             self.elitism_percentage * self.population_size)]
@@ -340,6 +344,7 @@ class AGOptimizer:
                  horizontalalignment='left',
                  verticalalignment='center',
                  bbox=dict(facecolor='white', alpha=1))
+        plt.ion()
         plt.show()
 
     def stringOfParameters(self):
@@ -370,6 +375,7 @@ class AGOptimizer:
 
         self.initPopulation()
         self.updateStats()
+
         for k in range(self.nb_generations):
             print("Best : %s - Score : %d" % (str(self.population[0]["vector"]),
                                               self.population[0]["score"]))

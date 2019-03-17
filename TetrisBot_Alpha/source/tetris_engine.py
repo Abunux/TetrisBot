@@ -28,11 +28,11 @@ from random import *
 from math import *
 from time import *
 import os
+from copy import deepcopy
 
 
 class TetrisEngine:
-    def __init__(self, getMove=lambda: '', width=10, height=22, max_blocks=0,
-                 base_blocks_bag=RAPID_BLOCK_BAG,
+    def __init__(self, getMove, width=10, height=22, max_blocks=0,
                  temporisation=0, silent=False, random_generator_seed=None,
                  agent_name="", agent_description=""):
         self.width = width
@@ -42,18 +42,17 @@ class TetrisEngine:
         self.board = Board(width, height)
         # La grille constituée des pièces placées
         self.fixed_board = self.board.copy()
+
         # La fonction de callback à appeler pour jouer un coup
         self.getMove = getMove
 
         # Gestion des blocs
-        self.random_generator_seed = random_generator_seed
         seed(random_generator_seed)
-        self.base_blocks_bag = base_blocks_bag
-        self.blocks_bag = []
+        self.block_bag = []
         self.generateNewBlockBag()
         self.block = None
         self.block_position = [0, 0]
-        self.next_block = self.blocks_bag.pop()
+        self.next_block = self.block_bag.pop()
 
         self.max_blocks = max_blocks
         self.nb_blocks_played = 0
@@ -62,11 +61,9 @@ class TetrisEngine:
         self.score = 0
         self.score_on_move = 0
         self.total_lines = 0
-        self.max_height_on_game = 0
-#         self.max_sum_heights_on_game = 0
 
         # Lancement du moteur
-        self.is_running = True
+        self.isRunning = True
 
         # Affichage ou non
         self.silent = silent
@@ -91,23 +88,23 @@ class TetrisEngine:
         # On utilise la règle du "7-random bag" :
         # On crée un sac de 7 pièces qu'on mélange
         # Dès qu'il est vide, on regénère un nouveau sac
-        self.blocks_bag = self.base_blocks_bag[:]
-        shuffle(self.blocks_bag)
+        self.block_bag = BLOCK_BAG[:]
+        shuffle(self.block_bag)
 
     def generateNewBlock(self):
         """ Remplace le bloc courant par le suivant et fabrique un nouveau bloc suivant """
         self.block = self.next_block.copy()
         # Si le sac est vide, on en recrée un nouveau
-        if len(self.blocks_bag) == 0:
+        if len(self.block_bag) == 0:
             self.generateNewBlockBag()
-        self.next_block = self.blocks_bag.pop()
+        self.next_block = self.block_bag.pop()
 
     def setBlockInitPosition(self):
         """ Position initiale pour un nouveau bloc """
         # Un nouveau bloc est placé sur la ligne cachée au milieu
         self.block_position[0] = self.board.height + 1
         self.block_position[1] = self.board.width // 2 - \
-            ceil((self.block.jmax + 1) / 2)
+            ceil(self.block.size / 2)
 
     def getNewBlock(self):
         """ Met un nouveau bloc en jeu """
@@ -119,29 +116,47 @@ class TetrisEngine:
     #=========================================================================
     # Déplacements et rotations des pièces
     #=========================================================================
+#     def getUsedCellsByBlock(self):
+#         """ Renvoie la liste des cases occupées par le bloc courant """
+#         self.used_cells_by_block = []
+#         for i in range(self.block.size):
+#             for j in range(self.block.size):
+#                 if self.block.glyph[i][j] != 0:
+#                     self.used_cells_by_block.append(
+#                         [self.block_position[0] - i, self.block_position[1] + j])
+#         return self.used_cells_by_block
+
     def isMoveValid(self, block, new_position):
         """ Teste si une position est valide pour un bloc """
         # Teste si le bloc sort de la grille
-        if new_position[1] + block.jmax >= self.board.width or new_position[0] - block.imax < 0 \
-                or new_position[0] - block.imin > self.board.height + 1 or new_position[1] + block.jmin < 0:
+        (imin, jmin, imax, jmax) = block.getBoundingBox()
+        if new_position[0] - imax < 0 or new_position[0] - imin > self.board.height + 1 \
+                or new_position[1] + jmin < 0 or new_position[1] + jmax >= self.board.width:
             return False
 
         # Teste si les nouvelles cases occupées par le bloc sont vides
-        for (i, j) in block.glyph:
-            if not self.fixed_board.isCellEmpty(new_position[0] - i, new_position[1] + j):
-                return False
+        for i in range(block.size):
+            for j in range(block.size):
+                if block.glyph[i][j] != 0 \
+                        and not self.fixed_board.isCellEmpty(new_position[0] - i, new_position[1] + j):
+                    return False
         return True
 
     def placeBlock(self, block, position):
         """ Place un bloc dans une position """
-        for (i, j) in block.glyph:
-            self.board.setCell(position[0] - i, position[1] + j, block.id)
+        for i in range(block.size):
+            for j in range(block.size):
+                if block.glyph[i][j] != 0:
+                    self.board.setCell(
+                        position[0] - i, position[1] + j, block.glyph[i][j])
 
     def eraseBlock(self):
         """ Efface le bloc de sa position """
-        for (i, j) in self.block.glyph:
-            self.board.emptyCell(
-                self.block_position[0] - i, self.block_position[1] + j)
+        for i in range(self.block.size):
+            for j in range(self.block.size):
+                if self.block.glyph[i][j] != 0:
+                    self.board.emptyCell(
+                        self.block_position[0] - i, self.block_position[1] + j)
 
     def moveBlock(self, block, new_position):
         """ Déplace un bloc vers une nouvelle position """
@@ -192,21 +207,21 @@ class TetrisEngine:
         new_block.setRotation(rotation)
         # On essaie de placer le bloc sur sa ligne dans la colonne donnée
         new_position = [self.block_position[0], column]
-        return self.isMoveValid(new_block, new_position)
+        if self.isMoveValid(new_block, new_position):
+            return True
+        return False
 
     def getPossibleMovesDirect(self):
         """ Renvoie la liste de tous les placements directs possibles
             sous la forme de tuples (column, rotation) """
         self.direct_placements = []
-        index = self.block.glyph_index
-        for rotation in range(self.block.nb_rotations):
-            self.block.setRotation(rotation)
-            jmin = self.block.jmin
-            jmax = self.block.jmax
-            for column in range(0 - jmin, self.width - jmax):
-                if self.isMoveValid(self.block, [self.block_position[0], column]):
+        # On commence avec la colonne -2 à cause du bloc I vertical
+        # On arrête à l'avant dernière colonne car aucune pièce n'a
+        # son coin gauche sur la dernière colonne.
+        for column in range(-2, self.width - 1):
+            for rotation in range(self.block.nb_rotations):
+                if self.canPlaceBlockDirect(column, rotation):
                     self.direct_placements.append((column, rotation))
-        self.block.setRotation(index)
         return self.direct_placements
 
     def placeBlockDirect(self, column, rotation):
@@ -222,6 +237,10 @@ class TetrisEngine:
             self.dropBlock()
             return True
         return False
+
+#     def getBlockHeight(self):
+#         """ Renvoie la hauteur du bloc """
+#         return max(pos[0] for pos in self.getUsedCellsByBlock())
 
     #=========================================================================
     # Commandes
@@ -250,9 +269,13 @@ class TetrisEngine:
         elif command == 'S':
             self.__init__(self.width, self.height)
         elif command == 'Q':
-            self.is_running = False
+            self.isRunning = False
         else:
             pass
+
+    def isEndGame(self):
+        """ Teste la fin du jeu """
+        return self.fixed_board.max_height > self.board.height
 
     #=========================================================================
     # Scores
@@ -282,7 +305,7 @@ class TetrisEngine:
         chain = "Score : %d\n" % self.score
         chain += "\n"
         chain += "BlocksBag : %s\n" % " ".join([str(b.id)
-                                                for b in self.blocks_bag])
+                                                for b in self.block_bag])
         chain += "\n"
         chain += "MaxHeight  : %d\n" % self.fixed_board.getMaxHeight()
         chain += "SumHeights : %d\n" % self.fixed_board.getSumHeights()
@@ -321,19 +344,7 @@ class TetrisEngine:
     #=========================================================================
     def copy(self):
         """ Renvoie une copie de l'environnement """
-        return self.minimalCopy()
-
-    def minimalCopy(self):
-        """ Renvoie une copie minimale de l'environnement
-            (grilles et pièces) pour tester les différents coups """
-        engine = TetrisEngine(
-            self.getMove, width=self.width, height=self.height)
-        engine.board = self.board.copy()
-        engine.fixed_board = self.fixed_board.copy()
-        engine.block = self.block.copy()
-        engine.next_block = self.next_block.copy()
-        engine.block_position = self.block_position[:]
-        return engine
+        return deepcopy(self)
 
     def updateTimes(self, start_time):
         """ Met à jour les chronos """
@@ -344,10 +355,6 @@ class TetrisEngine:
     #=========================================================================
     # Boucle principale
     #=========================================================================
-    def isEndGame(self):
-        """ Teste la fin du jeu """
-        return self.fixed_board.max_height > self.board.height
-
     def run(self):
         """ Boucle principale du jeu """
         # L'algo est le suivant :
@@ -365,11 +372,11 @@ class TetrisEngine:
         #     Fixe la grille
         #     Teste la fin du jeu
         # Retourne le score
-        while self.is_running and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
+        while self.isRunning and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
             self.getNewBlock()
             self.time_total = time() - self.time_start
             self.score_on_move = 0
-            while self.moveBlockInDirection('') and self.is_running:
+            while self.moveBlockInDirection('') and self.isRunning:
                 self.score_on_move += self.getScoreFromMove()
 
                 if not self.silent:
@@ -394,14 +401,11 @@ class TetrisEngine:
 
             self.fixed_board = self.board.copy()
             self.fixed_board.updateStats()
-            self.max_height_on_game = max(
-                self.max_height_on_game, self.fixed_board.max_height)
-#             self.max_sum_heights_on_game = max(
-#                 self.max_sum_heights_on_game, self.fixed_board.sum_heights)
+
             if self.isEndGame():
                 if not self.silent:
                     print(self)
-                self.is_running = False
+                self.isRunning = False
         return self.score
 
 
@@ -417,6 +421,5 @@ S : Restart
 Q : Quit""")
         move = input("Mouvement : ")
         return move.upper()
-    engine = TetrisEngine(
-        getMove=getMove, base_blocks_bag=CLASSIC_BLOCK_BAG, agent_name="Toto")
+    engine = TetrisEngine(getMove, agent_name="Toto")
     engine.run()

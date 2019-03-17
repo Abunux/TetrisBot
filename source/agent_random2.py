@@ -33,4 +33,5 @@ class AgentRandom2(Agent):
 
 
 if __name__ == "__main__":
-    playGameWithAgent(AgentRandom2)
+    player = AgentRandom2()
+    playGame(player, temporisation=0.1)

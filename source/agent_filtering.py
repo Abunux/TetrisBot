@@ -73,6 +73,7 @@ class AgentFiltering(Agent):
 
 
 if __name__ == "__main__":
-    playGameWithAgent(AgentFiltering, temporisation=0.1)
+    player = AgentFiltering()
+    playGame(player, temporisation=0.1)
 
 #     benchAgent(AgentFiltering, 50)

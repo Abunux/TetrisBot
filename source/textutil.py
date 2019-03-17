@@ -13,13 +13,38 @@
 #
 #-----------------------------------------------------
 
+import re
+from time import *
+
+# Contantes de couleurs en mode 2566 couleurs VTE
+CRED = 196
+CCYAN = 50
+CPURPLE = 165
+CGREEN = 82
+CBLUE = 27
+CORANGE = 202
+CYELLOW = 226
+CWHITE = 15
+CBLACK = 232
+CGRAY = 237
+
+
+def textColor(string, bg=CWHITE, fg=CBLACK):
+    """ Renvoie une chaîne contenant le texte coloré
+        avec bg pour la couleur de fond
+        et fg pour la couleur du texte.
+        Utilise les codes ANSI/VT100. """
+    return "\033[48;5;%dm\033[38;5;%dm%s\033[0m" % (bg, fg, string)
+
 
 def mergeChains(string1, string2):
     """ Fusionne deux chaînes cote à cote pour l'affichage """
     lines1 = string1.split('\n')
     lines2 = string2.split('\n')
     result = ""
-    max_length_string1 = max([len(s) for s in lines1])
+    # Utilisation d'une expression rrégulière pour supprimer
+    # les caractères spéciaux de couleurs
+    max_length_string1 = max([len(re.sub(r"\033.+?m", "", s)) for s in lines1])
     min_height = min(len(lines1), len(lines2))
 
     for k in range(min_height):
@@ -62,7 +87,14 @@ def boxed(text, prefix='', window_width=0, window_height=0):
     return chain
 
 
+def dateNow():
+    return strftime("%d/%m/%y - %H:%M:%S", localtime())
+
+
 if __name__ == "__main__":
+    print(textColor("TEST", CGREEN))
+    input()
+
     text1 = """1++++++++++++++
 2++++++
 3+++++++++++++

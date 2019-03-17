@@ -1,11 +1,46 @@
 \chapter{Les agents}
+Les agents sont à la base du projet dont le but est, justement, de les programmer.
 
 \section{Généralités}
+Un agent est essentiellement une classe qui a accès à un moteur de jeu (et donc à tous les paramètres de jeu) et qui implémente une méthode \pyth{getMove()} qui renvoie la commande du prochain coup à jouer. \\
+C'est de leur responsabilité de lancer la partie.
+
+Les fonctionnalités de base des agents sont implémentées dans la classe \pyth{Agent} dont les agents héritent tous. cette classe permet de :
+\begin{itemize}
+	\item Récupérer les paramètres de la grille après qu'un coup ait été joué via la méthode \pyth{getMoveStats(self, move)}. Cette méthode est utilisée dans la méthode \pyth{allMoveStats(self)} qui remplit un dictionnaire dont les clefs sont les différents placements possibles et les valeurs un dictionnaire content les différentes statistiques de jeu (nombre de lignes créées, nombre de trous,...)
+	\item Créer une commande pour un placement direct via la méthode \pyth{commandFromMove(self, move)}.
+\end{itemize}
 
 \section{Joueur humain en mode texte}
+Pour tester les différentes fonctionnalités du moteur, nous avons implémenté un agent, \pyth{AgetHuman}, qui se contente de recevoir les différentes commandes à jouer via l'entrée standard.\\
+Grâce à cet agent nous avons pu tester le déplacement et la rotation des pièces, la suppression des lignes,...
 
 \section{Agent aléatoire}
+Ensuite le premier agent automatique qui joue de manière aléatoire. \\
+\pyth{AgentRandom1} joue des coups aléatoires de type "aller à gauche", "tourner la pièce",... à la manière d'un joueur humain.\\
+\pyth{AgentRandom2}, quant à lui, place directement les pièces dans des colonnes et des rotations aléatoires.\\
 
-\section{Agent par évaluation des coups}
+Évidemment ces deux agents sont catastrophiques en terme de performances mais ne demandent qu'à être améliorés (ces sont les "hello world" des agents).
 
 \section{Agent par filtrage}
+Le premier agent un tant soit peu efficace.\\
+La stratégie utilisée est de filtrer la liste des coups jouables successivement selon plusieurs critères :
+\begin{itemize}
+	\item D'abord il ne garde que les coups qui font le moins de trous
+	\item Ensuite, parmi eux, il ne garde que ceux qui donnent une somme des hauteurs des colonnes de la structure minimal
+	\item Puis, ceux qui minimisent le bumpiness
+	\item Enfin sont qui créent le plus de lignes 
+\end{itemize} 
+
+Cet agent joue plutôt bien pour une heuristique aussi simple.
+
+\section{Agent par évaluation des coups}
+Cet agent est à la base de ce que nous ferons avec les algorithmes génétiques :\\
+Pour chaque coup jouable notons $L$ le nombre de lignes, $H$ la somme des hauteurs des colonnes, $T$ le nombre de trous créés et $B$ le bumpiness, après que le coup ait été joué.\\
+La qualité d'un coup peut être évaluée par une fonction $$f(L,H,T,B)=a\times L - b\times H - c\times T - d\times B$$
+où $a$, $b$, $c$ et $d$ sont des paramètres positifs que nous pouvons supposés dans $[0~;~1[$ (en effet on pourrait, sans perte de généralité les diviser par $a+b+c+d$ pour s'y ramener si ce n'était pas le cas).\\
+
+Le coup à jouer est donc celui qui maximise cette fonction.\\
+
+Tout le problème consiste à déterminer ces coefficients et c'est le but de l'optimisation par algorithme génétique.
+

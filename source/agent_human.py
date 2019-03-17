@@ -41,4 +41,5 @@ Q : Quit""")
 
 
 if __name__ == "__main__":
-    playGameWithAgent(AgentHuman)
+    player = AgentHuman()
+    playGame(player, temporisation=0)

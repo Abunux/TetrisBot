@@ -13,15 +13,16 @@
 #
 #-----------------------------------------------------
 
-from copy import deepcopy
+
+from tetramino import *
+from textutil import *
 
 
 class Board:
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height
-        self.grid = [[0] * width for _ in range(height + 2)]
-
+        self.grid = [[0] * width for i in range(height + 2)]
         self.column_heights = [0] * self.width
         self.max_height = 0
         self.sum_heights = 0
@@ -59,6 +60,13 @@ class Board:
         """ Supprime la ligne i """
         del self.grid[i]
         self.grid.append([0] * self.width)
+        """
+#         for k in range(i, self.height + 1):
+#             self.grid[k, :] = self.grid[k + 1, :]
+        self.grid[i:self.height + 1, :] = self.grid[i + 1:, :]
+        self.grid[self.height + 1, :] = 0
+#         self.grid[self.height + 1] = np.zeros(self.width, dtype=np.int8)
+        """
 
     #=========================================================================
     # Satistiques de la grille
@@ -88,7 +96,7 @@ class Board:
 
     def getBumpiness(self):
         """ Renvoie la somme des valeurs absolues des différences
-            de hauteurs entre les colonnes consécutives """
+#             de hauteurs entre les colonnes consécutives """
         self.bumpiness = 0
         for j in range(1, self.width):
             self.bumpiness += abs(self.column_heights[j] -
@@ -97,20 +105,14 @@ class Board:
 
     def isDominated(self, i, j):
         """ Teste si une case est vide et est dominée par une case au-dessus """
-        if not self.isCellEmpty(i, j):
-            return False
-        else:
-            for k in range(i + 1, self.column_heights[j]):
-                if not self.isCellEmpty(k, j):
-                    return True
-            return False
+        return self.isCellEmpty(i, j) and i < self.column_heights[j]
 
     def getNbHoles(self):
         """ Renvoie le nombre de trous dans la grille
             (en fait ici juste les cases dominées) """
         self.nb_holes = 0
         for j in range(self.width):
-            for i in range(self.column_heights[j]):
+            for i in range(self.column_heights[j] - 1):
                 if self.isDominated(i, j):
                     self.nb_holes += 1
         return self.nb_holes
@@ -145,19 +147,20 @@ class Board:
     #=========================================================================
     def copy(self):
         """ Renvoie une copie de la grille """
-        return deepcopy(self)
+        new_board = Board(width=self.width, height=self.height)
+        new_board.grid = [g[:] for g in self.grid]
+        new_board.updateStats()
+        return new_board
 
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
+
+        """
         for i in range(self.height + 2 - 1, -1, -1):
             chain += "%2d ║ %s ║\n" % \
                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
                               for j in range(self.width)]))
-#             chain += "%2d ║ %s ║\n" % \
-#                 (i, " ".join(["█" if self.grid[i][j] else "."
-#                               for j in range(self.width)]))
-
             if i == self.height:
                 chain += "   ║" + "-" * (2 * self.width + 1) + "║\n"
         chain += "   ╚" + "═" * (2 * self.width + 1) + "╝\n"
@@ -165,6 +168,34 @@ class Board:
         for j in range(self.width):
             chain += "%d " % j
         chain += "\n"
+        """
+        colors = {ID_IBLOCK: CCYAN,
+                  ID_JBLOCK: CBLUE,
+                  ID_LBLOCK: CORANGE,
+                  ID_OBLOCK: CYELLOW,
+                  ID_SBLOCK: CGREEN,
+                  ID_ZBLOCK: CRED,
+                  ID_TBLOCK: CPURPLE
+                  }
+        for i in range(self.height + 2 - 1, -1, -1):
+            chain += textColor("%2d ║" % (i % 10), bg=CBLACK, fg=CWHITE)
+            for j in range(self.width):
+                if i == self.height:
+                    char = "~"
+                else:
+                    char = "."
+                if self.grid[i][j]:
+                    chain += textColor(char, bg=colors[self.grid[i][j]])
+                else:
+                    chain += textColor(char, bg=CBLACK, fg=CWHITE)
+            chain += textColor("║", bg=CBLACK, fg=CWHITE) + "\n"
+        chain += textColor("   ╚" + "═" * (self.width) +
+                           "╝", bg=CBLACK, fg=CWHITE) + "\n"
+        chain += textColor("    ", bg=CBLACK, fg=CWHITE)
+        for j in range(self.width):
+            chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
+        chain += textColor(" \n", bg=CBLACK, fg=CWHITE)
+
         return chain
 
     def printInfos(self):
@@ -196,8 +227,11 @@ if __name__ == "__main__":
     board.setCell(3, 0, 0)
     board.setCell(3, 1, 4)
     board.setCell(3, 2, 4)
-
+    board.setCell(6, 2, 4)
     board.printInfos()
 
     board.processLines()
     board.printInfos()
+
+    new = board.copy()
+    new.printInfos()

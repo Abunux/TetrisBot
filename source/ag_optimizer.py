@@ -22,12 +22,11 @@ from time import time
 from math import sqrt
 import matplotlib.pyplot as plt
 
-# Taille du c=vecteur de coefficients
+# Taille du vecteur de coefficients
 VECTOR_SIZE = 4
 
+
 # Fonctions utilitaires de calcul
-
-
 def binToFloat(bits):
     """ Renvoie la représentation entre 0 et 1 d'une liste binaire 
     Le chiffre des unités étant considéré comme le 1er élément de la liste
@@ -202,7 +201,7 @@ class AGOptimizer:
         if self.vector_encoding == "bin":
             bin_vector1 = []
             bin_vector2 = []
-            for k in range(4):
+            for k in range(VECTOR_SIZE):
                 crossover_point = randrange(0, self.nb_bits)
                 bin_vector1.append(parent1["bin_vector"][k][:crossover_point] +
                                    parent2["bin_vector"][k][crossover_point:])
@@ -229,7 +228,7 @@ class AGOptimizer:
 
     def mutateBinVector(self, bin_vector):
         """ Mute un vecteur """
-        for i in range(4):
+        for i in range(VECTOR_SIZE):
             for k in range(self.nb_bits):
                 if random() < self.proba_mutation:
                     bin_vector[i][k] = 1 - bin_vector[i][k]
@@ -249,6 +248,7 @@ class AGOptimizer:
         """ Renvoie la nouvelle génération """
         print("%s - Création des enfants... " % dateNow())
         new_offspring = []
+
         # Nombre d'enfants à créer
         if self.old_generation_policy == "best":
             nb_childs_to_create = int(
@@ -341,8 +341,7 @@ class AGOptimizer:
         plt.xticks(())
         plt.yticks(())
         plt.text(0, 0.5, self.stringOfParameters(),
-                 horizontalalignment='left',
-                 verticalalignment='center',
+                 horizontalalignment='left', verticalalignment='center',
                  bbox=dict(facecolor='white', alpha=1))
         plt.ion()
         plt.show()

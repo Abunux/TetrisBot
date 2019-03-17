@@ -139,7 +139,7 @@ class AGOptimizer:
         score = 0
         for i in range(self.nb_games_played):
             score += self.scoreOnOneGame(vector)
-        return score
+        return score / self.nb_games_played
 
     def updateBinaryIndivdu(self, individu):
         """ Met à jour les paramètres d'un individu à partir de son vecteur binaire """

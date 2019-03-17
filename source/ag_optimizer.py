@@ -56,7 +56,7 @@ def linearCombination(a1, vector1, a2, vector2):
 
 
 class AGOptimizer:
-    def __init__(self, population_size=20, nb_generations=3, nb_bits=16,
+    def __init__(self, population_size=20, nb_generations=2, nb_bits=16,
                  max_nb_blocks=5, nb_games_played=1,
                  proba_mutation=0.05, mutation_rate=0.2,
                  percentage_for_tournament=0.10, percentage_new_offspring=0.30,
@@ -324,13 +324,22 @@ class AGOptimizer:
 
     def plotStats(self):
         """ Courbes de statistiques """
-        plt.title("pop_size=%d - nb_games=%d - max_blocks=%d" %
-                  (self.population_size, self.nb_games_played, self.max_nb_blocks))
+#         plt.title("pop_size=%d - nb_games=%d - max_blocks=%d" %
+#                   (self.population_size, self.nb_games_played, self.max_nb_blocks))
+        plt.subplot(212)
         plt.plot(self.average_scores, label="Average scores")
         plt.plot(self.max_scores, label="Max scores")
         plt.legend()
         plt.xlabel("Génération")
         plt.ylabel("Score")
+        plt.subplot(211)
+        plt.box(on=False)
+        plt.xticks(())
+        plt.yticks(())
+        plt.text(0, 0.5, self.stringOfParameters(),
+                 horizontalalignment='left',
+                 verticalalignment='center',
+                 bbox=dict(facecolor='white', alpha=1))
         plt.show()
 
     def stringOfParameters(self):

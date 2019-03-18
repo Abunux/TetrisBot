@@ -16,6 +16,7 @@
 
 from tetramino import *
 from textutil import *
+import numpy as np
 
 
 class Board:
@@ -152,6 +153,14 @@ class Board:
         new_board.updateStats()
         return new_board
 
+    def npBinaryRepresentation(self):
+        self.binGrid = np.zeros([self.height + 2, self.width], dtype=np.int8)
+        for i in range(self.height + 2):
+            for j in range(self.width):
+                if not self.isCellEmpty(i, j):
+                    self.binGrid[i, j] = 1
+        return self.binGrid
+
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
@@ -229,7 +238,7 @@ if __name__ == "__main__":
     board.setCell(3, 2, 4)
     board.setCell(6, 2, 4)
     board.printInfos()
-
+    print(board.npBinaryRepresentation())
     board.processLines()
     board.printInfos()
 

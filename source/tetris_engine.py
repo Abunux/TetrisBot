@@ -365,6 +365,7 @@ class TetrisEngine:
         #     Fixe la grille
         #     Teste la fin du jeu
         # Retourne le score
+        self.time_start = time()
         while self.is_running and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
             self.getNewBlock()
             self.time_total = time() - self.time_start

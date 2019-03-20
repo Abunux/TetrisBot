@@ -178,7 +178,7 @@ if __name__ == "__main__":
     2 : Satistiques (attention, peut être très long)""")
             work_type = int(input("Votre choix : "))
             if work_type == 1:
-                temporisation = inputInt("Temporisation", 0.1)
+                temporisation = inputFloat("Temporisation", 0.1)
                 playGame(player, temporisation=temporisation)
             else:
                 nb_samples = inputInt("Nombre de parties", 100)

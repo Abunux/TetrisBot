@@ -39,6 +39,7 @@ class TetrisEnv(TetrisEngine):
 
         self.done = self.isEndGame() or (self.nb_blocks_played ==
                                          self.max_blocks and self.max_blocks != 0)
+        # Reward = (nombre de lignes faites)^2
         self.reward = nb_lines**2
 
         if not self.moveBlockInDirection(''):

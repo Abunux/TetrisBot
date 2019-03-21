@@ -31,6 +31,18 @@ class Tetramino:
             self.jmax) = self.corners[self.glyph_index]
         return (self.imin, self.jmin, self.imax, self.jmax)
 
+    def getLowerCell(self, j):
+        """ Renvoie la ligne de la cellule la plus en bas dans la colonne j """
+        return max([g[0] for g in self.glyph if g[1] == j])
+
+    def getBottomCells(self):
+        """ Renvoie les coordonnées des cellules les plus en bas """
+        self.getCorners()
+        self.bottom_cells = []
+        for j in range(self.jmin, self.jmax + 1):
+            self.bottom_cells.append([self.getLowerCell(j), j])
+        return self.bottom_cells
+
     def rotate(self, direction='H'):
         """ Tourne la pièce dans la direction donnée 
             - 'H' : Sens Horaire
@@ -338,7 +350,7 @@ CLASSIC_Z3 = [[0, 1],
               [2, 0]]
 CLASSIC_ZBLOCK = Tetramino(ID_ZBLOCK,
                            [CLASSIC_Z0, CLASSIC_Z1, CLASSIC_Z2, CLASSIC_Z3],
-                           ((0, 0, 1, 2), (0, 0, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
+                           ((0, 0, 1, 2), (0, 1, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
                            )
 
 # L Block
@@ -401,6 +413,7 @@ if __name__ == "__main__":
         for k in range(t.nb_rotations):
             print(t)
             print(t.imin, t.jmin, t.imax, t.jmax)
-            print(t.toArray())
+            print(t.getBottomCells())
+#             print(t.toArray())
             print()
             t.rotate("H")

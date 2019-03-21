@@ -168,10 +168,19 @@ class TetrisEngine:
         else:
             return False
 
-    def dropBlock(self):
+    def dropBlock0(self):
         """ Fait tomber le bloc en bas """
         while self.moveBlockInDirection(''):
             self.score += self.getScoreFromMove()
+
+    def dropBlock(self):
+        """ Fait tomber le bloc en bas """
+        column_heights = [self.fixed_board.column_heights[self.block_position[1] + j]
+                          for j in range(self.block.jmin, self.block.jmax + 1)]
+#         botcells = self.block.getBottomCells()
+        line = max([column_heights[j] + self.block.getLowerCell(j)
+                    for j in range(self.block.jmin, self.block.jmax + 1)])
+        self.moveBlock(self.block, [line, self.block_position[1]])
 
     def rotateBlockInDirection(self, direction='H'):
         """ Tourne le bloc dans une direction :

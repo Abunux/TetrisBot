@@ -119,18 +119,31 @@ class TetrisEngine:
     #=========================================================================
     # Déplacements et rotations des pièces
     #=========================================================================
-    def isMoveValid(self, block, new_position):
-        """ Teste si une position est valide pour un bloc """
-        # Teste si le bloc sort de la grille
-        if new_position[1] + block.jmax >= self.board.width or new_position[0] - block.imax < 0 \
-                or new_position[0] - block.imin > self.board.height + 1 or new_position[1] + block.jmin < 0:
-            return False
+    def isMoveInGrid(self, block, new_position):
+        """ Test si le bloc reste dans la grille """
+        return not (new_position[1] + block.jmin < 0 or new_position[1] + block.jmax >= self.board.width
+                    or new_position[0] - block.imax < 0 or new_position[0] - block.imin > self.board.height + 1)
 
-        # Teste si les nouvelles cases occupées par le bloc sont vides
+    def isMoveOnFreeCells(self, block, new_position):
+        """ Teste si les nouvelles cases occupées par le bloc sont vides """
         for (i, j) in block.glyph:
             if not self.fixed_board.isCellEmpty(new_position[0] - i, new_position[1] + j):
                 return False
         return True
+
+    def isMoveValid(self, block, new_position):
+        """ Teste si une position est valide pour un bloc """
+        return self.isMoveInGrid(block, new_position) and self.isMoveOnFreeCells(block, new_position)
+#         # Teste si le bloc sort de la grille
+#         if new_position[1] + block.jmax >= self.board.width or new_position[0] - block.imax < 0 \
+#                 or new_position[0] - block.imin > self.board.height + 1 or new_position[1] + block.jmin < 0:
+#             return False
+#
+#         # Teste si les nouvelles cases occupées par le bloc sont vides
+#         for (i, j) in block.glyph:
+#             if not self.fixed_board.isCellEmpty(new_position[0] - i, new_position[1] + j):
+#                 return False
+#         return True
 
     def placeBlock(self, block, position):
         """ Place un bloc dans une position """

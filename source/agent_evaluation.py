@@ -74,17 +74,17 @@ def playGameWithAgentEvaluation(coeffs, temporisation=0):
 
 if __name__ == "__main__":
     pass
-#     t = 0
-#     n = 20
-#     max_blocks = 1000
-#     for k in range(n):
-#         t += benchTime(AgentEvaluation, max_blocks=max_blocks)
-#         print("(", t / (k + 1), ")")
-#     print("Total :", t / n)
-#     input()
-#     quit()
-    player = AgentEvaluation()
-    playGame(player, temporisation=0.05)
+
+    s = 0
+    n = 10
+    for k in range(n):
+        player = AgentEvaluation()
+        t = benchTimePlayer(player, 500)
+        print(t)
+        s += t
+    print("Moyenne :", s / n)
+#     playGame(player, temporisation=0)
+    input()
     quit()
 
     #=========================================================================

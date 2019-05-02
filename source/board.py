@@ -154,6 +154,7 @@ class Board:
         return new_board
 
     def npBinaryRepresentation(self):
+        """ Renvoie un numpy array contenant la grille """
         self.binGrid = np.zeros([self.height + 2, self.width], dtype=np.int8)
         for i in range(self.height + 2):
             for j in range(self.width):
@@ -165,6 +166,8 @@ class Board:
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
 
+        """
+        
         for i in range(self.height + 2 - 1, -1, -1):
             chain += "%2d ║ %s ║\n" % \
                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
@@ -178,7 +181,7 @@ class Board:
         chain += "\n"
 
         """
-        
+
         colors = {ID_IBLOCK: CCYAN,
                   ID_JBLOCK: CBLUE,
                   ID_LBLOCK: CORANGE,
@@ -205,7 +208,6 @@ class Board:
         for j in range(self.width):
             chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
         chain += textColor(" \n", bg=CBLACK, fg=CWHITE)
-        """
 
         return chain
 

@@ -13,6 +13,7 @@ class TetrisEnv(TetrisEngine):
                          temporisation=0, silent=True, random_generator_seed=random_generator_seed,
                          agent_name=agent_name, agent_description=agent_description)
         self.action_space = ['L', 'R', 'D', 'H', 'T', 'N']
+        self.nb_actions = len(self.action_space)
 
     def reset(self):
         """ Réinitialise l'environnement """

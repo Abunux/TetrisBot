@@ -408,8 +408,19 @@ CLASSIC_BLOCK_BAG = [
     CLASSIC_JBLOCK
 ]
 
+#------------------------------------------------------------------------------
+# Dominos
+#------------------------------------------------------------------------------
+ID_DOMINO = 1
+DOMINO_0 = [[0, 0], [0, 1]]
+DOMINO_1 = [[0, 0], [1, 0]]
+DOMINO_BLOCK = Tetramino(
+    ID_DOMINO, [DOMINO_0, DOMINO_1], ((0, 0, 0, 1), (0, 0, 1, 0)))
+
+DOMINO_BLOCK_BAG = [DOMINO_BLOCK]
+
 if __name__ == "__main__":
-    for t in CLASSIC_BLOCK_BAG:
+    for t in DOMINO_BLOCK_BAG:
         for k in range(t.nb_rotations):
             print(t)
             print(t.imin, t.jmin, t.imax, t.jmax)

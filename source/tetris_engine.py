@@ -134,16 +134,6 @@ class TetrisEngine:
     def isMoveValid(self, block, new_position):
         """ Teste si une position est valide pour un bloc """
         return self.isMoveInGrid(block, new_position) and self.isMoveOnFreeCells(block, new_position)
-#         # Teste si le bloc sort de la grille
-#         if new_position[1] + block.jmax >= self.board.width or new_position[0] - block.imax < 0 \
-#                 or new_position[0] - block.imin > self.board.height + 1 or new_position[1] + block.jmin < 0:
-#             return False
-#
-#         # Teste si les nouvelles cases occupées par le bloc sont vides
-#         for (i, j) in block.glyph:
-#             if not self.fixed_board.isCellEmpty(new_position[0] - i, new_position[1] + j):
-#                 return False
-#         return True
 
     def placeBlock(self, block, position):
         """ Place un bloc dans une position """
@@ -181,16 +171,10 @@ class TetrisEngine:
         else:
             return False
 
-    def dropBlock0(self):
-        """ Fait tomber le bloc en bas """
-        while self.moveBlockInDirection(''):
-            self.score += self.getScoreFromMove()
-
     def dropBlock(self):
         """ Fait tomber le bloc en bas """
         column_heights = [self.fixed_board.column_heights[self.block_position[1] + j]
                           for j in range(self.block.jmin, self.block.jmax + 1)]
-#         botcells = self.block.getBottomCells()
         line = max([column_heights[j] + self.block.getLowerCell(j)
                     for j in range(self.block.jmin, self.block.jmax + 1)])
         self.moveBlock(self.block, [line, self.block_position[1]])

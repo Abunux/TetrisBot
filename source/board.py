@@ -61,13 +61,6 @@ class Board:
         """ Supprime la ligne i """
         del self.grid[i]
         self.grid.append([0] * self.width)
-        """
-#         for k in range(i, self.height + 1):
-#             self.grid[k, :] = self.grid[k + 1, :]
-        self.grid[i:self.height + 1, :] = self.grid[i + 1:, :]
-        self.grid[self.height + 1, :] = 0
-#         self.grid[self.height + 1] = np.zeros(self.width, dtype=np.int8)
-        """
 
     #=========================================================================
     # Satistiques de la grille

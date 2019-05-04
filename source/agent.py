@@ -1,12 +1,3 @@
-from tetris_engine import *
-from random import *
-from time import time
-from stats import *
-# from queue import Queue
-# import threading
-# import multiprocessing
-from copy import deepcopy
-
 #-----------------------------------------------------
 #
 #        Tetris Bot
@@ -27,6 +18,12 @@ from copy import deepcopy
 #    Classe de base pour les agents
 #
 #-----------------------------------------------------
+
+from tetris_engine import *
+from random import *
+from time import time
+from stats import *
+from copy import deepcopy
 
 
 class Agent:

@@ -38,6 +38,8 @@ Sinon vous ne pourrez pas avoir les figures statistiques.
 
 
 class Stats:
+    """ Représentation statistique des parties """
+
     def __init__(self, data=None, filename="", mean_time=0, nb_bars=10, title=""):
         if data:
             self.data = data

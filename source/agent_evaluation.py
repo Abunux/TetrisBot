@@ -23,10 +23,12 @@ from agent import *
 
 
 class AgentEvaluation(Agent):
+    """ Agent procédant par évaluation des coups """
     # def __init__(self, eval_coeffs=[0.8, 0.6, 0.4, 0.2], temporisation=0.1,
     # silent=False):
     # def __init__(self, eval_coeffs=[0.0615, 0.1197, 0.940, 0.1373],
     # temporisation=0.1, silent=False):
+
     def __init__(self, eval_coeffs=[0.548, 0.5218, 0.6267, 0.1862], temporisation=0.1, silent=False):
         super().__init__(name="Evaluation %s" % str(eval_coeffs))
         self.eval_coeffs = eval_coeffs

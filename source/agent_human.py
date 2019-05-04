@@ -21,6 +21,8 @@ import os
 
 
 class AgentHuman(Agent):
+    """ Agent humain """
+
     def __init__(self, temporisation=0, silent=False):
         super().__init__(name="Human")
         self.engine = TetrisEngine(

@@ -22,10 +22,14 @@ import os
 
 
 class AgentRandom1(Agent):
+    """ Agent aléatoire jouant avec les touches du clavier """
+
     def __init__(self, temporisation=0.1, silent=False):
         super().__init__(name="Random 1")
         self.engine = TetrisEngine(
-            self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
+            self.getMove, base_blocks_bag=CLASSIC_BLOCK_BAG,
+            temporisation=temporisation, silent=silent,
+            agent_name=self.name, agent_description=self.decription)
 
     def getMove(self):
         move = choice(['L', 'R', 'N', 'T', 'H'])

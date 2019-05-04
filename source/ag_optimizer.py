@@ -59,6 +59,8 @@ def linearCombination(a1, vector1, a2, vector2):
 
 
 class AGOptimizer:
+    """ Optimisation des coefficients par algorithme génétique """
+
     def __init__(self, population_size=20, nb_generations=2, nb_bits=16,
                  max_nb_blocks=5, nb_games_played=1,
                  proba_mutation=0.05, mutation_rate=0.2,

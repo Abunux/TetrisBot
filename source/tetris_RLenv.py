@@ -7,6 +7,8 @@ from time import *
 
 
 class TetrisEnv(TetrisEngine):
+    """ Environnement à la OpenAI Gym pour implémenter le reinforcement learning """
+
     def __init__(self, max_blocks=0, random_generator_seed=None, agent_name="", agent_description=""):
         super().__init__(max_blocks=max_blocks,
                          base_blocks_bag=CLASSIC_BLOCK_BAG,

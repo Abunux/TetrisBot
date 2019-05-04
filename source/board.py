@@ -20,6 +20,8 @@ import numpy as np
 
 
 class Board:
+    """ Classe de gestion de la grille """
+
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height

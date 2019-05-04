@@ -21,6 +21,8 @@ from agent import *
 
 
 class AgentFiltering(Agent):
+    """ Agent proccédant par filtrage des coups """
+
     def __init__(self,  temporisation=0.1, silent=False):
         super().__init__(name="Filtering")
         self.engine = TetrisEngine(

@@ -30,6 +30,8 @@ from copy import deepcopy
 
 
 class Agent:
+    """ La classe de base des agents """
+
     def __init__(self, name="", description=""):
         self.name = name
         self.decription = description

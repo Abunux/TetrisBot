@@ -31,6 +31,8 @@ import os
 
 
 class TetrisEngine:
+    """ Classe gérant le moteur de jeu """
+
     def __init__(self, getMove=lambda: '', width=10, height=22, max_blocks=0,
                  base_blocks_bag=RAPID_BLOCK_BAG,
                  temporisation=0, silent=False, random_generator_seed=None,

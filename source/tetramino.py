@@ -15,6 +15,8 @@
 
 
 class Tetramino:
+    """ Classe de gestion des pièces """
+
     def __init__(self, id, rotations, corners):
         self.id = id
         self.rotations = rotations

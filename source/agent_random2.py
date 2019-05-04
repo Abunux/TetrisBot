@@ -22,6 +22,8 @@ import os
 
 
 class AgentRandom2(Agent):
+    """ Agent aléatoire jouant directement les pièces """
+
     def __init__(self, temporisation=0.1, silent=False):
         super().__init__(name="Random 2")
         self.engine = TetrisEngine(

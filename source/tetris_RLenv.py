@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 
+#-----------------------------------------------------
+#
+#        Tetris Bot
+#
+#    Projet maths infos du DU CCIE 2ème année
+#    de l'université d'Aix-Marseille
+#
+#    Frédéric Muller - Lionel Ponton
+#
+#    Licence : CC By-NC-SA
+#
+#    Projet démarré le 25/11/2018
+#
+#-----------------------------------------------------
 
 from tetris_engine import *
 from random import *

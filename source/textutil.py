@@ -16,7 +16,7 @@
 import re
 from time import *
 
-# Contantes de couleurs en mode 2566 couleurs VTE
+# Contantes de couleurs en mode 256 couleurs VTE
 CRED = 196
 CCYAN = 50
 CPURPLE = 165

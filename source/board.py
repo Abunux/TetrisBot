@@ -94,7 +94,7 @@ class Board:
 
     def getBumpiness(self):
         """ Renvoie la somme des valeurs absolues des différences
-#             de hauteurs entre les colonnes consécutives """
+            de hauteurs entre les colonnes consécutives """
         self.bumpiness = 0
         for j in range(1, self.width):
             self.bumpiness += abs(self.column_heights[j] -

@@ -31,6 +31,7 @@ class AgentRandom2(Agent):
             self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
 
     def getMove(self):
+        """ Renvoie un mouvement direct aléatoire """
         (j, r) = choice(self.engine.getPossibleMovesDirect())
         return "P:%d:%d" % (j, r)
 

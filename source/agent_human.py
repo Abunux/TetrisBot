@@ -32,6 +32,7 @@ class AgentHuman(Agent):
             agent_name=self.name, agent_description=self.decription)
 
     def getMove(self):
+        """ Entre un mouvement à jouer """
         print("""L : Move Left
 R : Move Right
 D : Drop

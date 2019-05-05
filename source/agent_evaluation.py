@@ -65,6 +65,7 @@ class AgentEvaluation(Agent):
 
 
 def playGameWithAgentEvaluation(coeffs, temporisation=0):
+    """ Joue des parties avec l'agent par évaluation et les coeffs donnés """
     os.system("clear")
     while True:
         player = AgentEvaluation(

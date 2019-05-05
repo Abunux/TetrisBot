@@ -90,6 +90,7 @@ def boxed(text, prefix='', window_width=0, window_height=0):
 
 
 def dateNow():
+    """ Renvoie une chaîne avec la date et l'heure courante """
     return strftime("%d/%m/%y - %H:%M:%S", localtime())
 
 

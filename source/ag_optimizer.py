@@ -285,7 +285,7 @@ class AGOptimizer:
                 # Ajout à la liste des enfants
                 new_offspring += [child1, child2]
                 created_childs += 2
-            elif self.vector_encoding == "tournament" or True:
+            elif self.vector_encoding == "float" or True:
                 print("%s - Génération %d - Enfant %d/%d" %
                       (dateNow(), self.num_generation, created_childs + 1, nb_childs_to_create))
                 child = self.crossover(parent1, parent2)

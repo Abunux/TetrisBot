@@ -258,7 +258,7 @@ RAPID_BLOCK_BAG = [
 # Blocs classiques
 #  - Rotations dans une matrice carrée
 #  - 4 rotations par pièce (sauf le O qui n'en n'a qu'une)
-#------------------------------------------------------------------------------
+#-------------------------------------------DOMINO------------------------
 # I Block
 CLASSIC_I0 = [[1, 0],
               [1, 1],
@@ -424,7 +424,7 @@ DOMINO_BLOCK = Tetramino(
 DOMINO_BLOCK_BAG = [DOMINO_BLOCK]
 
 if __name__ == "__main__":
-    for t in DOMINO_BLOCK_BAG:
+    for t in CLASSIC_BLOCK_BAG:
         for k in range(t.nb_rotations):
             print(t)
             print(t.imin, t.jmin, t.imax, t.jmax)

@@ -204,7 +204,8 @@ class Board:
         chain += textColor("    ", bg=CBLACK, fg=CWHITE)
         for j in range(self.width):
             chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
-        chain += textColor(" \n", bg=CBLACK, fg=CWHITE)
+        chain += textColor(" ", bg=CBLACK, fg=CWHITE)
+        chain += "\n"
 
         return chain
 

@@ -34,7 +34,7 @@ class AgentRandom1(Agent):
 
     def getMove(self):
         """ Renvoie un mouvement de touche aléatoire """
-        move = choice(['L', 'R', 'N', 'T', 'H'])
+        move = choice(['L', 'R', 'N', 'T', 'H', 'D'])
         return move
 
 

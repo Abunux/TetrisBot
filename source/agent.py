@@ -22,6 +22,7 @@
 #-----------------------------------------------------
 
 from tetris_engine import *
+from textutil import *
 from random import *
 from time import time
 from stats import *
@@ -89,20 +90,21 @@ def benchPlayer(player_init, nb_samples=100, max_blocks=0):
     stats = {}
     scores = []
     start = time()
-    print("Lancement du bench avec un échantillon de taille %d" % nb_samples)
+    print("%s - Lancement du bench avec un échantillon de taille %d" %
+          (dateNow(), nb_samples))
     for k in range(nb_samples):
         if k == 1:
             print("Temps total estimé : %.0f sec" %
                   ((time() - start) * (nb_samples - 1)))
         if k > 0 and k % (nb_samples / 10) == 0:
-            print("Avancement du bench: %.2f %% (Temps restant estimé : %.0f sec)" %
-                  ((100 * k / nb_samples), (nb_samples - k) * (time() - start) / k))
+            print("%s - Avancement du bench: %.2f %% (Temps restant estimé : %.0f sec)" %
+                  (dateNow(), (100 * k / nb_samples), (nb_samples - k) * (time() - start) / k))
         player = deepcopy(player_init)
         player.engine.silent = True
         player.engine.max_blocks = max_blocks
         score = player.engine.run()
         scores.append(score)
-    print("Avancement du bench : %.2f %%" % (100))
+    print("%s - Avancement du bench : %.2f %%" % (dateNow(), 100))
     total_time = time() - start
     total_score = sum(scores)
     stats["scores"] = scores
@@ -116,12 +118,12 @@ def benchPlayer(player_init, nb_samples=100, max_blocks=0):
     return stats
 
 
-def plotBenchPlayer(player_init, nb_samples, filename="", title="", nb_bars=10, max_blocks=0):
+def plotBenchPlayer(player_init, nb_samples, nb_bars=10, max_blocks=0):
     """ Réalise un bench de AgentToTest en jouant nb_samples parties
         Affiche les résultats sous la forme d'un histogramme avec nb_bars classes """
     s = benchPlayer(player_init, nb_samples=nb_samples, max_blocks=max_blocks)
     stats = Stats(data=s["scores"], mean_time=s["mean_time"],
-                  filename=filename, title=title, nb_bars=nb_bars)
+                  filename=player_init.name, title=player_init.name, nb_bars=nb_bars)
     stats.histogram()
 
 

@@ -359,6 +359,7 @@ class AGOptimizer:
         s += "  - nb_generations = %d\n" % self.nb_generations
         s += "  - population_size = %d\n" % self.population_size
         s += "  - max_nb_blocks = %d\n" % self.max_nb_blocks
+        s += "  - nb_games_played = %d\n" % self.nb_games_played
         s += "  - proba_mutation = %.2f\n" % self.proba_mutation
         if self.vector_encoding == "float":
             s += "  - mutation_rate = %.2f\n" % self.mutation_rate

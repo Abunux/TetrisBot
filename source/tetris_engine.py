@@ -177,9 +177,9 @@ class TetrisEngine:
     def dropBlock(self):
         """ Fait tomber le bloc en bas """
         column_heights = [self.fixed_board.column_heights[self.block_position[1] + j]
-                          for j in range(self.block.jmin, self.block.jmax + 1)]
-        line = max([column_heights[j] + self.block.getLowerCell(j)
-                    for j in range(self.block.jmin, self.block.jmax + 1)])
+                          for j in range(self.block.jmin, self.block.jmax + 1)]  # 1
+        line = max([column_heights[j - self.block.jmin] + self.block.getLowerCell(j)
+                    for j in range(self.block.jmin, self.block.jmax + 1)])  # 2
         self.moveBlock(self.block, [line, self.block_position[1]])
 
     def rotateBlockInDirection(self, direction='H'):

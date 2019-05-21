@@ -31,6 +31,7 @@ class TetrisEnv(TetrisEngine):
                          agent_name=agent_name, agent_description=agent_description)
         self.action_space = ['L', 'R', 'D', 'H', 'T', 'N']
         self.nb_actions = len(self.action_space)
+        self.done = False
 
     def reset(self):
         """ Réinitialise l'environnement """
@@ -55,8 +56,6 @@ class TetrisEnv(TetrisEngine):
         self.playCommand(action)
         nb_lines = self.board.processLines()
 
-        self.done = self.isEndGame() or (self.nb_blocks_played ==
-                                         self.max_blocks and self.max_blocks != 0)
         # Reward = (nombre de lignes faites)^2
         self.reward = nb_lines**2
 
@@ -64,6 +63,8 @@ class TetrisEnv(TetrisEngine):
             self.fixed_board = self.board.copy()
             self.fixed_board.updateStats()
             self.getNewBlock()
+        self.done = self.isEndGame() or (self.max_blocks != 0 and
+                                         self.nb_blocks_played == self.max_blocks)
 
         self.state = self.getState()
 
@@ -77,8 +78,8 @@ if __name__ == "__main__":
     input()
     env = TetrisEnv()
     env.reset()
-    for i in range(1000):
-        sleep(0.05)
+    for i in range(10000):
+        sleep(0.01)
         env.render()
         env.step(env.sampleAction())
         if env.done:

@@ -49,6 +49,10 @@ class TetrisEnv(TetrisEngine):
         self.state = self.board.npBinaryRepresentation()
         return self.state
 
+    def getStateCode(self):
+        self.stateCode = self.board.encodeToInt()
+        return self.stateCode
+
     def sampleAction(self):
         """ Renvoie une action aléatoire """
         return choice(self.action_space)
@@ -58,6 +62,8 @@ class TetrisEnv(TetrisEngine):
             Met à jour les informations (done, state) """
         self.playCommand(action)
         nb_lines = self.board.processLines()
+        self.total_lines += nb_lines
+        self.score += self.getScoreFromLines(nb_lines)
 
         # Reward = (nombre de lignes faites)^2
         self.reward = nb_lines**2

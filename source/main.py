@@ -28,6 +28,7 @@ from agent_random2 import *
 from agent_evaluation import *
 from agent_filtering import *
 from ag_optimizer import *
+from qRL_optimizer import *
 import os
 
 
@@ -53,7 +54,8 @@ def menuMain():
     """ Menu principal """
     print("""Que voulez-vous faire :
     1 : Utiliser un agent
-    2 : Optimisation par algorithme génétique""")
+    2 : Optimisation par algorithme génétique
+    3 : Optimisation par simple Q-learning """)
     choix = inputInt("Votre choix", 1)
     return choix
 
@@ -165,6 +167,20 @@ def menuAG():
                        old_generation_policy=old_generation_policy, evaluation_criteria=evaluation_criteria)
 
 
+def menuQRL():
+    width = inputInt("Largeur de la grille", 5)
+    height = inputInt("Hauteur de la grille", 5)
+    max_episodes = inputInt("Nombre d'épisodes", 2000)
+    max_blocks = inputInt("Nombre max de blocs", 500)
+    alpha = inputFloat("alpha", 0.1)
+    gamma = inputFloat("gamma", 0.9)
+    epsilon_delta = inputFloat("epsilon_delta", 0.001)
+
+    return QRLOptimizer(width=width, height=height,
+                        max_episodes=max_episodes, max_blocks=max_blocks,
+                        alpha=alpha, gamma=gamma, epsilon_delta=epsilon_delta)
+
+
 if __name__ == "__main__":
     choix = menuMain()
     if choix == 1:
@@ -205,3 +221,12 @@ if __name__ == "__main__":
         input("Press enter to see the agent in action...")
         os.system("clear")
         playGameWithAgentEvaluation(best_coeffs)
+
+    elif choix == 3:
+        optimizer = menuQRL()
+        optimizer.learn()
+        input("Press enter to see the agent in action...")
+        os.system("clear")
+        while True:
+            optimizer.play()
+            input("Press enter to continue...")

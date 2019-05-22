@@ -1,6 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+#-----------------------------------------------------
+#
+#        Tetris Bot
+#
+#    Projet maths infos du DU CCIE 2ème année
+#    de l'université d'Aix-Marseille
+#
+#    Frédéric Muller - Lionel Ponton
+#
+#    Licence : CC By-NC-SA
+#
+#    Projet démarré le 25/11/2018
+#
+#-----------------------------------------------------
+
 from tetris_RLenv import *
 from time import *
 from random import *
@@ -8,6 +23,8 @@ from math import *
 
 
 def argmax(liste):
+    """ Renvoie l'indice de la valeur max de liste
+        ou un indice aléatoire si la liste ne contient que de 0 """
     if sum(liste) != 0:
         return liste.index(max(liste))
     else:
@@ -15,6 +32,8 @@ def argmax(liste):
 
 
 class QRLOptimizer:
+    """ Optimisatio par Q-learning sur une configuration simple """
+
     def __init__(self, width=5, height=5, base_blocks_bag=DOMINO_BLOCK_BAG,
                  alpha=0.1, gamma=0.9,
                  epsilon_min=0.01, epsilon_max=1, epsilon_delta=0.001,
@@ -34,14 +53,17 @@ class QRLOptimizer:
             width=width, height=height, base_blocks_bag=base_blocks_bag, max_blocks=self.max_blocks)
 
     def reinit(self):
+        """ Réinitialise l'environnement """
         self.env.reset()
         self.epsilon = self.epsilon_max
 
     def initQValue(self, s):
+        """ Initialise la Q-value de l'état s avec de 0 """
         if s not in self.q:
             self.q[s] = [0] * self.env.nb_actions
 
     def update(self, s, a):
+        """ Met à jour la Q-table de l'état s sur une action a """
         self.env.step(self.env.action_space[a])
         s1 = self.env.getStateCode()
         r = self.env.reward
@@ -55,6 +77,7 @@ class QRLOptimizer:
                           self.gamma * max(self.q[s1]))
 
     def learn(self):
+        """ Lance l'apprentissage """
         print("%s - Lancement de l'apprentissage" % dateNow())
         for k in range(self.max_episodes):
             if k % (self.max_episodes // 10) == 0:
@@ -79,6 +102,7 @@ class QRLOptimizer:
 #         input()
 
     def play(self):
+        """ Joue la partie avec la Q-table crée """
         self.reinit()
         self.env.max_blocks = 0
         s = self.env.getStateCode()

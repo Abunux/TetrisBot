@@ -160,6 +160,7 @@ class Board:
         return self.binGrid
 
     def encodeToInt(self):
+        """ Renvoie une représentation de la grille sous la forme d'un entier """
         self.npBinaryRepresentation()
         self.intCode = 0
         k = 1

@@ -50,6 +50,7 @@ class TetrisEnv(TetrisEngine):
         return self.state
 
     def getStateCode(self):
+        """ Renoie de code entier de l'état de la grille """
         self.stateCode = self.board.encodeToInt()
         return self.stateCode
 

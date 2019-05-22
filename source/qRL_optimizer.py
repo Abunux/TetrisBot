@@ -80,6 +80,7 @@ class QRLOptimizer:
 
     def play(self):
         self.reinit()
+        self.env.max_blocks = 0
         s = self.env.getStateCode()
         while not self.env.done:
             self.env.render()

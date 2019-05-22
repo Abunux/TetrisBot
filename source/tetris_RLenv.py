@@ -33,6 +33,7 @@ class TetrisEnv(TetrisEngine):
         self.action_space = ['L', 'R', 'D', 'H', 'T', 'N']
         self.nb_actions = len(self.action_space)
         self.done = False
+        self.time_start = time()
 
     def reset(self):
         """ Réinitialise l'environnement """
@@ -61,7 +62,10 @@ class TetrisEnv(TetrisEngine):
     def step(self, action):
         """ Effectue une action (joue un coup)
             Met à jour les informations (done, state) """
+        self.time_total = time() - self.time_start
+        start_time = time()
         self.playCommand(action)
+        self.updateTimes(start_time)
         nb_lines = self.board.processLines()
         self.total_lines += nb_lines
         self.score += self.getScoreFromLines(nb_lines)

@@ -3,21 +3,22 @@
 
 from tetris_RLenv import *
 from time import *
+from random import *
 # import tensorflow as tf
-
-env = TetrisEnv()
-width = env.board.width
-height = env.board.height + 2
-
-# X = tf.placeholder(tf.int8, [None, width, height], name="board")
 
 
 class RLOptimizer:
 
-    def __init__(self, update_rate=0.1, learning_rate=0.1,
+    def __init__(self, width=10, height=22, base_blocks_bag=CLASSIC_BLOCK_BAG,
+                 update_rate=0.1, learning_rate=0.1,
                  exploration_rate_min=0, exploration_rate_max=1,
                  replay_memory_size=5000, batch_size=10,
                  update_period=10, max_epochs=10):
+        self.width = width
+        self.height = height
+
+        self.base_blocks_bag = base_blocks_bag
+
         self.update_rate = update_rate
         self.learning_rate = learning_rate
         self.exploration_rate_min = exploration_rate_min
@@ -27,7 +28,8 @@ class RLOptimizer:
         self.update_period = update_period
         self.max_epochs = max_epochs
 
-        self.env = TetrisEnv()
+        self.env = TetrisEnv(width=self.width, height=self.height,
+                             base_blocks_bag=self.base_blocks_bag)
 
     def initReplayMemory(self):
         self.replay_memory = []
@@ -37,7 +39,7 @@ class RLOptimizer:
             self.env.render()
             sleep(0)
 
-            s0 = self.env.getState
+            s0 = self.env.getState()
             a = self.env.sampleAction()
             self.env.step(a)
             r = self.env.reward
@@ -48,8 +50,18 @@ class RLOptimizer:
                 self.env.reset()
             t += 1
 
+    def addToReplayMemory(self, s0, a, r, s1):
+        del self.replay_memory[0]
+        self.replay_memory.append([s0, a, r, s1])
+
+    def sampleFromReplayMemory(self):
+        return sample(self.replay_memory, self.batch_size)
+
 
 if __name__ == "__main__":
-    optimizer = RLOptimizer()
+    optimizer = RLOptimizer(
+        width=5, height=6, base_blocks_bag=DOMINO_BLOCK_BAG,
+        replay_memory_size=10)
     optimizer.initReplayMemory()
+    print(optimizer.replay_memory)
     input("End")

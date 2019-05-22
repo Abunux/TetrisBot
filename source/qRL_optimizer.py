@@ -35,9 +35,9 @@ class QRLOptimizer:
     """ Optimisatio par Q-learning sur une configuration simple """
 
     def __init__(self, width=5, height=5, base_blocks_bag=DOMINO_BLOCK_BAG,
+                 max_episodes=2000, max_blocks=500,
                  alpha=0.1, gamma=0.9,
-                 epsilon_min=0.01, epsilon_max=1, epsilon_delta=0.001,
-                 max_episodes=2000, max_blocks=500):
+                 epsilon_min=0.01, epsilon_max=1, epsilon_delta=0.001):
         self.alpha = alpha
         self.gamma = gamma
         self.epsilon_min = epsilon_min
@@ -78,6 +78,7 @@ class QRLOptimizer:
 
     def learn(self):
         """ Lance l'apprentissage """
+        start = time()
         print("%s - Lancement de l'apprentissage" % dateNow())
         for k in range(self.max_episodes):
             if k % (self.max_episodes // 10) == 0:
@@ -97,6 +98,8 @@ class QRLOptimizer:
                 self.epsilon = self.epsilon_min + \
                     (self.epsilon_max - self.epsilon_min) * \
                     exp(-self.epsilon_delta * k)
+        print("%s - Fin de l'apprentissage" % dateNow())
+        print("Temps total : %.2f secondes" % (time() - start))
 #         for s in self.q:
 #             print(s, self.q[s])
 #         input()

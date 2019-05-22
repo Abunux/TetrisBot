@@ -159,6 +159,16 @@ class Board:
                     self.binGrid[i, j] = 1
         return self.binGrid
 
+    def encodeToInt(self):
+        self.npBinaryRepresentation()
+        self.intCode = 0
+        k = 1
+        for j in range(self.width):
+            for i in range(self.height + 2):
+                self.intCode += self.binGrid[i, j] * k
+                k = k * 2
+        return self.intCode
+
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
@@ -219,6 +229,7 @@ class Board:
         print("SumHeights : %d " % self.sum_heights)
         print("Bumpiness : %d" % self.bumpiness)
         print("Holes : %d" % self.nb_holes)
+        print("IntCode : %d" % self.encodeToInt())
         print()
 
 
@@ -243,6 +254,5 @@ if __name__ == "__main__":
     print(board.npBinaryRepresentation())
     board.processLines()
     board.printInfos()
-
     new = board.copy()
     new.printInfos()

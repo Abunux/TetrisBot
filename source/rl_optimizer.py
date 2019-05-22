@@ -37,7 +37,7 @@ class RLOptimizer:
         self.env.reset()
         while t < self.replay_memory_size:
             self.env.render()
-            sleep(0)
+            sleep(1)
 
             s0 = self.env.getState()
             a = self.env.sampleAction()
@@ -60,8 +60,8 @@ class RLOptimizer:
 
 if __name__ == "__main__":
     optimizer = RLOptimizer(
-        width=5, height=6, base_blocks_bag=DOMINO_BLOCK_BAG,
-        replay_memory_size=10)
+        width=3, height=3, base_blocks_bag=DOMINO_BLOCK_BAG,
+        replay_memory_size=100)
     optimizer.initReplayMemory()
     print(optimizer.replay_memory)
     input("End")

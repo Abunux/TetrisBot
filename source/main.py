@@ -188,9 +188,9 @@ def menuQRL():
     width = inputInt("Largeur de la grille", 5)
     height = inputInt("Hauteur de la grille", 5)
     max_episodes = inputInt("Nombre d'épisodes", 2000)
-    max_blocks = inputInt("Nombre max de blocs", 500)
-    alpha = inputFloat("alpha", 0.1)
-    gamma = inputFloat("gamma", 0.9)
+    max_blocks = inputInt("Nombre max de blocs (0 pour illimité)", 500)
+    alpha = inputFloat("alpha (learning rate)", 0.1)
+    gamma = inputFloat("gamma (discount factor)", 0.9)
     epsilon_delta = inputFloat("epsilon_delta", 0.001)
 
     return QRLOptimizer(width=width, height=height,

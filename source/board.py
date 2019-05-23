@@ -254,7 +254,7 @@ class Board:
 
 if __name__ == "__main__":
     board = Board(width=3, height=5)
-#     board.printInfos()
+    board.printInfos()
     print(board.npBinaryRepresentation())
     n = board.encodeToInt()
     print(n)
@@ -279,9 +279,9 @@ if __name__ == "__main__":
     print(n)
     print(board.decodeFromInt(n))
 
-#     board.printInfos()
-#     print(board.npBinaryRepresentation())
-#     board.processLines()
-#     board.printInfos()
-#     new = board.copy()
-#     new.printInfos()
+    board.printInfos()
+    print(board.npBinaryRepresentation())
+    board.processLines()
+    board.printInfos()
+    new = board.copy()
+    new.printInfos()

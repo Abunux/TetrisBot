@@ -57,6 +57,9 @@ def menuMain():
     2 : Optimisation par algorithme génétique
     3 : Optimisation par simple Q-learning """)
     choix = inputInt("Votre choix", 1)
+    while choix not in [1, 2, 3]:
+        print("Choix invalide")
+        choix = inputInt("Votre choix", 1)
     return choix
 
 
@@ -64,12 +67,16 @@ def menuFiltering():
     filters = ["holes", "sum_heights", "bumpiness", "lines"]
     nb_filters = len(filters)
     order = []
-    for k in range(nb_filters):
+    for k in range(nb_filters - 1):
         print("Filtre n° %d :" % (k + 1))
         for i in range(len(filters)):
             print("  %d : %s" % (i + 1, filters[i]))
         c = inputInt("Votre choix", 1)
+        while c not in list(range(1, len(filters) + 1)):
+            print("Choix invalide")
+            c = inputInt("Votre choix", 1)
         order.append(filters.pop(c - 1))
+    order.append(filters[0])
     return AgentFiltering(order=order)
 
 
@@ -91,6 +98,9 @@ def menuAgentType():
     4 : Filtrage
     5 : Évaluation""")
     agent = inputInt("Votre choix", 5)
+    while agent not in [1, 2, 3, 4, 5]:
+        print("Choix invalide")
+        agent = inputInt("Votre choix", 5)
     if agent == 1:
         player = AgentHuman()
     elif agent == 2:
@@ -111,6 +121,9 @@ def menuAG():
     1 : Binaire
     2 : Réel """)
     choix = inputInt("Votre choix", 2)
+    while choix not in [1, 2]:
+        print("Choix invalide")
+        choix = inputInt("Votre choix", 2)
     if choix == 1:
         vector_encoding = "bin"
     else:
@@ -125,6 +138,9 @@ def menuAG():
     1 : Sélection
     2 : Tournoi""")
     choix = inputInt("Votre choix", 2)
+    while choix not in [1, 2]:
+        print("Choix invalide")
+        choix = inputInt("Votre choix", 2)
     if choix == 1:
         parents_selection_method = "selection"
     else:
@@ -141,6 +157,9 @@ def menuAG():
     2 : Meilleurs
     3 : Aucun""")
     choix = inputInt("Votre choix", 2)
+    while choix not in [1, 2, 3]:
+        print("Choix invalide")
+        choix = inputInt("Votre choix", 2)
     if choix == 1:
         old_generation_policy = "elitism"
     elif choix == 2:
@@ -158,16 +177,21 @@ def menuAG():
             "Pourcentage de nouveaux individus", 0.30)
     else:
         percentage_new_offspring = 0
+
     proba_mutation = inputFloat("Probabilité de mutation", 0.05)
     population_size = inputInt("Taille de la population", 20)
     nb_generations = inputInt("Nombre de générations", 10)
     max_nb_blocks = inputInt("Nombre max de blocs", 500)
     nb_games_played = inputInt("Nombre de parties par évaluation", 5)
+
     print("""Critère d'évaluation :
     1 : Lignes
     2 : Score
     3 : Hauteur max""")
     choix = inputInt("Votre choix", 1)
+    while choix not in [1, 2, 3]:
+        print("Choix invalide")
+        choix = inputInt("Votre choix", 1)
     if choix == 1:
         evaluation_criteria = "lines"
     elif choix == 2:
@@ -210,7 +234,10 @@ if __name__ == "__main__":
             print("""Type de travail : 
     1 : Voir des parties
     2 : Satistiques (attention, peut être très long)""")
-            work_type = int(input("Votre choix : "))
+            work_type = inputInt("Votre choix", 1)
+            while work_type not in [1, 2, 3]:
+                print("Choix invalide")
+                work_type = inputInt("Votre choix", 1)
             if work_type == 1:
                 temporisation = inputFloat("Temporisation", 0.1)
                 playGame(player, temporisation=temporisation)

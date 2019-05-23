@@ -190,8 +190,7 @@ Création de la figure statistique impossible
                  verticalalignment='center', bbox={'facecolor': 'white', 'alpha': 1, 'pad': 2})
         # Texte de résumé statistique
         plt.text(gxmin + (gxmax - gxmin) * 0.05, gymin + (gymax - gymin) * 0.95,
-                 r"$\bar x=%.2f$" % moyenne + '\n' + "$\sigma=%.2f$" % sigma +
-                 '\n\n' + r"$t_{moy}=%.1f\,ms$" % (1000 * tmoy),
+                 r"$\bar x=%.2f$" % moyenne + '\n' + "$\sigma=%.2f$" % sigma,
                  horizontalalignment='left', verticalalignment='top', fontsize=15,
                  bbox={'facecolor': 'white', 'alpha': 0.5, 'pad': 15})
         # Mise en forme et affichage du graphique

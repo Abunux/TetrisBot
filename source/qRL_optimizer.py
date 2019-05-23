@@ -27,6 +27,7 @@ from time import *
 from random import *
 from math import *
 import sys
+from itertools import chain
 
 
 def argmax(liste):
@@ -36,6 +37,32 @@ def argmax(liste):
         return liste.index(max(liste))
     else:
         return randrange(0, len(liste))
+
+
+def total_size(o):
+    """ Renvoie la taille totale d'un objet en mémoire
+    Code récupéré sur : https://code.activestate.com/recipes/577504/ 
+    et adapté au projet """
+    def dict_handler(d): return chain.from_iterable(d.items())
+    all_handlers = {list: iter,
+                    dict: dict_handler}
+    seen = set()                      # track which object id's have already been seen
+    # estimate sizeof object without __sizeof__
+    default_size = sys.getsizeof(0)
+
+    def sizeof(o):
+        if id(o) in seen:       # do not double count the same object
+            return 0
+        seen.add(id(o))
+        s = sys.getsizeof(o, default_size)
+
+        for typ, handler in all_handlers.items():
+            if isinstance(o, typ):
+                s += sum(map(sizeof, handler(o)))
+                break
+        return s
+
+    return sizeof(o)
 
 
 class QRLOptimizer:
@@ -57,7 +84,8 @@ class QRLOptimizer:
         self.q = {}
 
         self.env = TetrisEnv(
-            width=width, height=height, base_blocks_bag=base_blocks_bag, max_blocks=self.max_blocks)
+            width=width, height=height, base_blocks_bag=base_blocks_bag, max_blocks=self.max_blocks,
+            agent_name="Q-Learning")
 
     def reinit(self):
         """ Réinitialise l'environnement """
@@ -65,8 +93,7 @@ class QRLOptimizer:
         self.epsilon = self.epsilon_max
 
     def initQValue(self, s):
-        """ Initialise la Q-value de l'état s avec des 0 
-            si s n'est pas encore dans la table """
+        """ Initialise la Q-value de l'état s avec des 0 si s n'est pas encore dans la table """
         if s not in self.q:
             self.q[s] = [0] * self.env.nb_actions
 
@@ -115,7 +142,7 @@ class QRLOptimizer:
 
         print("%s - Fin de l'apprentissage" % dateNow())
         print("Temps total : %.2f secondes" % (time() - start))
-        print("Taille de la q-table : %d octets" % sys.getsizeof(self.q))
+        print("Taille de la q-table : %d octets" % total_size(self.q))
 
     def play(self):
         """ Joue la partie avec la Q-table crée """
@@ -140,7 +167,7 @@ if __name__ == "__main__":
         optimizer.learn()
     except:
         print("Error !")
-    input("Press enter to see the agent in action ")
+    input("Press enter to see the agent in action...")
     while True:
         optimizer.play()
         input("Press enter to continue")

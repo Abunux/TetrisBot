@@ -36,7 +36,11 @@ def inputInt(text, default=0):
     """ Demande un entier et renvoie default si pas de valeur entrée """
     n = input(text + " [" + str(default) + "] : ")
     if n:
-        return int(n)
+        try:
+            return int(n)
+        except:
+            print("Entrée invalide")
+            return inputInt(text, default)
     else:
         return default
 
@@ -45,7 +49,11 @@ def inputFloat(text, default=0):
     """ Demande un float et renvoie default si pas de valeur entrée """
     x = input(text + " [" + str(default) + "] : ")
     if x:
-        return float(x)
+        try:
+            return float(x)
+        except:
+            print("Entrée invalide")
+            return inputFloat(text, default)
     else:
         return default
 

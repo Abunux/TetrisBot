@@ -75,6 +75,7 @@ class TetrisEnv(TetrisEngine):
         self.updateTimes(start_time)
         nb_lines = self.board.processLines()
         self.total_lines += nb_lines
+        self.lines_combo[nb_lines] += 1
         self.score += self.getScoreFromLines(nb_lines)
 
         # Reward = (nombre de lignes faites)^2

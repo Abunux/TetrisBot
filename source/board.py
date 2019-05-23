@@ -181,7 +181,6 @@ class Board:
     def decodeFromInt(self, n):
         """ Renvoie un tableau à partir d'un code entier """
         binGrid = np.zeros([self.height + 2, self.width], dtype=np.int8)
-        k = 0
         for j in range(self.width):
             for i in range(self.height + 2):
                 binGrid[i, j] = n % 2

@@ -168,6 +168,7 @@ class Board:
 
     def encodeToInt(self):
         """ Renvoie une représentation de la grille sous la forme d'un entier """
+        # On considère la grille comme unnombre écrit en binaire
         self.npBinaryRepresentation()
         self.intCode = 0
         k = 1
@@ -176,6 +177,16 @@ class Board:
                 self.intCode += self.binGrid[i, j] * k
                 k = k * 2
         return self.intCode
+
+    def decodeFromInt(self, n):
+        """ Renvoie un tableau à partir d'un code entier """
+        binGrid = np.zeros([self.height + 2, self.width], dtype=np.int8)
+        k = 0
+        for j in range(self.width):
+            for i in range(self.height + 2):
+                binGrid[i, j] = n % 2
+                n = n // 2
+        return binGrid
 
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
@@ -243,8 +254,12 @@ class Board:
 
 if __name__ == "__main__":
     board = Board(width=3, height=5)
-    board.printInfos()
-
+#     board.printInfos()
+    print(board.npBinaryRepresentation())
+    n = board.encodeToInt()
+    print(n)
+    print(board.decodeFromInt(n))
+    print()
     board.setCell(0, 0, 1)
     board.setCell(0, 1, 1)
     board.setCell(0, 2, 1)
@@ -258,9 +273,15 @@ if __name__ == "__main__":
     board.setCell(3, 1, 4)
     board.setCell(3, 2, 4)
     board.setCell(6, 2, 4)
-    board.printInfos()
+
     print(board.npBinaryRepresentation())
-    board.processLines()
-    board.printInfos()
-    new = board.copy()
-    new.printInfos()
+    n = board.encodeToInt()
+    print(n)
+    print(board.decodeFromInt(n))
+
+#     board.printInfos()
+#     print(board.npBinaryRepresentation())
+#     board.processLines()
+#     board.printInfos()
+#     new = board.copy()
+#     new.printInfos()

@@ -65,6 +65,7 @@ class TetrisEngine:
         self.score = 0
         self.score_on_move = 0
         self.total_lines = 0
+        self.lines_combo = [0, 0, 0, 0, 0]
         self.max_height_on_game = 0
 #         self.max_sum_heights_on_game = 0
 
@@ -295,6 +296,10 @@ class TetrisEngine:
         chain += "Holes      : %d\n" % self.fixed_board.getNbHoles()
         chain += "Nb blocks  : %d\n" % (self.nb_blocks_played - 1)
         chain += "Nb lines   : %d\n" % self.total_lines
+        chain += " Combo 1 line  : %d\n" % self.lines_combo[1]
+        chain += " Combo 2 lines : %d\n" % self.lines_combo[2]
+        chain += " Combo 3 lines : %d\n" % self.lines_combo[3]
+        chain += " Combo 4 lines : %d\n" % self.lines_combo[4]
         chain += "\n"
         chain += "Time for move         : %.4f s\n" % self.time_for_move
         chain += "Total time for moves  : %.4f s\n" % self.time_total_for_moves
@@ -393,6 +398,7 @@ class TetrisEngine:
 
                 nb_lines = self.board.processLines()
                 self.total_lines += nb_lines
+                self.lines_combo[nb_lines] += 1
                 self.score_on_move += self.getScoreFromLines(nb_lines)
 
                 self.score += self.score_on_move

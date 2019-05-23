@@ -29,6 +29,7 @@ from agent_evaluation import *
 from agent_filtering import *
 from ag_optimizer import *
 from qRL_optimizer import *
+from textutil import *
 import os
 
 
@@ -230,7 +231,40 @@ def menuQRL():
                         alpha=alpha, gamma=gamma, epsilon_delta=epsilon_delta)
 
 
+def title():
+    input("Veuillez passer en plein écran et appuyer sur entrée...")
+    os.system("clear")
+    # Les polices ASCII art proviennent de : http://patorjk.com/software/taag/
+    print(textColor("""
+╔═════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                             ║
+║         ████████╗███████╗████████╗██████╗ ██╗███████╗    ██████╗  ██████╗ ████████╗         ║
+║         ╚══██╔══╝██╔════╝╚══██╔══╝██╔══██╗██║██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝         ║
+║            ██║   █████╗     ██║   ██████╔╝██║███████╗    ██████╔╝██║   ██║   ██║            ║
+║            ██║   ██╔══╝     ██║   ██╔══██╗██║╚════██║    ██╔══██╗██║   ██║   ██║            ║
+║            ██║   ███████╗   ██║   ██║  ██║██║███████║    ██████╔╝╚██████╔╝   ██║            ║
+║            ╚═╝   ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚══════╝    ╚═════╝  ╚═════╝    ╚═╝            ║
+║                                                                                             ║
+║                                                                                             ║
+║       _____      _____     _ _                   __         _____         _                 ║
+║      |   __|    |     |_ _| | |___ ___    ___   |  |       |  _  |___ ___| |_ ___ ___       ║
+║      |   __|_   | | | | | | | | -_|  _|  |___|  |  |__ _   |   __| . |   |  _| . |   |      ║
+║      |__|  |_|  |_|_|_|___|_|_|___|_|           |_____|_|  |__|  |___|_|_|_| |___|_|_|      ║
+║                                                                                             ║
+║                                                                                             ║
+║                 Projet Maths-infos du DU CCIE de l'université d'Aix-Marseille               ║
+║                                                                                             ║
+║                 Version finale : 31/05/2019                                                 ║
+║                 Code du projet : https://github.com/Abunux/tetrisbot                        ║
+║                                                                                             ║
+╚═════════════════════════════════════════════════════════════════════════════════════════════╝
+""", bg=CBLACK, fg=CWHITE))
+    input("Press enter to continue...")
+    os.system("clear")
+
+
 if __name__ == "__main__":
+    title()
     choix = menuMain()
     if choix == 1:
         (agent, player) = menuAgentType()

@@ -15,6 +15,12 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AGOptimizer
+#
+#    Optimisation par algorithmes génétiques
+#
+#-----------------------------------------------------
 
 from agent_evaluation import *
 from textutil import *

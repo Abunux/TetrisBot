@@ -15,6 +15,12 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe Tetramino
+#
+#    Implémente les pièces du jeu
+#
+#-----------------------------------------------------
 
 from textutil import *
 

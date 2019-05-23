@@ -15,6 +15,12 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AgentHuman
+#
+#    Agent humain qui joue sur l'entrée standard
+#
+#-----------------------------------------------------
 
 from tetris_engine import *
 from agent import *

@@ -15,6 +15,13 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe TetrisEnv
+#
+#    Environnement à la OpenAi Gym
+#    pour le reinforcement learning
+#
+#-----------------------------------------------------
 
 from tetris_engine import *
 from random import *

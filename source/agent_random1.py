@@ -15,6 +15,13 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AgentRandom1
+#
+#    Agent qui joue de manière aléatoire
+#    avec les blocs classiques
+#
+#-----------------------------------------------------
 
 from tetris_engine import *
 from agent import *

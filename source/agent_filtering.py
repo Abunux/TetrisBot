@@ -15,6 +15,12 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AgentFiltering
+#
+#    Agent qui procède par filtrage des coups
+#
+#-----------------------------------------------------
 
 from tetris_engine import *
 from random import *

@@ -15,6 +15,12 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe Board
+#
+#    Implémente la grille de jeu
+#
+#-----------------------------------------------------
 
 
 from tetramino import *

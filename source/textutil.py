@@ -14,6 +14,10 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Fonctions utiles de manipulation de texte
+#
+#-----------------------------------------------------
 
 import re
 from time import *

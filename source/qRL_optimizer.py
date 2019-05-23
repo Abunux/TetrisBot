@@ -15,16 +15,23 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe QRLOptimizer
+#
+#    Optimisation par simple Q-learning
+#
+#-----------------------------------------------------
 
 from tetris_RLenv import *
 from time import *
 from random import *
 from math import *
+import sys
 
 
 def argmax(liste):
     """ Renvoie l'indice de la valeur max de liste
-        ou un indice aléatoire si la liste ne contient que de 0 """
+        ou un indice aléatoire si la liste ne contient que des 0 """
     if sum(liste) != 0:
         return liste.index(max(liste))
     else:
@@ -32,7 +39,7 @@ def argmax(liste):
 
 
 class QRLOptimizer:
-    """ Optimisatio par Q-learning sur une configuration simple """
+    """ Optimisation par Q-learning sur une configuration simple """
 
     def __init__(self, width=5, height=5, base_blocks_bag=DOMINO_BLOCK_BAG,
                  max_episodes=2000, max_blocks=500,
@@ -58,7 +65,8 @@ class QRLOptimizer:
         self.epsilon = self.epsilon_max
 
     def initQValue(self, s):
-        """ Initialise la Q-value de l'état s avec de 0 """
+        """ Initialise la Q-value de l'état s avec des 0 
+            si s n'est pas encore dans la table """
         if s not in self.q:
             self.q[s] = [0] * self.env.nb_actions
 
@@ -67,11 +75,10 @@ class QRLOptimizer:
         self.env.step(self.env.action_space[a])
         s1 = self.env.getStateCode()
         r = self.env.reward
-        if s not in self.q:
-            self.initQValue(s)
-        if s1 not in self.q:
-            self.initQValue(s1)
+        self.initQValue(s)
+        self.initQValue(s1)
 
+        # Équation de Bellman
         self.q[s][a] = (1 - self.alpha) * self.q[s][a] + \
             self.alpha * (r +
                           self.gamma * max(self.q[s1]))
@@ -81,28 +88,34 @@ class QRLOptimizer:
         start = time()
         print("%s - Lancement de l'apprentissage" % dateNow())
         for k in range(self.max_episodes):
-            if k % (self.max_episodes // 10) == 0:
-                print("%s - %d/%d" % (dateNow(), k, self.max_episodes))
+            if k % (self.max_episodes // 100) == 0:
+                print("%s - %d/%d (epsilon=%.3f)" %
+                      (dateNow(), k, self.max_episodes, self.epsilon))
+            # Initialisation de l'environnement
             self.reinit()
             s = self.env.getStateCode()
             self.initQValue(s)
+
             while not self.env.done:
+                # Exploration vs exploitation
                 g = uniform(0, 1)
                 if g <= self.epsilon:
                     a = randrange(0, self.env.nb_actions)
                 else:
-                    #                     a = self.q[s].index(max(self.q[s]))
                     a = argmax(self.q[s])
+
+                # MAJ de la Q-Table
                 self.update(s, a)
                 s = self.env.getStateCode()
+
+                # MAJ de epsilon
                 self.epsilon = self.epsilon_min + \
                     (self.epsilon_max - self.epsilon_min) * \
                     exp(-self.epsilon_delta * k)
+
         print("%s - Fin de l'apprentissage" % dateNow())
         print("Temps total : %.2f secondes" % (time() - start))
-#         for s in self.q:
-#             print(s, self.q[s])
-#         input()
+        print("Taille de la q-table : %d octets" % sys.getsizeof(self.q))
 
     def play(self):
         """ Joue la partie avec la Q-table crée """
@@ -123,7 +136,10 @@ class QRLOptimizer:
 
 if __name__ == "__main__":
     optimizer = QRLOptimizer()
-    optimizer.learn()
+    try:
+        optimizer.learn()
+    except:
+        print("Error !")
     input("Press enter to see the agent in action ")
     while True:
         optimizer.play()

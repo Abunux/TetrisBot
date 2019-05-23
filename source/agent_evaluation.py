@@ -15,6 +15,12 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AgentEvaluation
+#
+#    Agent qui procède par évaluation des coups
+#
+#-----------------------------------------------------
 
 # from tetris_engine import *
 from random import *

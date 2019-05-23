@@ -39,14 +39,19 @@ def textColor(string, bg=CWHITE, fg=CBLACK):
     return "\033[48;5;%dm\033[38;5;%dm%s\033[0m" % (bg, fg, string)
 
 
+def cleanLine(string):
+    """ Renvoie la chaine sans les caractères spéciaux de couleur """
+    # Utilisation d'une expression régulière pour supprimer
+    # les caractères spéciaux de couleurs
+    return re.sub(r"\033.+?m", "", string)
+
+
 def mergeChains(string1, string2):
     """ Fusionne deux chaînes cote à cote pour l'affichage """
     lines1 = string1.split('\n')
     lines2 = string2.split('\n')
     result = ""
-    # Utilisation d'une expression rrégulière pour supprimer
-    # les caractères spéciaux de couleurs
-    max_length_string1 = max([len(re.sub(r"\033.+?m", "", s)) for s in lines1])
+    max_length_string1 = max([len(cleanLine(s)) for s in lines1])
     min_height = min(len(lines1), len(lines2))
 
     for k in range(min_height):
@@ -74,14 +79,16 @@ def boxed(text, prefix='', window_width=0, window_height=0):
     dans une boîte de largeur window_width"""
     lines = text.split('\n')
     if window_width == 0:
-        window_width = max([len(l) for l in lines]) + 2
+        window_width = max([len(cleanLine(l))
+                            for l in lines]) + 2
     if window_height == 0:
         window_height = len(lines)
     chain = ""
     chain += '╔' + '═' * window_width + '╗' + '\n'
-    for ligne in lines:
-        chain += "║ %s%s" % (prefix, ligne) + ' ' * \
-            (window_width - (len(ligne) + len(prefix) + 1)) + '║' + '\n'
+    for line in lines:
+        chain += "║ %s%s" % (prefix, line) + ' ' * \
+            (window_width - (len(cleanLine(line)) +
+                             len(prefix) + 1)) + '║' + '\n'
     for _ in range(window_height - len(lines)):
         chain += "║ " + ' ' * \
             (window_width + len(prefix) - 1) + '║' + '\n'

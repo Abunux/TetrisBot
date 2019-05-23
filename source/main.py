@@ -60,6 +60,28 @@ def menuMain():
     return choix
 
 
+def menuFiltering():
+    filters = ["holes", "sum_heights", "bumpiness", "lines"]
+    nb_filters = len(filters)
+    order = []
+    for k in range(nb_filters):
+        print("Filtre n° %d :" % (k + 1))
+        for i in range(len(filters)):
+            print("  %d : %s" % (i + 1, filters[i]))
+        c = inputInt("Votre choix", 1)
+        order.append(filters.pop(c - 1))
+    return AgentFiltering(order=order)
+
+
+def menuEvaluation():
+    c1 = inputFloat("Coeff 0 (nb_lines)", 0.8)
+    c2 = inputFloat("Coeff 1 (sum_heights)", 0.6)
+    c3 = inputFloat("Coeff 2 (nb_holes)", 0.4)
+    c4 = inputFloat("Coeff 3 (bumpiness)", 0.2)
+    coeffs = [c1, c2, c3, c4]
+    return AgentEvaluation(eval_coeffs=coeffs)
+
+
 def menuAgentType():
     """ Menu choix de l'agent """
     print("""Choix de l'agent :
@@ -76,14 +98,9 @@ def menuAgentType():
     elif agent == 3:
         player = AgentRandom2()
     elif agent == 4:
-        player = AgentFiltering()
+        player = menuFiltering()
     elif agent == 5:
-        c1 = inputFloat("Coeff 0 (nb_lines)", 0.8)
-        c2 = inputFloat("Coeff 1 (sum_heights)", 0.6)
-        c3 = inputFloat("Coeff 2 (nb_holes)", 0.4)
-        c4 = inputFloat("Coeff 3 (bumpiness)", 0.2)
-        coeffs = [c1, c2, c3, c4]
-        player = AgentEvaluation(eval_coeffs=coeffs)
+        player = menuEvaluation()
 
     return (agent, player)
 

@@ -198,7 +198,7 @@ class QRLOptimizer:
         for j in range(self.width):
             chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
         chain += textColor(" ", bg=CBLACK, fg=CWHITE)
-        chain += "\n"
+        chain += "  Les cellules claires sont les plus connues\n\n"
         print(chain)
         return chain
 

@@ -96,6 +96,9 @@ class QRLOptimizer:
         self.env.reset()
         self.epsilon = self.epsilon_max
 
+    #=========================================================================
+    # Apprentissage
+    #=========================================================================
     def initQValue(self, s):
         """ Initialise la Q-value de l'état s avec des 0 si s n'est pas encore dans la table """
         if s not in self.q:
@@ -156,6 +159,9 @@ class QRLOptimizer:
 
         return self.q
 
+    #=========================================================================
+    # Visualisation de la Q-Table
+    #=========================================================================
     def getQIndexes(self):
         """ Renvoie un tableau dans lequel chaque cellule est le nombre
             de fois qu'elle apparaît dans les indices de la Q-Table 
@@ -196,6 +202,9 @@ class QRLOptimizer:
         print(chain)
         return chain
 
+    #=========================================================================
+    # Jeu avec la Q-Table
+    #=========================================================================
     def play(self):
         """ Joue la partie avec la Q-table crée """
         self.reinit()

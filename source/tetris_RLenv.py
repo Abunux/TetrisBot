@@ -52,6 +52,9 @@ class TetrisEnv(TetrisEngine):
         self.moveBlockInDirection('')
         self.getState()
 
+    #=========================================================================
+    # Récupération des états
+    #=========================================================================
     def getState(self):
         """ Renvoie l'état de la grille """
         self.state = self.board.npBinaryRepresentation()
@@ -62,10 +65,16 @@ class TetrisEnv(TetrisEngine):
         self.stateCode = self.board.encodeToInt()
         return self.stateCode
 
+    #=========================================================================
+    # Action aléatoire
+    #=========================================================================
     def sampleAction(self):
         """ Renvoie une action aléatoire """
         return choice(self.action_space)
 
+    #=========================================================================
+    # Avancement d'une phase de jeu
+    #=========================================================================
     def step(self, action):
         """ Effectue une action (joue un coup)
             Met à jour les informations (done, state) """
@@ -90,6 +99,9 @@ class TetrisEnv(TetrisEngine):
 
         self.state = self.getState()
 
+    #=========================================================================
+    # Affichage de l'environnement
+    #=========================================================================
     def render(self):
         """ Affiche le jeu """
         os.system("clear")

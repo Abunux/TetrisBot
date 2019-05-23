@@ -279,10 +279,6 @@ class TetrisEngine:
         else:
             return 1200
 
-    def getScoreFromMove(self):
-        """ Renvoie le score pour chaque déplacement vers le bas """
-        return 1
-
     #=========================================================================
     # Affichage en mode console
     #=========================================================================
@@ -380,7 +376,6 @@ class TetrisEngine:
             self.time_total = time() - self.time_start
             self.score_on_move = 0
             while self.moveBlockInDirection('') and self.is_running:
-                self.score_on_move += self.getScoreFromMove()
 
                 if not self.silent:
                     print(self)

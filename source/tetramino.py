@@ -83,15 +83,6 @@ class Tetramino:
             self.array[i][j] = self.id
         return self.array
 
-#     def __str__(self):
-#         """ Renvoie une représentation textuelle des blocs """
-#         self.getCorners()
-#         self.array = self.toArray()
-#         return "\n".join(
-#             ["".join([str(self.array[i][j]) if self.array[i][j] else "."
-#                       for j in range(self.size)])
-#              for i in range(self.size)])
-
     def __str__(self):
         """ Renvoie une représentation textuelle des blocs """
         self.getCorners()

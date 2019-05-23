@@ -26,6 +26,7 @@ from tetris_RLenv import *
 from time import *
 from random import *
 from math import *
+# import numpy as np
 import sys
 from itertools import chain
 
@@ -72,6 +73,9 @@ class QRLOptimizer:
                  max_episodes=2000, max_blocks=500,
                  alpha=0.1, gamma=0.9,
                  epsilon_min=0.01, epsilon_max=1, epsilon_delta=0.001):
+        self.width = width
+        self.height = height
+
         self.alpha = alpha
         self.gamma = gamma
         self.epsilon_min = epsilon_min
@@ -115,9 +119,14 @@ class QRLOptimizer:
         start = time()
         print("%s - Lancement de l'apprentissage" % dateNow())
         for k in range(self.max_episodes):
-            if k % (self.max_episodes // 100) == 0:
-                print("%s - %d/%d (epsilon=%.3f)" %
-                      (dateNow(), k, self.max_episodes, self.epsilon))
+            if k == 1:
+                print("Temps total estimé : %d secondes" %
+                      ((time() - start) * self.max_episodes))
+            if (k + 1) % (self.max_episodes // 10) == 0:
+                print("%s - %d/%d (epsilon=%.3f) (temps restant : %d s)" %
+                      (dateNow(), k + 1, self.max_episodes, self.epsilon,
+                       (time() - start) / (k + 1) * (self.max_episodes - (k + 1)))
+                      )
             # Initialisation de l'environnement
             self.reinit()
             s = self.env.getStateCode()
@@ -143,6 +152,49 @@ class QRLOptimizer:
         print("%s - Fin de l'apprentissage" % dateNow())
         print("Temps total : %.2f secondes" % (time() - start))
         print("Taille de la q-table : %d octets" % total_size(self.q))
+        self.printQIndexes()
+
+        return self.q
+
+    def getQIndexes(self):
+        """ Renvoie un tableau dans lequel chaque cellule est le nombre
+            de fois qu'elle apparaît dans les indices de la Q-Table 
+            avec des Q-Values toutes non nulles """
+        board = Board(width=self.width, height=self.height)
+        grid = np.zeros([self.height + 2, self.width], dtype=np.int64)
+        for s in self.q:
+            if sum(self.q[s]) != 0:
+                grid = grid + board.decodeFromInt(s)
+        return grid
+
+    def printQIndexes(self):
+        """ Affiche le nombre de fois que chaque cellule apparaît dans
+            les indices de la Q-Table en nuances de gris """
+        grid = self.getQIndexes()
+        imax = grid.max()
+
+        def color(n):
+            return int((256 - 232) / imax * n + 232)
+
+        chain = ""
+        for i in range(self.height + 2 - 1, -1, -1):
+            chain += textColor("%2d ║" % (i % 10), bg=CBLACK, fg=CWHITE)
+            for j in range(self.width):
+                if i == self.height:
+                    char = "~"
+                else:
+                    char = "."
+                chain += textColor(char, bg=color(grid[i, j]), fg=CWHITE)
+            chain += textColor("║", bg=CBLACK, fg=CWHITE) + "\n"
+        chain += textColor("   ╚" + "═" * (self.width) +
+                           "╝", bg=CBLACK, fg=CWHITE) + "\n"
+        chain += textColor("    ", bg=CBLACK, fg=CWHITE)
+        for j in range(self.width):
+            chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
+        chain += textColor(" ", bg=CBLACK, fg=CWHITE)
+        chain += "\n"
+        print(chain)
+        return chain
 
     def play(self):
         """ Joue la partie avec la Q-table crée """

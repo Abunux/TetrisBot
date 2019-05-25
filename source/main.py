@@ -144,14 +144,14 @@ def menuAG():
         mutation_rate = 0
 
     print("""Méthode de sélection des parents :
-    1 : Sélection
+    1 : Roue
     2 : Tournoi""")
     choix = inputInt("Votre choix", 2)
     while choix not in [1, 2]:
         print("Choix invalide")
         choix = inputInt("Votre choix", 2)
     if choix == 1:
-        parents_selection_method = "selection"
+        parents_selection_method = "wheel"
     else:
         parents_selection_method = "tournament"
 

@@ -181,7 +181,7 @@ class TetrisEngine:
                           for j in range(self.block.jmin, self.block.jmax + 1)]
         line = max([column_heights[j - self.block.jmin] + self.block.getLowerCell(j)
                     for j in range(self.block.jmin, self.block.jmax + 1)])
-        # Dans le cas où la pièce est trop haute
+        # Dans le cas ou on essaie de placer un bloc trop haut :
         if line >= self.board.height + 2:
             return
         self.moveBlock(self.block, [line, self.block_position[1]])

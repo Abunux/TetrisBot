@@ -124,9 +124,9 @@ class TetrisEngine:
     # Déplacements et rotations des pièces
     #=========================================================================
     def isMoveInGrid(self, block, new_position):
-        """ Test si le bloc reste dans la grille """
+        """ Teste si le bloc reste dans la grille """
         return not (new_position[1] + block.jmin < 0 or new_position[1] + block.jmax >= self.board.width
-                    or new_position[0] - block.imax < 0 or new_position[0] - block.imin > self.board.height + 1)
+                    or new_position[0] - block.imax < 0 or new_position[0] - block.imin >= self.board.height + 2)
 
     def isMoveOnFreeCells(self, block, new_position):
         """ Teste si les nouvelles cases occupées par le bloc sont vides """
@@ -178,9 +178,12 @@ class TetrisEngine:
     def dropBlock(self):
         """ Fait tomber le bloc en bas """
         column_heights = [self.fixed_board.column_heights[self.block_position[1] + j]
-                          for j in range(self.block.jmin, self.block.jmax + 1)]  # 1
+                          for j in range(self.block.jmin, self.block.jmax + 1)]
         line = max([column_heights[j - self.block.jmin] + self.block.getLowerCell(j)
-                    for j in range(self.block.jmin, self.block.jmax + 1)])  # 2
+                    for j in range(self.block.jmin, self.block.jmax + 1)])
+        # Dans le cas où la pièce est trop haute
+        if line >= self.board.height + 2:
+            return
         self.moveBlock(self.block, [line, self.block_position[1]])
 
     def rotateBlockInDirection(self, direction='H'):

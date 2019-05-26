@@ -381,7 +381,7 @@ class AGOptimizer:
     def process(self):
         """ Boucle principale de l'optimisation """
         print(self.stringOfParameters())
-
+        start = time()
         self.initPopulation()
         self.updateStats()
 
@@ -396,6 +396,7 @@ class AGOptimizer:
             self.updateStats()
 
         print()
+        print("Temps total : %d secondes" % (time() - start))
         best_coeffs = self.population[0]["vector"]
         print("Best coeffs = %s" % best_coeffs)
         print()

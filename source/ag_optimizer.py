@@ -396,6 +396,9 @@ class AGOptimizer:
             self.updateStats()
 
         print()
+        print("Résumé de l'optimisation : ")
+        print("---------------------------")
+        print(self.stringOfParameters())
         print("Temps total : %d secondes" % (time() - start))
         best_coeffs = self.population[0]["vector"]
         print("Best coeffs = %s" % best_coeffs)

@@ -277,7 +277,7 @@ if __name__ == "__main__":
     1 : Voir des parties
     2 : Satistiques (attention, peut être très long)""")
             work_type = inputInt("Votre choix", 1)
-            while work_type not in [1, 2, 3]:
+            while work_type not in [1, 2]:
                 print("Choix invalide")
                 work_type = inputInt("Votre choix", 1)
             if work_type == 1:

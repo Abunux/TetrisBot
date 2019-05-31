@@ -195,18 +195,15 @@ def menuAG():
 
     print("""Critère d'évaluation :
     1 : Lignes
-    2 : Score
-    3 : Hauteur max""")
+    2 : Score""")
     choix = inputInt("Votre choix", 1)
-    while choix not in [1, 2, 3]:
+    while choix not in [1, 2]:
         print("Choix invalide")
         choix = inputInt("Votre choix", 1)
     if choix == 1:
         evaluation_criteria = "lines"
-    elif choix == 2:
-        evaluation_criteria = "score"
     else:
-        evaluation_criteria = "height"
+        evaluation_criteria = "score"
 
     return AGOptimizer(population_size=population_size, nb_generations=nb_generations,
                        max_nb_blocks=max_nb_blocks, nb_games_played=nb_games_played,

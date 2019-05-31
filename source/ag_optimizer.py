@@ -26,7 +26,7 @@ from agent_evaluation import *
 from textutil import *
 from random import *
 from time import time
-from math import sqrt
+from math import sqrt, exp
 import matplotlib.pyplot as plt
 
 # Taille du vecteur de coefficients
@@ -107,7 +107,6 @@ class AGOptimizer:
         # Critère d'évaluation
         #    - "lines" : lignes créées
         #    - "score" : score total
-        #    - "height" : hauteur maximum atteinte
         self.evaluation_criteria = evaluation_criteria
 
         self.population = []
@@ -141,10 +140,8 @@ class AGOptimizer:
         score = player.engine.run()
         if self.evaluation_criteria == "lines":
             return player.engine.total_lines
-        elif self.evaluation_criteria == "score":
+        elif self.evaluation_criteria == "score" or True:
             return score
-        elif self.evaluation_criteria == "height" or True:
-            return -player.engine.max_height_on_game
 
     def fitness(self, vector):
         """ Fitness de l'individu : score total sur nb_games_played parties """

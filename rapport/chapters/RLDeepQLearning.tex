@@ -1,0 +1,242 @@
+\chapter{Vers le deep-Q-learning}
+
+Dans l'algorithme par itération des fonctions de valeur, on construit une suite d'approximations successives $(Q_k)$ qui converge vers $Q_*$. Concrètement, les $Q_k$ sont implémentées sous la forme de matrices $p\times q$ où $p$ est le nombre d'états et $q$ le nombre d'actions. Lorsque $p$ devient très grand (comme c'est le cas pour Tétris, même en simplifiant à l'extrême l'ensemble des états), cela devient à la fois ingérable du point de vue de la mémoire et inefficace du point de vue du temps de calcul.
+
+Pour contourner ce problème, il est possible d'utiliser un réseau de neurones pour calculer des approximations de $Q_*$. Plus précisément, on peut construire un réseau de neurones pondéré par un ensemble de poids $\theta$ qui prend en entrée l'état $s$ de l'environnement et qui calcule en sortie une valeur approchée de $Q_*(s,a)$ pour chaque action $a$ possible. Cette valeur dépend de $s$, de $a$ et de $\theta$: nous la noterons $Q_{\theta}(s,a)$.
+
+Schématiquement, si on encode l'état $s$ sur $5$ neurones en entrée et s'il y a 4 actions possibles pour chaque état, on obtient un réseau du type suivant.
+
+\begin{center}
+	\definecolor{aqaqaq}{rgb}{0.6274509803921569,0.6274509803921569,0.6274509803921569}
+	\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+	\clip(1.948,4.974) rectangle (18.712,11.002);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,9.)-- (8.,10.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,8.5)-- (8.,9.5);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,8.5)-- (8.,8.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,8.5)-- (6.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,9.)-- (8.,7.5);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,9.)-- (8.,6.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,8.)-- (8.,8.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,7.5)-- (8.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,8.)-- (8.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,7.)-- (8.,6.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,7.)-- (8.,7.5);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,7.)-- (8.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,7.5)-- (8.,6.5);
+	\draw [line width=0.8pt,color=aqaqaq] (6.,8.)-- (8.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,9.5)-- (10.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,10.)-- (10.,8.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,9.)-- (10.,10.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,9.5)-- (10.,10.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,10.)-- (10.,9.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,8.5)-- (10.,6.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,8.5)-- (10.,8.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,8.)-- (10.,7.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,7.5)-- (10.,8.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,7.5)-- (10.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,7.)-- (10.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,6.5)-- (10.,5.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,6.)-- (10.,6.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,6.)-- (10.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,6.)-- (10.,7.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,6.5)-- (10.,7.5);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,6.)-- (10.,5.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,10.5)-- (12.,9.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,10.)-- (12.,10.);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,9.5)-- (12.,8.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,9.)-- (12.,10.);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,10.5)-- (12.,8.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,8.5)-- (12.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,8.)-- (12.,8.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,7.5)-- (12.,7.52);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,7.)-- (12.,6.);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,6.)-- (12.,6.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,6.5)-- (12.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,7.)-- (10.,5.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,7.5)-- (12.,8.);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,9.)-- (12.,8.);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,5.5)-- (12.,6.);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,10.)-- (14.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,9.)-- (14.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,8.)-- (14.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,9.5)-- (14.,8.33);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,8.5)-- (14.,8.33);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,7.)-- (14.,8.33);
+	\draw [line width=0.8pt,color=aqaqaq] (14.,7.66)-- (12.,8.);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,9.)-- (14.,7.66);
+	\draw [line width=0.8pt,color=aqaqaq] (14.,7.)-- (12.,6.5);
+	\draw [line width=0.8pt,color=aqaqaq] (14.,7.)-- (12.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (14.,7.)-- (12.,6.);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,7.52)-- (14.,7.);
+	\draw [line width=0.8pt,color=aqaqaq] (14.,7.66)-- (12.,7.52);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,8.5)-- (12.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,9.)-- (10.,8.5);
+	\draw [line width=0.8pt,color=aqaqaq] (10.,7.)-- (12.,7.52);
+	\draw [->,line width=1.2pt] (4.,8.) -- (5.5,8.);
+	\draw (2.5,8.35) node[anchor=north west] {état $s$};
+	\draw [->,line width=1.2pt] (14.5,9.) -- (16.,9.);
+	\draw [line width=0.8pt,color=aqaqaq] (8.,10.)-- (10.,10.5);
+	\draw [line width=0.8pt,color=aqaqaq] (12.,10.)-- (10.,10.5);
+	\draw [->,line width=1.2pt] (14.5,8.33) -- (16.,8.33);
+	\draw [->,line width=1.2pt] (14.5,7.66) -- (16.,7.66);
+	\draw [->,line width=1.2pt] (14.5,7.) -- (16.,7.);
+	\draw (16.2,9.35) node[anchor=north west] {$Q_{\theta}(s,a_1)$};
+	\draw (16.2,8.68) node[anchor=north west] {$Q_{\theta}(s,a_2)$};
+	\draw (16.2,8.01) node[anchor=north west] {$Q_{\theta}(s,a_3)$};
+	\draw (16.2,7.35) node[anchor=north west] {$Q_{\theta}(s,a_4)$};
+	\draw [fill=black] (6.,9.) circle (2.5pt);
+	\draw [fill=black] (6.,8.5) circle (2.5pt);
+	\draw [fill=black] (6.,8.) circle (2.5pt);
+	\draw [fill=black] (6.,7.) circle (2.5pt);
+	\draw [fill=black] (6.,7.5) circle (2.5pt);
+	\draw [fill=black] (8.,10.) circle (2.5pt);
+	\draw [fill=black] (8.,9.5) circle (2.5pt);
+	\draw [fill=black] (8.,9.) circle (2.5pt);
+	\draw [fill=black] (8.,8.5) circle (2.5pt);
+	\draw [fill=black] (8.,8.) circle (2.5pt);
+	\draw [fill=black] (8.,7.5) circle (2.5pt);
+	\draw [fill=black] (8.,7.) circle (2.5pt);
+	\draw [fill=black] (8.,6.5) circle (2.5pt);
+	\draw [fill=black] (8.,6.) circle (2.5pt);
+	\draw [fill=black] (10.,10.5) circle (2.5pt);
+	\draw [fill=black] (10.,10.) circle (2.5pt);
+	\draw [fill=black] (10.,9.5) circle (2.5pt);
+	\draw [fill=black] (10.,9.) circle (2.5pt);
+	\draw [fill=black] (10.,8.5) circle (2.5pt);
+	\draw [fill=black] (10.,8.) circle (2.5pt);
+	\draw [fill=black] (10.,7.5) circle (2.5pt);
+	\draw [fill=black] (10.,7.) circle (2.5pt);
+	\draw [fill=black] (10.,6.5) circle (2.5pt);
+	\draw [fill=black] (10.,6.) circle (2.5pt);
+	\draw [fill=black] (10.,5.5) circle (2.5pt);
+	\draw [fill=black] (12.,10.) circle (2.5pt);
+	\draw [fill=black] (12.,9.5) circle (2.5pt);
+	\draw [fill=black] (12.,9.) circle (2.5pt);
+	\draw [fill=black] (12.,8.5) circle (2.5pt);
+	\draw [fill=black] (12.,8.) circle (2.5pt);
+	\draw [fill=black] (12.,7.52) circle (2.5pt);
+	\draw [fill=black] (12.,7.) circle (2.5pt);
+	\draw [fill=black] (12.,6.5) circle (2.5pt);
+	\draw [fill=black] (12.,6.) circle (2.5pt);
+	\draw [fill=black] (14.,8.33) circle (2.5pt);
+	\draw [fill=black] (14.,9.) circle (2.5pt);
+	\draw [fill=black] (14.,7.66) circle (2.5pt);
+	\draw [fill=black] (14.,7.) circle (2.5pt);
+	\end{tikzpicture}
+\end{center}
+
+Partant d'un réseau muni d'un ensemble de poids $\theta$ aléatoire, le but va être d'entraîner ce réseau de façon à modifier $\theta$ de telle sorte que, pour tout couple état-action $(s,a)$, l'écart entre la valeur $Q_{\theta}(s,a)$ calculée par le réseau et la valeur $Q_*(s,a)$ optimale soit le plus petit possible.
+
+Lorsqu'on utilise un réseau de neurones pour faire, par exemple, de la reconnaissance de caractère, l'entraînement est simple à définir: on fournit au réseau une série d'images dont on sait, à l'avance, ce qu'elles représentent et on entraîne le réseau sur ces images. On sait  alors explicitement calculer l'erreur commise entre la sortie du réseau et la valeur exacte attendue. Dans le cas des processus de décision markovien, on ne connaît pas la valeur de $Q_*$ et, dès lors, on ne sait pas calculer, de façon exacte, l'erreur commise. Pour contourner ce problème, on va chercher à minimiser cette erreur en utilisant l'équation d'optimalité de Bellman sur un stock d'expérience déjà réalisée.
+
+\section{Fonction d'erreur}
+
+Rappelons que, pour tout couple état-action $(s,a)\in\mathcal{S}\times\mathcal{A}$, $R(s,a)$ désigne la récompense obtenue après avoir effectué l'action $a$ alors que l'environnement était dans l'état $s$. De plus, l'environnement passe alors dans un état $s'$ avec une probabilité $T(s,a,s')$.  
+
+La fonction $Q_*$ est caractérisée par l'équation de Bellman \eqref{eq_Bellman_optimale_Q_Q}:
+$$\forall (s,a)\in\mathcal{S}\times\mathcal{A}, \quad Q_*(s,a) = \sum_{s'\in\mathcal{S}} T(s,a,s') \left[R(s,a) + \gamma \max_{\alpha \in \mathcal{A}} Q_{*}(s',\alpha)\right]$$
+Autrement dit, étant donné un couple état-action $(s,a)$, $Q_*$ est l'unique fonction de valeur état-action $Q$ qui minimise la fonction $E_{(s,a)}$ définie par
+\begin{equation}
+E_{(s,a)}(Q)=\left[Q(s,a)-\sum_{s'\in\mathcal{S}} T(s,a,s') \left[R(s,a) + \gamma \max_{\alpha \in \mathcal{A}} Q(s',\alpha)\right]\right]^2
+\label{fontion_erreur}
+\end{equation}
+puisque $Q_*$ est l'unique fonction de valeurs état-action telle que $E_{(s,a)}(Q_*)=0$.
+
+La fonction $E_{(s,a)}$ est appelée \textit{fonction d'erreur} associée au couple $(s,a)$. Elle sert à estimer si une fonction de valeur état-action $Q$ est plus ou moins proche de $Q_*$. Plus $E_{(s,a)}$ est proche de $0$, plus $Q$ sera considérée comme proche de $Q_*$. 
+
+On va donc entraîner le réseau à minimiser $E_{(s,a)}$ pour tout $(s,a)\in\mathcal{S}\times\mathcal{A}$. Pour se faire, on va utiliser un échantillon aléatoire de valeurs issues d'un stock d'expériences conservées en mémoire.
+
+\section{Entraînement par mémoire de reprise}
+
+On fixe un entier $M>0$ et entier $M_e\in\llbracket 1, M\rrbracket$ (dans la pratique $M\gg M_e$).
+
+On fait agir le réseau de neurones sur l'environnement (essentiellement comme dans le cas du $Q$-learning par itération décrit au paragraphe précédent -- notamment en conservant le principe de compromis exploitation/exploration) et on stocke en mémoire les $M$ dernières valeurs du quadruplet $(s,\; a,\; R(a,s),\; s')$. Ce stock est appelé la \textit{mémoire de reprise} (\textit{replay memory} en anglais).
+
+Pour mettre à jour le réseau de neurones, on choisit un échantillon aléatoire de $M_e$ éléments dans la mémoire de reprise. Pour chaque élément $(s_j,\; a_j,\; R(s_j, a_j),\; s_j')$ de cet échantillon, on calcule, pour chaque action $a\in\mathcal{A}$, $Q_{\theta}(s_j, a)$ à l'aide du réseau de neurones puis on détermine $\mathop{\max}\limits_{\alpha \in\mathcal{A}} Q_{\theta}(s_j,\alpha)$ et on en déduit la valeur de
+$$y_j:=R(s_j,a_j)+\gamma \mathop{\max}\limits_{\alpha \in \mathcal{A}} Q_{\theta}(s_j', \alpha).$$
+On  travaille ici avec un nouvel état $s_j'$ déterminé donc, dans la somme de l'égalité \eqref{fontion_erreur}, on considère que toutes les probabilités $T(s,a,s')$ sont nulles sauf pour $s'=s_j'$ pour lequel elle vaut 1.
+
+On utilise enfin la méthode de descente de gradient pour mettre à jour le réseau de telle sorte à minimiser la fonction d'erreur 
+$$E_{(s_j,a_j)}(Q_{\theta})=\left[Q_{\theta}(s_j,a_j)-y_j\right]^2$$
+sur le lot de $M_e$ valeurs de l'échantillon. 
+
+\section{Stabilisation par duplication du réseau}
+
+Lors du calcul de l'erreur, on utilise le réseau de neurones à deux reprises: une première fois pour calculer $Q_{\theta}(s_j,a_j)$ et une seconde fois pour calculer $y_j$. Entre ces deux calculs, le réseau n'a pas évolué alors qu'on cherche plutôt à tirer partie des \og progrès \fg{} du réseau pour estimer au mieux l'écart entre $y_i$ et $Q_{\theta}(s_j,a_j)$. En utilisant le même réseau -- ou même des réseaux trop proches (dans la suite des évolutions) -- on constate une certaine instabilité du processus.
+
+Pour palier ce problème, on introduit un réseau secondaire, initialement identique au réseau principal et dont les poids restent figés pendant un intervalle de temps $t$ assez long puis sont régulièrement mis à jour, à intervalle régulier $t$, à l'aide des poids du réseau principal. Lors du calcul de $E_{(s_j, a_j)}(Q_{\theta})$ vu précédemment, on utilisera en fait le réseau principal pour calculer $Q_{\theta}(s_j, a_j)$ mais on utilisera le réseau secondaire pour le calcul de $y_j$. Ainsi, si on note $\theta_0$, $\theta_1$, ..., $\theta_k$, ... la suite des ensembles des poids du réseau de neurones principal aux instants $0$, $1$, ..., $k$, ..., on calcule la fonction d'erreur $E_{(s_j, a_j)}(Q_{\theta})$ par la formule
+$$E_{(s_j, a_j)}(Q_{\theta_{mt+k}})=\left[Q_{\theta_{mt+k}}(s_j,a_j) - \left(R(s_j,a_j)+\gamma\mathop{\max}\limits_{\alpha\in\mathcal{A}} Q_{\theta_{mt}}(s_j',\alpha)\right)\right]^2$$
+pour tout $m\in\N$ et tout $k\in\llbracket 0, t-1\rrbracket$. 
+
+\section{Algorithme}
+
+On aboutit à l'algorithme de la page suivante où l'on note: 
+
+\begin{itemize}
+	\item \verb|etat_initial| l'état initial de l'environnement (début d'une partie);
+	\item \verb|etat_final| l'état final de l'environnement (fin d'une partie);
+	\item \verb|Res_P| le réseau principal;
+	\item \verb|Res_S| le réseau secondaire;
+	\item \verb|Res_P(s)_max| (resp. \verb|Res_S(s)_max|) la plus grande valeur en sortie du réseau principal (resp. secondaire) lorsqu'on passe en entrée l'état \verb|s|;
+	\item \verb|Res_P(s,a)| (resp. \verb|Res_S(s,a)|) la valeur obtenue pour l'action \verb|a| en sortie du réseau principal (resp. secondaire) lorsqu'on passe en entrée l'état \verb|s|.
+\end{itemize}
+
+\newpage
+
+\small
+
+\begin{tabular}{|l|}
+	\hline
+	\verb|Paramètres: facteur_actualisation, facteur_apprentissage| \\
+	\phantom{|Paramètres:| } \verb|facteur_exploration_min, facteur_exploration_max,| \\
+	\phantom{|Paramètres:| } \verb|taille_memoire, taille_echantillon,| \\
+	\phantom{|Paramètres:| } \verb|periode_actualisation_Res_S, nb_episodes_max|\\
+	\verb|### constitution d'une mémoire de reprise aléatoire ###| \\
+	\verb|Initialiser à 0 la liste memoire_de_reprise de taille taille_memoire|\\	
+	\verb|t = 0| \\
+	\verb|Tant que t < taille_memoire :| \\
+	\hspace{0.5cm} \verb|s = etat_initial| \\
+	\hspace{0.5cm} \verb|Tant que s != etat_final :| \\
+	\hspace{1cm} \verb|Effectuer une action a au hasard| \\
+	\hspace{1cm} \verb|Déterminer la récompense r et le nouvel état s'| \\
+	\hspace{1cm} \verb|memoire_de_reprise[t] = [s,a,r,s']| \\
+	\hspace{1cm} \verb|t = t+1|\\
+	\verb|### début de l'entrainement ###| \\
+	\verb|Initialiser Res_P avec des poids aléatoires| \\
+	\verb|Initialiser à 0 les poids de Res_S| \\
+	\verb|temps_t = 0| \\
+	\verb|delta_exploration = facteur_exploration_max - facteur_exploration_min| \\
+	\verb|Pour k allant de 1 à nb_episodes_max :|\\
+	\hspace{0.5cm} \verb|s = etat_initial|\\
+	\hspace{0.5cm} \verb|Tant que s != etat_final :| \\
+	\hspace{1cm} \verb|Si temps_t est un multiple de periode_actualisation_Res_S :|\\
+	\hspace{1.5cm} \verb|Res_S = Res_P| \\
+	\hspace{1cm} \verb|facteur_exploration = facteur_exploration_min +| \\
+	\hfill \verb|delta_exploration*exp(-taux_decroissance*temps_t)| \\
+	\hspace{1cm} \verb|Choisir un nombre réel x aléatoire entre 0 et 1| \\
+	\hspace{1cm} \verb|Si x < facteur_exploration :| \\
+	\hspace{1.5cm} \verb|Choisir une action a au hasard| \\
+	\hspace{1cm} \verb|Sinon :| \\
+	\hspace{1.5cm} \verb|Déterminer une action a telle que Res_P(s,a) == Res_P(s)_max| \\
+	\hspace{1cm} \verb|Effectuer l'action a et déterminer la récompense r et le nouvel état s'| \\ 
+	\hspace{1cm} \verb|Pour j allant de 0 à taille_memoire-2 :| \\
+	\hspace{1.5cm} \verb|memoire_de_reprise[j] = memoire_de_reprise[j+1]| \\
+	\hspace{1cm} \verb|memoire_de_reprise[taille_memoire-1]=[s,a,r,s']| \\
+	\hspace{1cm} \verb|Initialiser à 0 une liste y de longueur taille_echantillon|\\
+	\hspace{1cm} \verb|Selectionner aléatoirement un échantillon de taille_echantillon| \\
+	\hfill \verb|éléments de memoire_de_reprise sous forme d'une liste E| \\
+	\hspace{1cm} \verb|Pour j allant de 0 à taille_echantillon-1 :|\\
+	\hspace{1.5cm} \verb|Si E[j][0] == etat_final :| \\
+	\hspace{2cm} \verb|y[j] = E[j][2]| \\
+	\hspace{1.5cm} \verb|sinon :| \\
+	\hspace{2cm} \verb|y[j] = E[j][2] + facteur_actualisation * Res_S(E[j][3])_max|\\
+	\hspace{1cm} \verb|Mettre à jour Res_P par descente de gradient pour la fonction d'erreur|\\
+	\hfill \verb|(Res_P(E[j][0],E[j][1])-y[j])^2 sur le lot de valeurs contenues dans y| \\
+	\hspace{0.5cm} \verb|s = s'| \\
+	\hspace{0.5cm} \verb|temps_t = temps_t + 1| \\
+	\hline
+\end{tabular}  
+
+
+\normalsize
+

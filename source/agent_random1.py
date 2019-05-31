@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 #-----------------------------------------------------
 #
@@ -14,6 +15,13 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AgentRandom1
+#
+#    Agent qui joue de manière aléatoire
+#    avec les blocs classiques
+#
+#-----------------------------------------------------
 
 from tetris_engine import *
 from agent import *
@@ -22,13 +30,18 @@ import os
 
 
 class AgentRandom1(Agent):
+    """ Agent aléatoire jouant avec les touches du clavier """
+
     def __init__(self, temporisation=0.1, silent=False):
         super().__init__(name="Random 1")
         self.engine = TetrisEngine(
-            self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
+            self.getMove, base_blocks_bag=CLASSIC_BLOCK_BAG,
+            temporisation=temporisation, silent=silent,
+            agent_name=self.name, agent_description=self.decription)
 
     def getMove(self):
-        move = choice(['L', 'R', 'N', 'T', 'H'])
+        """ Renvoie un mouvement de touche aléatoire """
+        move = choice(['L', 'R', 'N', 'T', 'H', 'D'])
         return move
 
 

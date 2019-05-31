@@ -1,0 +1,68 @@
+\input{macros/preambule_macros}
+\input{macros/preambule_book}
+
+\lfoot[\thepage]{}
+%\cfoot{\textsc{Titre}}
+\rfoot[]{\thepage}
+
+
+\renewcommand{\encadre}[1]{
+	\begin{center}
+		\fbox{\parbox{0.9\linewidth}{
+				\medskip
+				
+				#1
+				
+				\medskip
+		}}
+	\end{center}	
+}	
+
+\usepackage{hyperref}
+
+\begin{document}
+	\frontmatter
+	\input{chapters/frontmatter}
+	
+	\thispagestyle{fancy}
+	\pagestyle{fancy}
+	
+
+	
+	\mainmatter
+	
+	\thispagestyle{fancy}
+	
+	
+	\include{chapters/Intro}
+	
+
+	
+	
+	\part{Le moteur de jeu}
+	\include{chapters/TetrisHistorique}
+	\include{chapters/TetrisRegles}
+	\include{chapters/TetrisImplementation}
+	\include{chapters/TetrisAgent}
+	
+	\part{Optimisation par algorithmes génétiques}
+	\include{chapters/AGgeneralites}
+	\include{chapters/AGimplementation}
+	
+	\part{Optimisation par reinforcement learning}
+	\include{chapters/RLgeneralites}
+	\include{chapters/RLQLearning}
+	\include{chapters/RLDeepQLearning}
+	
+	\part{Résultats et conclusion}
+	\include{chapters/Resultats}
+	\include{chapters/Conclusion}
+	
+	
+	\include{chapters/biblio}
+
+	
+
+	
+	
+\end{document}

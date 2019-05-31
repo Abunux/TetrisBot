@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 #-----------------------------------------------------
 #
 #        Tetris Bot
@@ -12,9 +15,19 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe Tetramino
+#
+#    Implémente les pièces du jeu
+#
+#-----------------------------------------------------
+
+from textutil import *
 
 
 class Tetramino:
+    """ Classe de gestion des pièces """
+
     def __init__(self, id, rotations, corners):
         self.id = id
         self.rotations = rotations
@@ -30,6 +43,18 @@ class Tetramino:
         (self.imin, self.jmin, self.imax,
             self.jmax) = self.corners[self.glyph_index]
         return (self.imin, self.jmin, self.imax, self.jmax)
+
+    def getLowerCell(self, j):
+        """ Renvoie la ligne de la cellule la plus en bas dans la colonne j """
+        return max([g[0] for g in self.glyph if g[1] == j])
+
+    def getBottomCells(self):
+        """ Renvoie les coordonnées des cellules les plus en bas """
+        self.getCorners()
+        self.bottom_cells = []
+        for j in range(self.jmin, self.jmax + 1):
+            self.bottom_cells.append([self.getLowerCell(j), j])
+        return self.bottom_cells
 
     def rotate(self, direction='H'):
         """ Tourne la pièce dans la direction donnée 
@@ -68,8 +93,16 @@ class Tetramino:
         """ Renvoie une représentation textuelle des blocs """
         self.getCorners()
         self.array = self.toArray()
+        colors = {ID_IBLOCK: CCYAN,
+                  ID_JBLOCK: CBLUE,
+                  ID_LBLOCK: CORANGE,
+                  ID_OBLOCK: CYELLOW,
+                  ID_SBLOCK: CGREEN,
+                  ID_ZBLOCK: CRED,
+                  ID_TBLOCK: CPURPLE
+                  }
         return "\n".join(
-            ["".join([str(self.array[i][j]) if self.array[i][j] else "."
+            ["".join([textColor(".", bg=colors[self.array[i][j]]) if self.array[i][j] else "."
                       for j in range(self.size)])
              for i in range(self.size)])
 
@@ -103,6 +136,7 @@ ID_SBLOCK = 4
 ID_ZBLOCK = 5
 ID_LBLOCK = 6
 ID_JBLOCK = 7
+
 
 #------------------------------------------------------------------------------
 # Blocs rapides
@@ -242,7 +276,7 @@ RAPID_BLOCK_BAG = [
 # Blocs classiques
 #  - Rotations dans une matrice carrée
 #  - 4 rotations par pièce (sauf le O qui n'en n'a qu'une)
-#------------------------------------------------------------------------------
+#-------------------------------------------DOMINO------------------------
 # I Block
 CLASSIC_I0 = [[1, 0],
               [1, 1],
@@ -338,7 +372,7 @@ CLASSIC_Z3 = [[0, 1],
               [2, 0]]
 CLASSIC_ZBLOCK = Tetramino(ID_ZBLOCK,
                            [CLASSIC_Z0, CLASSIC_Z1, CLASSIC_Z2, CLASSIC_Z3],
-                           ((0, 0, 1, 2), (0, 0, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
+                           ((0, 0, 1, 2), (0, 1, 2, 2), (1, 0, 2, 2), (0, 0, 2, 1))
                            )
 
 # L Block
@@ -396,11 +430,24 @@ CLASSIC_BLOCK_BAG = [
     CLASSIC_JBLOCK
 ]
 
+#------------------------------------------------------------------------------
+# Dominos
+#  - Simple domino
+#------------------------------------------------------------------------------
+ID_DOMINO = 1
+DOMINO_0 = [[0, 0], [0, 1]]
+DOMINO_1 = [[0, 0], [1, 0]]
+DOMINO_BLOCK = Tetramino(
+    ID_DOMINO, [DOMINO_0, DOMINO_1], ((0, 0, 0, 1), (0, 0, 1, 0)))
+
+DOMINO_BLOCK_BAG = [DOMINO_BLOCK]
+
 if __name__ == "__main__":
     for t in CLASSIC_BLOCK_BAG:
         for k in range(t.nb_rotations):
             print(t)
             print(t.imin, t.jmin, t.imax, t.jmax)
-            print(t.toArray())
+            print(t.getBottomCells())
+#             print(t.toArray())
             print()
             t.rotate("H")

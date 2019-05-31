@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 #-----------------------------------------------------
 #
@@ -14,6 +15,12 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AgentFiltering
+#
+#    Agent qui procède par filtrage des coups
+#
+#-----------------------------------------------------
 
 from tetris_engine import *
 from random import *
@@ -21,10 +28,17 @@ from agent import *
 
 
 class AgentFiltering(Agent):
-    def __init__(self,  temporisation=0.1, silent=False):
-        super().__init__(name="Filtering")
+    """ Agent procédant par filtrage des coups """
+
+    def __init__(self,  temporisation=0.1, silent=False, order=["holes", "sum_heights", "bumpiness", "lines"]):
+        super().__init__(name="Filtering " + str(order))
         self.engine = TetrisEngine(
             self.getMove, temporisation=temporisation, silent=silent, agent_name=self.name, agent_description=self.decription)
+        self.order = order
+        self.orderFunctions = {"holes": self.filterHoles,
+                               "sum_heights": self.filterSumHeights,
+                               "bumpiness": self.filterBumpiness,
+                               "lines": self.filterLines}
 
     def minStat(self, stat):
         """ Renvoie la valeur mini d'une stat """
@@ -51,22 +65,29 @@ class AgentFiltering(Agent):
                 all_moves[move] = self.all_moves[move]
         self.all_moves = all_moves
 
+    def filterHoles(self):
+        min_holes = self.minStat("nb_holes")
+        self.filterMoves("nb_holes", min_holes)
+
+    def filterSumHeights(self):
+        min_sum_heights = self.minStat("sum_heights")
+        self.filterMoves("sum_heights", min_sum_heights)
+
+    def filterBumpiness(self):
+        min_bumpiness = self.minStat("bumpiness")
+        self.filterMoves("bumpiness", min_bumpiness)
+
+    def filterLines(self):
+        max_lines = self.maxStat("nb_lines")
+        self.filterMoves("nb_lines", max_lines)
+
     def getMove(self):
         """ Optimisation en filtrant successivement les mouvements 
         suivant les différentes stats """
         self.allMovesStats()
 
-        min_holes = self.minStat("nb_holes")
-        self.filterMoves("nb_holes", min_holes)
-
-        min_sum_heights = self.minStat("sum_heights")
-        self.filterMoves("sum_heights", min_sum_heights)
-
-        min_bumpiness = self.minStat("bumpiness")
-        self.filterMoves("bumpiness", min_bumpiness)
-
-        max_lines = self.maxStat("nb_lines")
-        self.filterMoves("nb_lines", max_lines)
+        for order in self.order:
+            self.orderFunctions[order]()
 
         best_move = choice(list(self.all_moves.keys()))
         return self.commandFromMove(best_move)

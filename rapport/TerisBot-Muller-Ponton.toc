@@ -1,0 +1,108 @@
+\babel@toc {french}{}
+\contentsline {chapter}{Introduction}{1}{chapter*.2}
+\contentsline {part}{Partie 1\hspace {1em}Le moteur de jeu}{3}{part.1}
+\contentsline {chapter}{\numberline {1}Le jeu T\IeC {\'e}tris}{5}{chapter.1}
+\contentsline {section}{\numberline {1}L'origine du jeu}{5}{section.1.1}
+\contentsline {section}{\numberline {2}Le principe du jeu}{6}{section.1.2}
+\contentsline {section}{\numberline {3}Diffusion du jeu}{7}{section.1.3}
+\contentsline {section}{\numberline {4}Les raisons du succ\IeC {\`e}s}{9}{section.1.4}
+\contentsline {section}{\numberline {5}Peut-on gagner \IeC {\`a} T\IeC {\'e}tris?}{10}{section.1.5}
+\contentsline {chapter}{\numberline {2}R\IeC {\`e}gles utilis\IeC {\'e}es dans le projet}{11}{chapter.2}
+\contentsline {chapter}{\numberline {3}Impl\IeC {\'e}mentation du moteur de jeu}{13}{chapter.3}
+\contentsline {section}{\numberline {1}Structures de donn\IeC {\'e}es}{13}{section.3.1}
+\contentsline {section}{\numberline {2}La classe Tetramino}{13}{section.3.2}
+\contentsline {subsection}{\numberline {2.1}Initialisation}{13}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {2.2}Bornes de la pi\IeC {\`e}ces}{13}{subsection.3.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Coins}{13}{subsubsection.3.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Cellules du bas}{14}{subsubsection.3.2.2.2}
+\contentsline {subsection}{\numberline {2.3}Rotations}{14}{subsection.3.2.3}
+\contentsline {subsection}{\numberline {2.4}M\IeC {\'e}thodes utilitaires}{14}{subsection.3.2.4}
+\contentsline {subsection}{\numberline {2.5}Sacs de pi\IeC {\`e}ces}{14}{subsection.3.2.5}
+\contentsline {section}{\numberline {3}La classe Board}{15}{section.3.3}
+\contentsline {subsection}{\numberline {3.1}Constructeur}{15}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.2}Gestion des cellules}{16}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3}R\IeC {\'e}cup\IeC {\'e}ration des caract\IeC {\'e}ristiques de la grille}{16}{subsection.3.3.3}
+\contentsline {subsection}{\numberline {3.4}Gestion des lignes}{17}{subsection.3.3.4}
+\contentsline {subsection}{\numberline {3.5}M\IeC {\'e}thodes utilitaires}{17}{subsection.3.3.5}
+\contentsline {section}{\numberline {4}La classe TetrisEngine}{18}{section.3.4}
+\contentsline {subsection}{\numberline {4.1}Constructeur et attributs}{18}{subsection.3.4.1}
+\contentsline {subsection}{\numberline {4.2}G\IeC {\'e}n\IeC {\'e}ration des pi\IeC {\`e}ces}{19}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {4.3}D\IeC {\'e}placements et rotations}{19}{subsection.3.4.3}
+\contentsline {subsection}{\numberline {4.4}Commandes de jeu}{20}{subsection.3.4.4}
+\contentsline {subsection}{\numberline {4.5}D\IeC {\'e}roulement de la partie}{21}{subsection.3.4.5}
+\contentsline {chapter}{\numberline {4}Les agents}{23}{chapter.4}
+\contentsline {section}{\numberline {1}G\IeC {\'e}n\IeC {\'e}ralit\IeC {\'e}s}{23}{section.4.1}
+\contentsline {section}{\numberline {2}Joueur humain en mode texte}{23}{section.4.2}
+\contentsline {section}{\numberline {3}Agent al\IeC {\'e}atoire}{23}{section.4.3}
+\contentsline {section}{\numberline {4}Agent par filtrage}{24}{section.4.4}
+\contentsline {section}{\numberline {5}Agent par \IeC {\'e}valuation des coups}{24}{section.4.5}
+\contentsline {part}{Partie 2\hspace {1em}Optimisation par algorithmes g\IeC {\'e}n\IeC {\'e}tiques}{25}{part.2}
+\contentsline {chapter}{\numberline {5}Les algorithmes g\IeC {\'e}n\IeC {\'e}tiques}{27}{chapter.5}
+\contentsline {section}{\numberline {1}Principe g\IeC {\'e}n\IeC {\'e}ral}{27}{section.5.1}
+\contentsline {section}{\numberline {2}Codage}{28}{section.5.2}
+\contentsline {subsection}{\numberline {2.1}Codage d\IeC {\'e}cimal}{28}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {2.2}Codage binaire}{28}{subsection.5.2.2}
+\contentsline {section}{\numberline {3}Filtrage}{28}{section.5.3}
+\contentsline {section}{\numberline {4}Reproduction}{29}{section.5.4}
+\contentsline {subsection}{\numberline {4.1}S\IeC {\'e}lection des parents}{29}{subsection.5.4.1}
+\contentsline {subsubsection}{\numberline {4.1.1}S\IeC {\'e}lection proportionnelle \IeC {\`a} l'adaptation}{29}{subsubsection.5.4.1.1}
+\contentsline {subsubsection}{\numberline {4.1.2}S\IeC {\'e}lection par tournoi}{29}{subsubsection.5.4.1.2}
+\contentsline {subsection}{\numberline {4.2}Reproduction}{30}{subsection.5.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Reproduction par enjambement}{30}{subsubsection.5.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}Reproduction par combinaison lin\IeC {\'e}aire}{30}{subsubsection.5.4.2.2}
+\contentsline {section}{\numberline {5}Mutation g\IeC {\'e}n\IeC {\'e}tique}{31}{section.5.5}
+\contentsline {subsection}{\numberline {5.1}Mutation pour le codage binaire}{31}{subsection.5.5.1}
+\contentsline {subsection}{\numberline {5.2}Mutation pour le codage d\IeC {\'e}cimal}{31}{subsection.5.5.2}
+\contentsline {section}{\numberline {6}Constitution de la nouvelle g\IeC {\'e}n\IeC {\'e}ration}{31}{section.5.6}
+\contentsline {section}{\numberline {7}It\IeC {\'e}ration du proc\IeC {\'e}d\IeC {\'e}}{32}{section.5.7}
+\contentsline {chapter}{\numberline {6}Impl\IeC {\'e}mentation pour T\IeC {\'e}tris}{33}{chapter.6}
+\contentsline {section}{\numberline {1}La classe AGOptimizer}{33}{section.6.1}
+\contentsline {section}{\numberline {2}Fonction d'\IeC {\'e}valuation}{33}{section.6.2}
+\contentsline {section}{\numberline {3}Codage}{34}{section.6.3}
+\contentsline {section}{\numberline {4}Initilisation de la population}{34}{section.6.4}
+\contentsline {section}{\numberline {5}Reproduction}{34}{section.6.5}
+\contentsline {subsection}{\numberline {5.1}S\IeC {\'e}lection des parents}{34}{subsection.6.5.1}
+\contentsline {subsection}{\numberline {5.2}Croisement}{34}{subsection.6.5.2}
+\contentsline {section}{\numberline {6}Mutation}{34}{section.6.6}
+\contentsline {section}{\numberline {7}Cr\IeC {\'e}ation de la nouvelle g\IeC {\'e}n\IeC {\'e}ration}{34}{section.6.7}
+\contentsline {section}{\numberline {8}R\IeC {\'e}sultats et limites}{35}{section.6.8}
+\contentsline {part}{Partie 3\hspace {1em}Optimisation par reinforcement learning}{37}{part.3}
+\contentsline {chapter}{\numberline {7}Processus de d\IeC {\'e}cision markovien}{39}{chapter.7}
+\contentsline {section}{\numberline {1}Mod\IeC {\'e}lisation}{39}{section.7.1}
+\contentsline {subsection}{\numberline {1.1}Politiques}{40}{subsection.7.1.1}
+\contentsline {subsection}{\numberline {1.2}R\IeC {\'e}compenses pond\IeC {\'e}r\IeC {\'e}es}{40}{subsection.7.1.2}
+\contentsline {section}{\numberline {2}\'Equations de Bellman pour les fonctions de valeur}{41}{section.7.2}
+\contentsline {subsection}{\numberline {2.1}Fonctions de valeur}{41}{subsection.7.2.1}
+\contentsline {subsection}{\numberline {2.2}\'Equations de Bellman}{41}{subsection.7.2.2}
+\contentsline {subsection}{\numberline {2.3}Politiques optimales}{42}{subsection.7.2.3}
+\contentsline {subsection}{\numberline {2.4}\'Equations d'optimalit\IeC {\'e} de Bellman}{43}{subsection.7.2.4}
+\contentsline {chapter}{\numberline {8}Q-Learning par it\IeC {\'e}rations des fonctions de valeur}{45}{chapter.8}
+\contentsline {section}{\numberline {1}Principe g\IeC {\'e}n\IeC {\'e}ral}{45}{section.8.1}
+\contentsline {section}{\numberline {2}Compromis exploitation/exploration}{46}{section.8.2}
+\contentsline {section}{\numberline {3}Algorithme}{46}{section.8.3}
+\contentsline {section}{\numberline {4}Impl\IeC {\'e}mentation pour T\IeC {\'e}tris}{47}{section.8.4}
+\contentsline {subsection}{\numberline {4.1}Limitations}{47}{subsection.8.4.1}
+\contentsline {subsection}{\numberline {4.2}Les classes QRLOptimizer et TetrisEnv}{48}{subsection.8.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}La classe QRLOptimizer}{48}{subsubsection.8.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}La classe TetrisEnv}{48}{subsubsection.8.4.2.2}
+\contentsline {subsubsection}{\numberline {4.2.3}Apprentissage}{49}{subsubsection.8.4.2.3}
+\contentsline {subsubsection}{\numberline {4.2.4}Phase de jeu}{49}{subsubsection.8.4.2.4}
+\contentsline {chapter}{\numberline {9}Vers le deep-Q-learning}{51}{chapter.9}
+\contentsline {section}{\numberline {1}Fonction d'erreur}{52}{section.9.1}
+\contentsline {section}{\numberline {2}Entra\IeC {\^\i }nement par m\IeC {\'e}moire de reprise}{52}{section.9.2}
+\contentsline {section}{\numberline {3}Stabilisation par duplication du r\IeC {\'e}seau}{53}{section.9.3}
+\contentsline {section}{\numberline {4}Algorithme}{53}{section.9.4}
+\contentsline {part}{Partie 4\hspace {1em}R\IeC {\'e}sultats et conclusion}{55}{part.4}
+\contentsline {chapter}{\numberline {10}R\IeC {\'e}sultats}{57}{chapter.10}
+\contentsline {section}{\numberline {1}Agents par filtrage}{57}{section.10.1}
+\contentsline {section}{\numberline {2}Algorithmes g\IeC {\'e}n\IeC {\'e}tiques}{58}{section.10.2}
+\contentsline {subsection}{\numberline {2.1}Exemple 1}{59}{subsection.10.2.1}
+\contentsline {subsection}{\numberline {2.2}Exemple 2}{61}{subsection.10.2.2}
+\contentsline {subsection}{\numberline {2.3}Exemple 3}{63}{subsection.10.2.3}
+\contentsline {subsection}{\numberline {2.4}Exemple 4}{65}{subsection.10.2.4}
+\contentsline {subsection}{\numberline {2.5}Exemple 5}{67}{subsection.10.2.5}
+\contentsline {subsection}{\numberline {2.6}Exemple 5}{69}{subsection.10.2.6}
+\contentsline {subsection}{\numberline {2.7}Dernier exemple}{71}{subsection.10.2.7}
+\contentsline {section}{\numberline {3}Optimisation par Q-Learning}{72}{section.10.3}
+\contentsline {chapter}{\numberline {11}Conclusion}{73}{chapter.11}
+\contentsline {chapter}{Bibliographie}{74}{chapter.11}

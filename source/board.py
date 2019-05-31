@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 #-----------------------------------------------------
 #
 #        Tetris Bot
@@ -12,13 +15,22 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe Board
+#
+#    Implémente la grille de jeu
+#
+#-----------------------------------------------------
 
 
 from tetramino import *
 from textutil import *
+import numpy as np
 
 
 class Board:
+    """ Classe de gestion de la grille """
+
     def __init__(self, width=10, height=22):
         self.width = width
         self.height = height
@@ -60,13 +72,6 @@ class Board:
         """ Supprime la ligne i """
         del self.grid[i]
         self.grid.append([0] * self.width)
-        """
-#         for k in range(i, self.height + 1):
-#             self.grid[k, :] = self.grid[k + 1, :]
-        self.grid[i:self.height + 1, :] = self.grid[i + 1:, :]
-        self.grid[self.height + 1, :] = 0
-#         self.grid[self.height + 1] = np.zeros(self.width, dtype=np.int8)
-        """
 
     #=========================================================================
     # Satistiques de la grille
@@ -96,7 +101,7 @@ class Board:
 
     def getBumpiness(self):
         """ Renvoie la somme des valeurs absolues des différences
-#             de hauteurs entre les colonnes consécutives """
+            de hauteurs entre les colonnes consécutives """
         self.bumpiness = 0
         for j in range(1, self.width):
             self.bumpiness += abs(self.column_heights[j] -
@@ -152,11 +157,42 @@ class Board:
         new_board.updateStats()
         return new_board
 
+    def npBinaryRepresentation(self):
+        """ Renvoie un numpy array contenant la grille """
+        self.binGrid = np.zeros([self.height + 2, self.width], dtype=np.int8)
+        for i in range(self.height + 2):
+            for j in range(self.width):
+                if not self.isCellEmpty(i, j):
+                    self.binGrid[i, j] = 1
+        return self.binGrid
+
+    def encodeToInt(self):
+        """ Renvoie une représentation de la grille sous la forme d'un entier """
+        # On considère la grille comme unnombre écrit en binaire
+        self.npBinaryRepresentation()
+        self.intCode = 0
+        k = 1
+        for j in range(self.width):
+            for i in range(self.height + 2):
+                self.intCode += self.binGrid[i, j] * k
+                k = k * 2
+        return self.intCode
+
+    def decodeFromInt(self, n):
+        """ Renvoie un tableau à partir d'un code entier """
+        binGrid = np.zeros([self.height + 2, self.width], dtype=np.int8)
+        for j in range(self.width):
+            for i in range(self.height + 2):
+                binGrid[i, j] = n % 2
+                n = n // 2
+        return binGrid
+
     def __str__(self):
         """ Renvoie une représentation textuelle de la grille """
         chain = ""
 
         """
+        
         for i in range(self.height + 2 - 1, -1, -1):
             chain += "%2d ║ %s ║\n" % \
                 (i, " ".join([str(self.grid[i][j]) if self.grid[i][j] else "."
@@ -168,7 +204,9 @@ class Board:
         for j in range(self.width):
             chain += "%d " % j
         chain += "\n"
+
         """
+
         colors = {ID_IBLOCK: CCYAN,
                   ID_JBLOCK: CBLUE,
                   ID_LBLOCK: CORANGE,
@@ -194,7 +232,8 @@ class Board:
         chain += textColor("    ", bg=CBLACK, fg=CWHITE)
         for j in range(self.width):
             chain += textColor("%d" % (j % 10), bg=CBLACK, fg=CWHITE)
-        chain += textColor(" \n", bg=CBLACK, fg=CWHITE)
+        chain += textColor(" ", bg=CBLACK, fg=CWHITE)
+        chain += "\n"
 
         return chain
 
@@ -208,13 +247,18 @@ class Board:
         print("SumHeights : %d " % self.sum_heights)
         print("Bumpiness : %d" % self.bumpiness)
         print("Holes : %d" % self.nb_holes)
+        print("IntCode : %d" % self.encodeToInt())
         print()
 
 
 if __name__ == "__main__":
     board = Board(width=3, height=5)
     board.printInfos()
-
+    print(board.npBinaryRepresentation())
+    n = board.encodeToInt()
+    print(n)
+    print(board.decodeFromInt(n))
+    print()
     board.setCell(0, 0, 1)
     board.setCell(0, 1, 1)
     board.setCell(0, 2, 1)
@@ -228,10 +272,15 @@ if __name__ == "__main__":
     board.setCell(3, 1, 4)
     board.setCell(3, 2, 4)
     board.setCell(6, 2, 4)
-    board.printInfos()
 
+    print(board.npBinaryRepresentation())
+    n = board.encodeToInt()
+    print(n)
+    print(board.decodeFromInt(n))
+
+    board.printInfos()
+    print(board.npBinaryRepresentation())
     board.processLines()
     board.printInfos()
-
     new = board.copy()
     new.printInfos()

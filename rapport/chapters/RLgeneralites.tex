@@ -1,0 +1,170 @@
+\chapter{Processus de décision markovien}
+
+\section{Modélisation}
+
+On considère un système formé d'un agent $\mathcal{G}$ et d'un environnement $\mathcal{E}$ sur lequel $\mathcal{G}$ agit. L'ensemble des états possibles de $\mathcal{E}$ est un ensemble fini $\mathcal{S}$ et l'ensemble des actions possibles pour l'agent est un ensemble fini $\mathcal{A}$. Ces actions peuvent être différentes selon les états: on notera, pour tout $s\in\mathcal{S}$, $\mathcal{A}(s)$ l'ensemble des actions effectivement possibles pour l'agent lorsque le système est à l'état $s$. On a donc $\mathcal{A}=\bigcup_{s\in\mathcal{S}}\mathcal{A}(s)$.
+
+L'environnement est également muni de deux fonctions:
+\begin{enumerate}
+	\item une \textit{fonction de transition probabiliste} $T:\mathcal{S}\times \mathcal{A} \times \mathcal{S} \to [0, 1]$ telles que, pour tout $(s,a,s')\in\mathcal{S}\times\mathcal{A}\times\mathcal{S}$,  $T(s,a,s')$ représente la probabilité que l'environnent passe de l'état $s$ à l'état $s'$ lorsque l'agent effectue l'action $a$. Autrement dit, pour tout $(s,a)\in\mathcal{S}\times\mathcal{A}$, $s'\mapsto T(s,a,s')$ est une probabilité sur $\mathcal{S}$. Notons que cette fonction $T$ est constante au cours du temps.
+	\item une \textit{fonction de récompense} $R: \mathcal{S}\times \mathcal{A} \to \R$: pour tout $(s,a)\in\mathcal{S}\times\mathcal{A}$, $R(s,a)$ représente la récompense (qui peut être positive ou négative) attribuée à l'agent lorsqu'il effectue l'action $a$ alors que l'environnement est dans l'état $s$. On remarquera que comme $\mathcal{S}\times \mathcal{A}$ est fini, la fonction $R$ est bornée. Comme la fonction $T$, la fonction $R$ est constante au cours du temps.
+\end{enumerate}
+
+La quadruplet $(\mathcal{S}, \mathcal{A}, T, R)$ forme ce qu'on appelle un \textit{processus de décision markovien}.
+
+\medskip
+
+\textit{Remarque}. --- Nous nous plaçons ici dans le cas où la fonction $R$ ne dépend que de l'état présent $s$ et de l'action choisie $a$ i.e. $R(s,a)$ est indépendant du nouvel état $s'$. Dans certain processus de décision markovien, il est nécessaire de considérer une fonction récompense $R:\mathcal{S}\times\mathcal{A}\times\mathcal{S} \to \R$ telle que, pour tout $(s,a,s')\in\mathcal{S}\times\mathcal{A}\times\mathcal{S}$, $R(s,a,s')$ représente la récompense reçue par l'agent lorsque l'environnement passe de l'état $s$ à l'état $s'$ à la suite de l'action $a$.
+
+\bigskip
+
+Initialement, l'environnement $\mathcal{E}$ se trouve dans un certain état $s_0\in\mathcal{S}$. L'agent effectue une action $a_0\in\mathcal{A}(s_0)$ et l'environnement passe dans un certain état $s_1$ avec une probabilité $T(s_0, a_0, s_1)$, puis une action $a_1\in\mathcal{A}(s_1)$ et l'environnement passe dans l'état $s_2$ avec une probabilité $T(s_1,a_1,s_2)$, etc. 
+
+On obtient ainsi une suite de variables aléatoires d'états $(S_n)\in \mathcal{S}^{\N}$ et une suite de variables aléatoires d'actions $(A_n)\in\mathcal{A}^{\N}$. 
+
+\subsection{Politiques}
+
+Une politique déterministe $\pi$ est une fonction $\pi:\mathcal{S} \to \mathcal{A}$ qui à chaque état $s\in\mathcal{S}$ associe une action $\pi(s)\in\mathcal{A}$.
+
+Une politique probabiliste $\pi$ est une fonction $\pi:\mathcal{S} \times \mathcal{A} \to [0,1]$ telle que, pour tout $s\in\mathcal{S}$, la fonction $a \mapsto \pi(s,a)$ est une probabilité sur $\mathcal{A}$. Dans la suite, on note $\pi(a|s)$ (plutôt que $\pi(s,a)$) l'image de $(s,a)$ par cette fonction $\pi$. 
+
+On ne considère ici que des politiques stationnaires i.e. qui n'évoluent pas au cours du temps: elles sont identiques à chaque instant $n$. 
+
+\bigskip
+
+Si $\pi$ est une politique déterministe, on dit que l'agent suit la politique $\pi$ si, pour tout $n\in\N$, $A_{n}=\pi(S_n)$. Si $\pi$ est une politique probabiliste, on dit que l'agent suit la politique $\pi$ si, pour tout $n\in\N$, l'agent choisi aléatoirement l'action $A_n$ à partir de l'état $S_n$ de telle sorte que, pour tout $(s,a)\in\mathcal{S}\times\mathcal{A}$, la probabilité que $A_{n}=a$ sachant que $S_{n}=s$ est égale à $\pi(a|s)$. Autrement dit, l'ensemble $\mathcal{S}\times \mathcal{A}$ est muni d'une probabilité $\mathbb{P}_{\pi}$ telle que, pour tout $n\in\N$, $\mathbb{P}_{\pi}(A_n=a \mid S_n=s)=\pi(a|s)$. 
+
+Notons qu'une politique déterministe $\pi$ peut toujours être vue comme une politique probabiliste $\tilde{\pi}$ en posant, pour tout $(s,a)\in \mathcal{S}\times\mathcal{A}$, $\tilde{\pi}(a|s)=1$ si $a=\pi(s)$ et $\tilde{\pi}(a|s)=0$ sinon. Dans la suite, on identifiera $\pi$ et $\tilde{\pi}$ et on supposera, sauf mention du contraire, que les politiques sont probabilistes.
+
+Si l'agent suit une politique $\pi$ alors, pour tout $(s,s')\in\mathcal{S}^2$, la probabilité de $(S_{n+1}=s')$ sachant $(S_n=s)$ est indépendante de $n$ car
+\begin{equation}
+\mathbb{P}_{\pi}(S_{n+1}=s' \mid S_n=s)=\sum_{a\in\mathcal{A}} T(s,a,s')\mathbb{P}_{\pi}(A_n=a \mid S_n=s) =  \sum_{a\in\mathcal{A}} T(s,a,s')\pi(a|s).
+\label{proba_transition}
+\end{equation}
+Ainsi, dans ce cas, la suite des variables aléatoires $(S_n)$ définit une chaîne de Markov sur l'espace d'états $\mathcal{S}$ dont les probabilités de transition sont données \eqref{proba_transition} pour tout couple $(s,s')\in\mathcal{S}^2$.
+
+\subsection{Récompenses pondérées}
+
+Supposons que l'agent suive une politique $\pi$. Alors, pour tout $n\in\N$, la récompense à l'instant $n+1$ est $R_{n+1}:=R(S_n,A_n)$: il s'agit donc de la récompense reçue par l'agent pour avoir choisi l'action $A_n$ alors que l'environnement est dans l'état $S_n$.  
+
+Dès lors, pour $(n,m)\in\N^2$ tel que $n<m$, la récompense totale obtenue entre les instants $n+1$ et $m$ est $\displaystyle \sum_{k=n+1}^{m} R_k$. Lorsque $m$ tend vers $+\infty$, cette somme n'a pas de raison de converger. On introduit alors un réel $\gamma\in[0\,;1]$ appelé \textit{facteur d'actualisation} et on définit la récompense  totale pondérée à partir de l'instant $n+1$ par
+\begin{equation}
+G_{n}=\sum_{k=n+1}^{+\infty} \gamma^{n+1-k}R_k=\sum_{k=0}^{+\infty} \gamma^k R_{n+1+k}.
+\label{recompense_ponderee}
+\end{equation}
+Cette série est bien convergente car la suite de variables aléatoires $(R_n)$ est bornée (puisque la fonction $R$ est bornée) donc $\gamma^k R_{n+1+k}=O(\gamma^k)$ qui est le terme général d'une série géométrique convergente car $0 \leqslant \gamma < 1$.
+
+On va chercher s'il existe une politique qui maximise, pour tout $n\in\N$, l'espérance de $G_{n}$ sachant qu'à l'instant $n$, $S_n=s$ et $A_n=a$ pour un certain $(s,a)\in\mathcal{S}\times\mathcal{A}$. Puisque cette espérance dépend de la politique $\pi$ et des états initiaux $s$ et $a$, on la notera
+\begin{equation}
+Q_{\pi}(s,a):=\mathbb{E}_{\pi}\left[G_{n} \mid (S_n, A_n)=(s,a)\right]
+\label{esperance_recompense}
+\end{equation}
+On remarquera que la notation $Q_{\pi}(s,a)$ ne fait pas intervenir $n$ ce qui est légitime puisque la loi conditionnelle de $G_{n}$ sachant $(S_n, A_n)=(s,a)$ ne dépend en fait que de $T$, $R$ et $\pi$ et pas de $n$.
+
+\section{\'Equations de Bellman pour les fonctions de valeur}
+
+\subsection{Fonctions de valeur}
+
+On fixe une politique $\pi$.
+
+\bigskip
+
+La fonction $Q_{\pi}$ définie par \eqref{esperance_recompense} est appelée \textit{fonction de valeur état-action}. On définit également sur $\mathcal{S}$ la \textit{fonction de valeur état} $V_{\pi}$ par
+$$\forall s\in\mathcal{S}, \quad V_{\pi}(s)=\mathbb{E}_{\pi}[G_n \mid S_n=s]$$
+Comme dans le cas de la fonction $Q_{\pi}$, cette fonction ne dépend pas de $n$ mais uniquement de $s$, $T$, $R$ et $\pi$.
+
+\bigskip
+
+Les deux fonctions de valeur $V_{\pi}$ et $Q_{\pi}$ sont liées par la relation suivante:
+\begin{equation}
+\forall s\in\mathcal{S}, \quad V_{\pi}(s)=\sum_{a\in \mathcal{A}} \pi(a|s)Q_{\pi}(s,a).
+\label{relation_V_Q}
+\end{equation}
+
+En effet, si $s\in\mathcal{S}$, 
+\begin{align*}
+	V_{\pi}(s)&=\mathbb{E}_{\pi}[G_n \mid S_n=s]=\sum_{a\in\mathcal{A}} \mathbb{P}_{\pi}(A_n=a \mid S_n=s) \mathbb{E}_{\pi}[G_n \mid (S_n=s)\cap (A_n=a)] \\
+	&= \sum_{a\in\mathcal{A}} \pi(a|s) \mathbb{E}_{\pi}[G_n \mid (S_n,A_n)=(s,a)] \\
+	&=\sum_{a\in\mathcal{A}} \pi(a|s)Q_{\pi}(s,a).
+\end{align*}
+
+\subsection{\'Equations de Bellman}
+
+Considérons une politique $\pi$ et revenons à la récompense pondérée définie par \eqref{esperance_recompense}. Pour tout $n\in\N$,
+$$G_{n} = \sum_{k=0}^{+\infty} \gamma^k R_{n+1+k} = R_{n+1} + \sum_{k=1}^{+\infty} \gamma^k R_{n+1+k} = R_{n+1} + \gamma \sum_{k=1}^{+\infty} \gamma^{k-1} R_{n+1+k} = R_{n+1} + \gamma \sum_{k=0}^{+\infty} \gamma^{k} R_{n+2+k}$$
+i.e.
+$$G_{n} = R_{n+1} + \gamma G_{n+1}.$$
+Dès lors, pour tout $(s,a)\in\mathcal{S}\times\mathcal{A}$,
+$$Q_{\pi}(s,a)=\mathbb{E}_{\pi}[R_{n+1} + \gamma G_{n+1} | (S_n,A_n)=(s,a)].$$
+Par linéarité de l'espérance conditionnelle, il s'ensuit que
+$$Q_{\pi}(s,a)=\mathbb{E}_{\pi}[R_{n+1} | (S_n,A_n)=(s,a)] + \gamma \mathbb{E}_{\pi}[G_{n+1} | (S_n,A_n)=(s,a)].$$
+Comme $R_{n+1}=R(S_n, A_n)$, si $(S_n,A_n)=(s,a)$ alors $R_{n+1}$ est constante égale à $R(a,b)$ donc $\mathbb{E}_{\pi}[R_{n+1} | (S_n,A_n)=(s,a)]=R(s,a)$. De plus, 
+$$\mathbb{E}_{\pi}[G_{n+1} | (S_n,A_n)=(s,a)]= \sum_{s'\in\mathcal{S}} T(s,a,s') \mathbb{E}_{\pi}[G_{n+1} | ((S_n,A_n)=(s,a))\cap(S_{n+1}=s')]$$
+Or, la loi de $G_{n+1}$ ne dépend que de $S_{n+1}$ et de la politique $\pi$ donc 
+$$\mathbb{E}_{\pi}[G_{n+1} | (S_n,A_n)=(s,a)]=\sum_{s'\in\mathcal{S}} T(s,a,s') \mathbb{E}_{\pi}[G_{n+1} | S_{n+1}=s']$$
+et donc, pour tout $(s,a)\in\mathcal{S}\times\mathcal{A}$,
+\begin{equation}
+Q_{\pi}(s,a)=R(s,a)+\gamma \sum_{s'\in\mathcal{S}} T(s,a,s') V_{\pi}(s')
+\label{eq_Bellman_Q_V}
+\end{equation}
+\`A l'aide de \eqref{relation_V_Q}, on en déduit que, pour tout $(s,a)\in\mathcal{S}\times\mathcal{A}$,
+\begin{equation}
+Q_{\pi}(s,a)=R(s,a)+\gamma\sum_{s'\in\mathcal{S}} T(s,a,s')\sum_{a'\in \mathcal{A}} \pi(a'|s') Q_{\pi}(s',a')
+\label{eq_Bellman_Q_Q}
+\end{equation}
+Les égalités \eqref{eq_Bellman_Q_V} et \eqref{eq_Bellman_Q_Q} sont connues sous le nom d'\textit{équations de Bellman} pour la fonction $Q_{\pi}$.
+
+\subsection{Politiques optimales}
+
+Soit $\Pi$ l'ensemble des politiques sur $\mathcal{S}$. On définit sur $\Pi$ un ordre partiel $\leqslant$ par: 
+\begin{center}
+	$\pi \leqslant \pi'$ si, pour tout $s\in\mathcal{S}$, $V_{\pi}(s) \leqslant V_{\pi'}(s)$
+\end{center}
+
+On dit qu'une politique $\pi_*$ est optimale si, pour tout $\pi\in\Pi$, $\pi \leqslant \pi_*$. Autrement dit, $\pi_*$ est optimale si, pour toute politique $\pi$ et tout état $s$, $V_{\pi}(s) \leqslant V_{\pi_*}(s)$
+
+\bigskip
+
+Il existe toujours au moins une politique optimale mais celle-ci n'est en général pas unique. Dans toute la suite, on admet cette existence et on note $\pi_*$ une politique optimale.
+
+\bigskip
+
+Par définition, $V_{\pi_*} = \mathop{\max}\limits_{\pi\in\Pi} V_{\pi}$ et, de plus, grâce à l'équation de Bellman \eqref{eq_Bellman_Q_V}, $Q_{\pi_*} = \mathop{\max}\limits_{\pi\in\Pi} Q_{\pi}$. Ainsi, $V_{\pi_*}$ et $Q_{\pi_*}$ ne dépendent pas de la politique maximale choisie. On les notera $V_*$ et $Q_*$. Par définition, on a donc
+$$V_*=\mathop{\max}_{\pi\in\Pi} V_{\pi} \qquad \text{et} \qquad Q_*=\mathop{\max}_{\pi\in\Pi} Q_{\pi}.$$
+
+Sachant qu'il existe une politique optimale, on peut montrer qu'il existe un politique optimale déterministe. En effet, considérons la politique $\pi_{\text{max}}$ définie de la manière suivante: pour tout $s\in\mathcal{S}$, on choisit un élément $a_s\in\mathcal{A}$ tel que $Q_{*}(s,a_s)=\mathop{\max}\limits_{\alpha\in \mathcal{A}} Q_{*}(s,\alpha)$ (ce qui est possible par $\mathcal{A}$ est fini) et on pose
+$$\forall (s,a)\in\mathcal{S}\times\mathcal{A},~~\pi_{\max}(a|s)=\begin{cases} ~1 & \text{si } a=a_s \\ ~0 & \text{sinon}
+\end{cases}.$$
+Alors, d'après \eqref{relation_V_Q}, pour tout $s\in\mathcal{S}$,
+$$V_{*}(s) = \sum_{a\in\mathcal{A}} \pi_*(a|s)Q_{*}(s,a) \leqslant \sum_{a\in\mathcal{A}} \pi_*(a|s) Q_{*}(s,a_s) = Q_{*}(s,a_s) \underbrace{\sum_{a\in\mathcal{A}} \pi_*(a|s)}_{=1} = Q_{*}(s,a_s)$$
+et
+$$V_{\pi_{\max}}(s) = \sum_{a\in\mathcal{A}} \pi_{\max}(a|s)Q_{\pi_{\max}}(s,a) = Q_{\pi_{\max}}(s,a_s)$$
+Or, la politique $\pi_{\max}$ consiste à choisir, quand l'environnement se trouve à l'état $s$, l'action $a_s$ qui conduit à $Q_*(s, a_s)$ donc $Q_{\pi_{\max}}(s,a_s)=Q_*(s,a_s)$ et ainsi
+$$V_*(s) \leqslant Q_{*}(s,a_s) = Q_{\pi_{\max}}(s,a_s) = V_{\pi_{\max}}(s)$$
+Par maximalité de $V_*$, on en déduit que $V_{\pi_{\max}}=V_*$ donc $\pi_{\max}$ est bien une politique déterministe optimale. 
+
+\subsection{\'Equations d'optimalité de Bellman}
+
+Comme $V_*=V_{\pi_{\max}}=Q_{\pi_{\max}}(s,a_s)$ et $Q_{\pi_{\max}}(s,a_s)=Q_{*}(s,a_s)=\mathop{\max}\limits_{\alpha\in\mathcal{A}} Q_*(s,\alpha)$, on obtient l'équation d'optimalité de Bellman permettant d'exprimer $V_*$ en fonction de $Q_*$:
+\begin{equation}
+\forall s\in\mathcal{S}, \qquad V_*(s)=\max_{\alpha\in\mathcal{A}} Q_*(s,\alpha)
+\label{eq_Bellman_optimal_V_Q}
+\end{equation}
+Or, l'équation de Bellman \eqref{eq_Bellman_Q_V} permet d'exprimer $Q_*$ en fonction de $V_*$:
+\begin{equation}
+\forall (s,a)\in\mathcal{S}\times\mathcal{A}, \quad Q_*(s,a)=R(s,a)+\gamma \sum_{s'\in\mathcal{S}} T(s,a,s')V_*(s')
+\end{equation}
+On en déduit que 
+$$\forall (s,a)\in\mathcal{S}\times\mathcal{A}, \quad Q_*(s,a) = R(s,a) + \gamma \sum_{s'\in\mathcal{S}} T(s,a,s')\max_{\alpha \in \mathcal{A}} Q_{*}(s',\alpha).$$
+Sachant que, pour tout $(a,s)\in\mathcal{A}\times\mathcal{S}$, $\sum\limits_{s'\in\mathcal{S}} T(s,a,s')=1$ puisque $s' \mapsto T(s,a,s')$ est une probabilité sur $\mathcal{S}$, on conclut que
+\begin{equation} \forall (s,a)\in\mathcal{S}\times\mathcal{A}, \quad Q_*(s,a) = \sum_{s'\in\mathcal{S}} T(s,a,s') \left[R(s,a) + \gamma \max_{\alpha \in \mathcal{A}} Q_{*}(s',\alpha)\right] \label{eq_Bellman_optimale_Q_Q}
+\end{equation}
+L'égalité \eqref{eq_Bellman_optimale_Q_Q} est \textit{l'équation d'optimalité de Bellman pour $Q_*$}.
+
+
+
+
+
+
+
+

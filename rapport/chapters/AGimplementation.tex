@@ -1,0 +1,68 @@
+\chapter{Implémentation pour Tétris}
+
+\section{La classe AGOptimizer}
+
+L'algorithme génétique est implémenté par la classe \pyth{AGOptimizer}.
+
+Celle-ci prend en paramètres notamment:
+\begin{itemize}
+	\item \pyth{population\_size}: la taille $N$ de la population à chaque génération;
+	\item \pyth{nb\_generations}: le nombre de générations créées;
+	\item \pyth{nb\_bits}: le nombre $B$ de bits pour le codage binaire;
+	\item \pyth{proba\_mutation}: la probabilité $p$ de mutation génétique
+	\item \pyth{mutation\_rate}: le taux de mutation $\eta$ qui détermine l'intervalle $[-\eta, \eta]$ dans lequel est choisie la perturbation $\delta$ lors d'une mutation génétique pour le codage décimal;
+	\item \pyth{percentage\_for\_tournament}: le pourcentage d'éléments de la population qui participent lors de la sélection des parents par tournoi;
+	\item \pyth{percentage\_new\_offspring} = pourcentage $t$ de la nouvelle génération qui est créée avant de réunir les enfants et les parents et de ne conserver que les meilleurs;
+	\item \pyth{elitism\_percentage}: le pourcentage d'éléments de l'ancienne génération qui est conservé lorsqu'on effectue un filtrage par élitisme.
+\end{itemize}
+
+\section{Fonction d'évaluation}
+Les algorithmes génétiques ont pour but de maximiser une fonction. Comment utiliser cela pour obtenir un agent jouant de manière efficace à Tétris?
+
+L'idée est de définir une fonction d'évaluation (\textit{fitness} en anglais) qui est d'autant plus grande que l'agent joue bien. Ainsi, maximiser $f$ revient à déterminer un agent qui joue le mieux possible.\\
+
+La fonction d'évaluation choisie ici est le score moyen par partie obtenue en faisant jouer l'agent selon la fonction d'évaluation de la qualité d'un coup définie dans le paragraphe \textbf{5} du chapitre 3 (p. \pageref{evaluation_des_coups}):
+$$q(L,H,T,B)=a\times L - b\times H - c\times T - d\times B.$$
+Notre but est de déterminer les paramètres $a$, $b$, $c$ et $d$ dans $[0\,;1]$ afin que l'agent choisisse le meilleur coup à jouer i.e. le coup qui maximise le score.
+
+Ainsi, $f$ est la fonction qui associe au vecteur $(a,b,c,d)\in[0\,;1]^4$ le score moyen par partie lorsque l'agent joue par évaluation des coups selon la fonction $q$.
+Cette fonction $f$ est implémentée par la méthode \pyth{fitness(self, vector)}.
+
+\section{Codage}
+
+Le codage du vecteur $(a,b,c,d)$ est effectué en binaire ou en décimal selon le procédé décrit dans le chapitre 4. 
+
+Les fonctions \pyth{binToFloat} et \pyth{binVectorToFloat} servent à convertir l'écriture binaire en flottant pour l'évaluation de la fonction $f$.
+
+La fonction \pyth{normalize} normalise un vecteur en le divisant par sa norme (s'il est non nul).
+
+\section{Initilisation de la population}
+
+La méthode \pyth{initPopulation(self)} détermine la population initiale aléatoire en fonction du codage choisi en utilisant la méthode utilitaire \pyth{randomBinaryVector(self)} ou \pyth{randomFloatVector(self)}.
+
+\section{Reproduction}
+
+\subsection{Sélection des parents}
+
+La sélection des parents se fait à l'aide de la méthode \pyth{wheelSelection(self)} pour une sélection par \og roulette \fg{} ou de la méthode \pyth{tournamentSelection(self)} pour une sélection par tournoi.
+
+\subsection{Croisement}
+
+Le croisement permettant d'engendrer les enfants se fait à l'aide de la méthode \pyth{crossover(self, parent1, parent2)} par une simple concaténation de tableaux dans le cas du codage binaire et en utilisant la fonction utilitaire \pyth{linearCombination} pour réaliser la combinaison linéaire dans le cas du codage décimal. 
+
+\section{Mutation}
+
+La mutation génétique d'un individu se fait via la méthode \pyth{mutate(self, individu)} qui appelle, selon que le codage est binaire ou décimal, l'une des méthodes \pyth{mutateBinVector(self, bin\_vector)} ou \pyth{mutateFloatVector(self, vector)}.
+
+\section{Création de la nouvelle génération}
+
+La méthode \pyth{generateNewOffspring(self)} détermine le nombre de nouveaux individus à créer et effectue cette création et la méthode \pyth{makeNewGeneration(self)} détermine la nouvelle génération en fonction du filtrage choisi en faisant appel à l'une des méthodes \pyth{keepOnlyElite(self)} ou \pyth{deleteWorst(self)}.
+
+\section{Résultats et limites}
+Les résultats obtenus sont plutôt bons mais aléatoires (voir, notamment, les écarts-types obtenus dans les tests du chapitre 10). Un agent optimisé par algorithme génétique peut jouer plusieurs centaines de milliers de coup sur une partie mais perdre après seulement quelques centaines sur une autre.
+
+La raison de ces résultats fluctuant réside dans le fait que la fonction $f$ est en fait aléatoire. En faisant tourner l'algorithme génétique plusieurs fois, on obtient donc des quadruplets $(a,b,c,d)$ très différents d'une fois sur l'autre. \`A chaque fois, l'agent obtenu va être efficace dans les situations qu'il a rencontrées (ou proches de celle-ci) mais peut devenir très mauvais dans une suite de configurations mal connues.
+
+De plus, deux configurations différentes peuvent conduire aux mêmes valeurs de $L$, $H$, $T$ et $B$ sans qu'il soit évident qu'il faille jouer de la même façon dans ces deux configurations.\\
+
+Ainsi, l'utilisation de la fonction $f$ a un côté trop aléatoire et trop simplificateur. Pour prendre en compte toute la complexité et la multitude des grilles de jeu possibles, il va falloir avoir recours à une technique beaucoup plus avancée: l'apprentissage profond (\textit{reinforcement learning}) et les réseaux de neurones.

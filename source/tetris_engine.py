@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 #-----------------------------------------------------
 #
@@ -31,6 +32,8 @@ import os
 
 
 class TetrisEngine:
+    """ Classe gérant le moteur de jeu """
+
     def __init__(self, getMove=lambda: '', width=10, height=22, max_blocks=0,
                  base_blocks_bag=RAPID_BLOCK_BAG,
                  temporisation=0, silent=False, random_generator_seed=None,
@@ -62,6 +65,7 @@ class TetrisEngine:
         self.score = 0
         self.score_on_move = 0
         self.total_lines = 0
+        self.lines_combo = [0, 0, 0, 0, 0]
         self.max_height_on_game = 0
 #         self.max_sum_heights_on_game = 0
 
@@ -119,18 +123,21 @@ class TetrisEngine:
     #=========================================================================
     # Déplacements et rotations des pièces
     #=========================================================================
-    def isMoveValid(self, block, new_position):
-        """ Teste si une position est valide pour un bloc """
-        # Teste si le bloc sort de la grille
-        if new_position[1] + block.jmax >= self.board.width or new_position[0] - block.imax < 0 \
-                or new_position[0] - block.imin > self.board.height + 1 or new_position[1] + block.jmin < 0:
-            return False
+    def isMoveInGrid(self, block, new_position):
+        """ Teste si le bloc reste dans la grille """
+        return not (new_position[1] + block.jmin < 0 or new_position[1] + block.jmax >= self.board.width
+                    or new_position[0] - block.imax < 0 or new_position[0] - block.imin >= self.board.height + 2)
 
-        # Teste si les nouvelles cases occupées par le bloc sont vides
+    def isMoveOnFreeCells(self, block, new_position):
+        """ Teste si les nouvelles cases occupées par le bloc sont vides """
         for (i, j) in block.glyph:
             if not self.fixed_board.isCellEmpty(new_position[0] - i, new_position[1] + j):
                 return False
         return True
+
+    def isMoveValid(self, block, new_position):
+        """ Teste si une position est valide pour un bloc """
+        return self.isMoveInGrid(block, new_position) and self.isMoveOnFreeCells(block, new_position)
 
     def placeBlock(self, block, position):
         """ Place un bloc dans une position """
@@ -170,8 +177,14 @@ class TetrisEngine:
 
     def dropBlock(self):
         """ Fait tomber le bloc en bas """
-        while self.moveBlockInDirection(''):
-            self.score += self.getScoreFromMove()
+        column_heights = [self.fixed_board.column_heights[self.block_position[1] + j]
+                          for j in range(self.block.jmin, self.block.jmax + 1)]
+        line = max([column_heights[j - self.block.jmin] + self.block.getLowerCell(j)
+                    for j in range(self.block.jmin, self.block.jmax + 1)])
+        # Dans le cas ou on essaie de placer un bloc trop haut :
+        if line >= self.board.height + 2:
+            return
+        self.moveBlock(self.block, [line, self.block_position[1]])
 
     def rotateBlockInDirection(self, direction='H'):
         """ Tourne le bloc dans une direction :
@@ -270,10 +283,6 @@ class TetrisEngine:
         else:
             return 1200
 
-    def getScoreFromMove(self):
-        """ Renvoie le score pour chaque déplacement vers le bas """
-        return 1
-
     #=========================================================================
     # Affichage en mode console
     #=========================================================================
@@ -290,6 +299,10 @@ class TetrisEngine:
         chain += "Holes      : %d\n" % self.fixed_board.getNbHoles()
         chain += "Nb blocks  : %d\n" % (self.nb_blocks_played - 1)
         chain += "Nb lines   : %d\n" % self.total_lines
+        chain += " Combo 1 line  : %d\n" % self.lines_combo[1]
+        chain += " Combo 2 lines : %d\n" % self.lines_combo[2]
+        chain += " Combo 3 lines : %d\n" % self.lines_combo[3]
+        chain += " Combo 4 lines : %d\n" % self.lines_combo[4]
         chain += "\n"
         chain += "Time for move         : %.4f s\n" % self.time_for_move
         chain += "Total time for moves  : %.4f s\n" % self.time_total_for_moves
@@ -365,12 +378,12 @@ class TetrisEngine:
         #     Fixe la grille
         #     Teste la fin du jeu
         # Retourne le score
+        self.time_start = time()
         while self.is_running and (self.max_blocks == 0 or self.nb_blocks_played <= self.max_blocks):
             self.getNewBlock()
             self.time_total = time() - self.time_start
             self.score_on_move = 0
             while self.moveBlockInDirection('') and self.is_running:
-                self.score_on_move += self.getScoreFromMove()
 
                 if not self.silent:
                     print(self)
@@ -388,6 +401,7 @@ class TetrisEngine:
 
                 nb_lines = self.board.processLines()
                 self.total_lines += nb_lines
+                self.lines_combo[nb_lines] += 1
                 self.score_on_move += self.getScoreFromLines(nb_lines)
 
                 self.score += self.score_on_move

@@ -1,0 +1,238 @@
+\begin{sphinxtheindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter A
+  \item ag\_optimizer (module), \hyperpage{9}
+  \item Agent (classe dans agent), \hyperpage{5}
+  \item agent (module), \hyperpage{5}
+  \item agent\_evaluation (module), \hyperpage{6}
+  \item agent\_filtering (module), \hyperpage{6}
+  \item agent\_human (module), \hyperpage{5}
+  \item agent\_random1 (module), \hyperpage{6}
+  \item agent\_random2 (module), \hyperpage{6}
+  \item AgentEvaluation (classe dans agent\_evaluation), \hyperpage{6}
+  \item AgentFiltering (classe dans agent\_filtering), \hyperpage{6}
+  \item AgentHuman (classe dans agent\_human), \hyperpage{5}
+  \item AgentRandom1 (classe dans agent\_random1), \hyperpage{6}
+  \item AgentRandom2 (classe dans agent\_random2), \hyperpage{6}
+  \item AGOptimizer (classe dans ag\_optimizer), \hyperpage{9}
+  \item allMovesStats() (m\IeC {\'e}thode agent.Agent), \hyperpage{5}
+  \item argmax() (dans le module qRL\_optimizer), \hyperpage{12}
+
+  \indexspace
+  \bigletter B
+  \item benchPlayer() (dans le module agent), \hyperpage{5}
+  \item binToFloat() (dans le module ag\_optimizer), \hyperpage{10}
+  \item binVectorToFloat() (dans le module ag\_optimizer), \hyperpage{10}
+  \item Board (classe dans board), \hyperpage{1}
+  \item board (module), \hyperpage{1}
+  \item boxed() (dans le module textutil), \hyperpage{13}
+
+  \indexspace
+  \bigletter C
+  \item canPlaceBlockDirect() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{2}
+  \item center() (dans le module textutil), \hyperpage{14}
+  \item cleanLine() (dans le module textutil), \hyperpage{14}
+  \item columnHeight() (m\IeC {\'e}thode board.Board), \hyperpage{1}
+  \item commandFromMove() (m\IeC {\'e}thode agent.Agent), \hyperpage{5}
+  \item copy() (m\IeC {\'e}thode board.Board), \hyperpage{1}
+  \item copy() (m\IeC {\'e}thode tetramino.Tetramino), \hyperpage{1}
+  \item copy() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{2}
+  \item crossover() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+
+  \indexspace
+  \bigletter D
+  \item dateNow() (dans le module textutil), \hyperpage{14}
+  \item decodeFromInt() (m\IeC {\'e}thode board.Board), \hyperpage{1}
+  \item deleteWorst() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+  \item dropBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+
+  \indexspace
+  \bigletter E
+  \item emptyCell() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item encodeToInt() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item eraseBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+
+  \indexspace
+  \bigletter F
+  \item filterMoves() (m\IeC {\'e}thode agent\_filtering.AgentFiltering), \hyperpage{6}
+  \item fitness() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+
+  \indexspace
+  \bigletter G
+  \item generateNewBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item generateNewBlockBag() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item generateNewOffspring() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+  \item getAllStats() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item getBottomCells() (m\IeC {\'e}thode tetramino.Tetramino), \hyperpage{1}
+  \item getBumpiness() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item getCell() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item getColumnHeights() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item getCorners() (m\IeC {\'e}thode tetramino.Tetramino), \hyperpage{1}
+  \item getEffectif() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item getLowerCell() (m\IeC {\'e}thode tetramino.Tetramino), \hyperpage{1}
+  \item getMaxHeight() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item getMaxi() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item getMean() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item getMini() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item getMove() (m\IeC {\'e}thode agent\_evaluation.AgentEvaluation), \hyperpage{6}
+  \item getMove() (m\IeC {\'e}thode agent\_filtering.AgentFiltering), \hyperpage{6}
+  \item getMove() (m\IeC {\'e}thode agent\_human.AgentHuman), \hyperpage{5}
+  \item getMove() (m\IeC {\'e}thode agent\_random1.AgentRandom1), \hyperpage{6}
+  \item getMove() (m\IeC {\'e}thode agent\_random2.AgentRandom2), \hyperpage{6}
+  \item getMoveStats() (m\IeC {\'e}thode agent.Agent), \hyperpage{5}
+  \item getNbHoles() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item getNewBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item getPossibleMovesDirect() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item getQIndexes() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer), \hyperpage{12}
+  \item getQuartiles() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item getrandbits() (dans le module ag\_optimizer), \hyperpage{10}
+  \item getrandbits() (dans le module agent), \hyperpage{5}
+  \item getrandbits() (dans le module agent\_evaluation), \hyperpage{7}
+  \item getrandbits() (dans le module agent\_filtering), \hyperpage{6}
+  \item getrandbits() (dans le module agent\_human), \hyperpage{6}
+  \item getrandbits() (dans le module agent\_random1), \hyperpage{6}
+  \item getrandbits() (dans le module agent\_random2), \hyperpage{6}
+  \item getrandbits() (dans le module qRL\_optimizer), \hyperpage{12}
+  \item getrandbits() (dans le module tetris\_engine), \hyperpage{4}
+  \item getrandbits() (dans le module tetris\_RLenv), \hyperpage{11}
+  \item getScoreFromLines() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item getSigma() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item getState() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv), \hyperpage{11}
+  \item getStateCode() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv), \hyperpage{11}
+  \item getStrAgentName() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item getStrInfos() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item getStrNextBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item getSumHeights() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+
+  \indexspace
+  \bigletter H
+  \item histogram() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+
+  \indexspace
+  \bigletter I
+  \item initPopulation() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+  \item initQValue() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer), \hyperpage{12}
+  \item isCellEmpty() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item isDominated() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item isEndGame() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item isLineFull() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item isMoveInGrid() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item isMoveOnFreeCells() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item isMoveValid() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+
+  \indexspace
+  \bigletter K
+  \item keepOnlyElite() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+
+  \indexspace
+  \bigletter L
+  \item learn() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer), \hyperpage{12}
+  \item linearCombination() (dans le module ag\_optimizer), \hyperpage{10}
+  \item loadData() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+
+  \indexspace
+  \bigletter M
+  \item makeNewGeneration() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+  \item maxStat() (m\IeC {\'e}thode agent\_filtering.AgentFiltering), \hyperpage{6}
+  \item mergeChains() (dans le module textutil), \hyperpage{14}
+  \item minimalCopy() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item minStat() (m\IeC {\'e}thode agent\_filtering.AgentFiltering), \hyperpage{6}
+  \item moveBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item moveBlockInDirection() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item moveEvaluation() (m\IeC {\'e}thode agent\_evaluation.AgentEvaluation), \hyperpage{7}
+  \item mutate() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+  \item mutateBinVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+  \item mutateFloatVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+
+  \indexspace
+  \bigletter N
+  \item normalize() (dans le module ag\_optimizer), \hyperpage{10}
+  \item npBinaryRepresentation() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+
+  \indexspace
+  \bigletter P
+  \item placeBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item placeBlockDirect() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item play() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer), \hyperpage{12}
+  \item playCommand() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item playGame() (dans le module agent), \hyperpage{5}
+  \item playGameWithAgentEvaluation() (dans le module agent\_evaluation), \hyperpage{7}
+  \item plotBenchPlayer() (dans le module agent), \hyperpage{5}
+  \item plotStats() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{9}
+  \item printInfos() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item printQIndexes() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer), \hyperpage{12}
+  \item printRightColumn() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item process() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item processLines() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+
+  \indexspace
+  \bigletter Q
+  \item qRL\_optimizer (module), \hyperpage{12}
+  \item QRLOptimizer (classe dans qRL\_optimizer), \hyperpage{12}
+
+  \indexspace
+  \bigletter R
+  \item random() (dans le module ag\_optimizer), \hyperpage{10}
+  \item random() (dans le module agent), \hyperpage{5}
+  \item random() (dans le module agent\_evaluation), \hyperpage{7}
+  \item random() (dans le module agent\_filtering), \hyperpage{6}
+  \item random() (dans le module agent\_human), \hyperpage{6}
+  \item random() (dans le module agent\_random1), \hyperpage{6}
+  \item random() (dans le module agent\_random2), \hyperpage{6}
+  \item random() (dans le module qRL\_optimizer), \hyperpage{12}
+  \item random() (dans le module tetris\_engine), \hyperpage{4}
+  \item random() (dans le module tetris\_RLenv), \hyperpage{11}
+  \item randomBinaryList() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item randomBinaryVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item randomFloatVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item reinit() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer), \hyperpage{12}
+  \item removeLine() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item render() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv), \hyperpage{11}
+  \item reset() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv), \hyperpage{11}
+  \item rotate() (m\IeC {\'e}thode tetramino.Tetramino), \hyperpage{1}
+  \item rotateBlockInDirection() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item run() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+
+  \indexspace
+  \bigletter S
+  \item sampleAction() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv), \hyperpage{11}
+  \item saveData() (m\IeC {\'e}thode stats.Stats), \hyperpage{13}
+  \item scoreOnOneGame() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item setBlockInitPosition() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{3}
+  \item setCell() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item setRotation() (m\IeC {\'e}thode tetramino.Tetramino), \hyperpage{1}
+  \item sortPopulationDescending() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item Stats (classe dans stats), \hyperpage{13}
+  \item stats (module), \hyperpage{13}
+  \item step() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv), \hyperpage{11}
+  \item stringOfParameters() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+
+  \indexspace
+  \bigletter T
+  \item Tetramino (classe dans tetramino), \hyperpage{1}
+  \item tetramino (module), \hyperpage{1}
+  \item tetris\_engine (module), \hyperpage{2}
+  \item tetris\_RLenv (module), \hyperpage{11}
+  \item TetrisEngine (classe dans tetris\_engine), \hyperpage{2}
+  \item TetrisEnv (classe dans tetris\_RLenv), \hyperpage{11}
+  \item textColor() (dans le module textutil), \hyperpage{14}
+  \item textutil (module), \hyperpage{13}
+  \item toArray() (m\IeC {\'e}thode tetramino.Tetramino), \hyperpage{1}
+  \item total\_size() (dans le module qRL\_optimizer), \hyperpage{12}
+  \item tournamentSelection() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+
+  \indexspace
+  \bigletter U
+  \item update() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer), \hyperpage{12}
+  \item updateBinaryIndivdu() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item updateScore() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item updateStats() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+  \item updateStats() (m\IeC {\'e}thode board.Board), \hyperpage{2}
+  \item updateTimes() (m\IeC {\'e}thode tetris\_engine.TetrisEngine), \hyperpage{4}
+
+  \indexspace
+  \bigletter W
+  \item wheelSelection() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer), \hyperpage{10}
+
+\end{sphinxtheindex}

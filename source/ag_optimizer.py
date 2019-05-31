@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 #-----------------------------------------------------
 #
@@ -14,12 +15,18 @@
 #    Projet démarré le 25/11/2018
 #
 #-----------------------------------------------------
+#
+#    Classe AGOptimizer
+#
+#    Optimisation par algorithmes génétiques
+#
+#-----------------------------------------------------
 
 from agent_evaluation import *
 from textutil import *
 from random import *
 from time import time
-from math import sqrt
+from math import sqrt, exp
 import matplotlib.pyplot as plt
 
 # Taille du vecteur de coefficients
@@ -59,6 +66,8 @@ def linearCombination(a1, vector1, a2, vector2):
 
 
 class AGOptimizer:
+    """ Optimisation des coefficients par algorithme génétique """
+
     def __init__(self, population_size=20, nb_generations=2, nb_bits=16,
                  max_nb_blocks=5, nb_games_played=1,
                  proba_mutation=0.05, mutation_rate=0.2,
@@ -98,7 +107,6 @@ class AGOptimizer:
         # Critère d'évaluation
         #    - "lines" : lignes créées
         #    - "score" : score total
-        #    - "height" : hauteur maximum atteinte
         self.evaluation_criteria = evaluation_criteria
 
         self.population = []
@@ -132,10 +140,8 @@ class AGOptimizer:
         score = player.engine.run()
         if self.evaluation_criteria == "lines":
             return player.engine.total_lines
-        elif self.evaluation_criteria == "score":
+        elif self.evaluation_criteria == "score" or True:
             return score
-        elif self.evaluation_criteria == "height" or True:
-            return -player.engine.max_height_on_game
 
     def fitness(self, vector):
         """ Fitness de l'individu : score total sur nb_games_played parties """
@@ -282,7 +288,7 @@ class AGOptimizer:
                 # Ajout à la liste des enfants
                 new_offspring += [child1, child2]
                 created_childs += 2
-            elif self.vector_encoding == "tournament" or True:
+            elif self.vector_encoding == "float" or True:
                 print("%s - Génération %d - Enfant %d/%d" %
                       (dateNow(), self.num_generation, created_childs + 1, nb_childs_to_create))
                 child = self.crossover(parent1, parent2)
@@ -356,6 +362,7 @@ class AGOptimizer:
         s += "  - nb_generations = %d\n" % self.nb_generations
         s += "  - population_size = %d\n" % self.population_size
         s += "  - max_nb_blocks = %d\n" % self.max_nb_blocks
+        s += "  - nb_games_played = %d\n" % self.nb_games_played
         s += "  - proba_mutation = %.2f\n" % self.proba_mutation
         if self.vector_encoding == "float":
             s += "  - mutation_rate = %.2f\n" % self.mutation_rate
@@ -371,7 +378,7 @@ class AGOptimizer:
     def process(self):
         """ Boucle principale de l'optimisation """
         print(self.stringOfParameters())
-
+        start = time()
         self.initPopulation()
         self.updateStats()
 
@@ -386,6 +393,10 @@ class AGOptimizer:
             self.updateStats()
 
         print()
+        print("Résumé de l'optimisation : ")
+        print("---------------------------")
+        print(self.stringOfParameters())
+        print("Temps total : %d secondes" % (time() - start))
         best_coeffs = self.population[0]["vector"]
         print("Best coeffs = %s" % best_coeffs)
         print()

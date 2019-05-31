@@ -1,0 +1,175 @@
+\indexentry{tetramino (module)|hyperpage}{1}
+\indexentry{Tetramino (classe dans tetramino)|hyperpage}{1}
+\indexentry{copy() (m\IeC {\'e}thode tetramino.Tetramino)|hyperpage}{1}
+\indexentry{getBottomCells() (m\IeC {\'e}thode tetramino.Tetramino)|hyperpage}{1}
+\indexentry{getCorners() (m\IeC {\'e}thode tetramino.Tetramino)|hyperpage}{1}
+\indexentry{getLowerCell() (m\IeC {\'e}thode tetramino.Tetramino)|hyperpage}{1}
+\indexentry{rotate() (m\IeC {\'e}thode tetramino.Tetramino)|hyperpage}{1}
+\indexentry{setRotation() (m\IeC {\'e}thode tetramino.Tetramino)|hyperpage}{1}
+\indexentry{toArray() (m\IeC {\'e}thode tetramino.Tetramino)|hyperpage}{1}
+\indexentry{board (module)|hyperpage}{1}
+\indexentry{Board (classe dans board)|hyperpage}{1}
+\indexentry{columnHeight() (m\IeC {\'e}thode board.Board)|hyperpage}{1}
+\indexentry{copy() (m\IeC {\'e}thode board.Board)|hyperpage}{1}
+\indexentry{decodeFromInt() (m\IeC {\'e}thode board.Board)|hyperpage}{1}
+\indexentry{emptyCell() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{encodeToInt() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{getBumpiness() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{getCell() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{getColumnHeights() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{getMaxHeight() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{getNbHoles() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{getSumHeights() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{isCellEmpty() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{isDominated() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{isLineFull() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{npBinaryRepresentation() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{printInfos() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{processLines() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{removeLine() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{setCell() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{updateStats() (m\IeC {\'e}thode board.Board)|hyperpage}{2}
+\indexentry{tetris\_engine (module)|hyperpage}{2}
+\indexentry{TetrisEngine (classe dans tetris\_engine)|hyperpage}{2}
+\indexentry{canPlaceBlockDirect() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{2}
+\indexentry{copy() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{2}
+\indexentry{dropBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{eraseBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{generateNewBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{generateNewBlockBag() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{getNewBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{getPossibleMovesDirect() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{getScoreFromLines() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{getStrAgentName() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{getStrInfos() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{getStrNextBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{isEndGame() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{isMoveInGrid() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{isMoveOnFreeCells() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{isMoveValid() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{minimalCopy() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{moveBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{moveBlockInDirection() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{placeBlock() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{placeBlockDirect() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{playCommand() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{printRightColumn() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{rotateBlockInDirection() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{run() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{setBlockInitPosition() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{3}
+\indexentry{updateTimes() (m\IeC {\'e}thode tetris\_engine.TetrisEngine)|hyperpage}{4}
+\indexentry{getrandbits() (dans le module tetris\_engine)|hyperpage}{4}
+\indexentry{random() (dans le module tetris\_engine)|hyperpage}{4}
+\indexentry{agent (module)|hyperpage}{5}
+\indexentry{Agent (classe dans agent)|hyperpage}{5}
+\indexentry{allMovesStats() (m\IeC {\'e}thode agent.Agent)|hyperpage}{5}
+\indexentry{commandFromMove() (m\IeC {\'e}thode agent.Agent)|hyperpage}{5}
+\indexentry{getMoveStats() (m\IeC {\'e}thode agent.Agent)|hyperpage}{5}
+\indexentry{benchPlayer() (dans le module agent)|hyperpage}{5}
+\indexentry{getrandbits() (dans le module agent)|hyperpage}{5}
+\indexentry{playGame() (dans le module agent)|hyperpage}{5}
+\indexentry{plotBenchPlayer() (dans le module agent)|hyperpage}{5}
+\indexentry{random() (dans le module agent)|hyperpage}{5}
+\indexentry{agent\_human (module)|hyperpage}{5}
+\indexentry{AgentHuman (classe dans agent\_human)|hyperpage}{5}
+\indexentry{getMove() (m\IeC {\'e}thode agent\_human.AgentHuman)|hyperpage}{5}
+\indexentry{getrandbits() (dans le module agent\_human)|hyperpage}{6}
+\indexentry{random() (dans le module agent\_human)|hyperpage}{6}
+\indexentry{agent\_random1 (module)|hyperpage}{6}
+\indexentry{AgentRandom1 (classe dans agent\_random1)|hyperpage}{6}
+\indexentry{getMove() (m\IeC {\'e}thode agent\_random1.AgentRandom1)|hyperpage}{6}
+\indexentry{getrandbits() (dans le module agent\_random1)|hyperpage}{6}
+\indexentry{random() (dans le module agent\_random1)|hyperpage}{6}
+\indexentry{agent\_random2 (module)|hyperpage}{6}
+\indexentry{AgentRandom2 (classe dans agent\_random2)|hyperpage}{6}
+\indexentry{getMove() (m\IeC {\'e}thode agent\_random2.AgentRandom2)|hyperpage}{6}
+\indexentry{getrandbits() (dans le module agent\_random2)|hyperpage}{6}
+\indexentry{random() (dans le module agent\_random2)|hyperpage}{6}
+\indexentry{agent\_filtering (module)|hyperpage}{6}
+\indexentry{AgentFiltering (classe dans agent\_filtering)|hyperpage}{6}
+\indexentry{filterMoves() (m\IeC {\'e}thode agent\_filtering.AgentFiltering)|hyperpage}{6}
+\indexentry{getMove() (m\IeC {\'e}thode agent\_filtering.AgentFiltering)|hyperpage}{6}
+\indexentry{maxStat() (m\IeC {\'e}thode agent\_filtering.AgentFiltering)|hyperpage}{6}
+\indexentry{minStat() (m\IeC {\'e}thode agent\_filtering.AgentFiltering)|hyperpage}{6}
+\indexentry{getrandbits() (dans le module agent\_filtering)|hyperpage}{6}
+\indexentry{random() (dans le module agent\_filtering)|hyperpage}{6}
+\indexentry{agent\_evaluation (module)|hyperpage}{6}
+\indexentry{AgentEvaluation (classe dans agent\_evaluation)|hyperpage}{6}
+\indexentry{getMove() (m\IeC {\'e}thode agent\_evaluation.AgentEvaluation)|hyperpage}{6}
+\indexentry{moveEvaluation() (m\IeC {\'e}thode agent\_evaluation.AgentEvaluation)|hyperpage}{7}
+\indexentry{getrandbits() (dans le module agent\_evaluation)|hyperpage}{7}
+\indexentry{playGameWithAgentEvaluation() (dans le module agent\_evaluation)|hyperpage}{7}
+\indexentry{random() (dans le module agent\_evaluation)|hyperpage}{7}
+\indexentry{ag\_optimizer (module)|hyperpage}{9}
+\indexentry{AGOptimizer (classe dans ag\_optimizer)|hyperpage}{9}
+\indexentry{crossover() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{deleteWorst() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{fitness() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{generateNewOffspring() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{initPopulation() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{keepOnlyElite() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{makeNewGeneration() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{mutate() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{mutateBinVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{mutateFloatVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{plotStats() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{9}
+\indexentry{process() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{randomBinaryList() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{randomBinaryVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{randomFloatVector() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{scoreOnOneGame() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{sortPopulationDescending() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{stringOfParameters() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{tournamentSelection() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{updateBinaryIndivdu() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{updateScore() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{updateStats() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{wheelSelection() (m\IeC {\'e}thode ag\_optimizer.AGOptimizer)|hyperpage}{10}
+\indexentry{binToFloat() (dans le module ag\_optimizer)|hyperpage}{10}
+\indexentry{binVectorToFloat() (dans le module ag\_optimizer)|hyperpage}{10}
+\indexentry{getrandbits() (dans le module ag\_optimizer)|hyperpage}{10}
+\indexentry{linearCombination() (dans le module ag\_optimizer)|hyperpage}{10}
+\indexentry{normalize() (dans le module ag\_optimizer)|hyperpage}{10}
+\indexentry{random() (dans le module ag\_optimizer)|hyperpage}{10}
+\indexentry{tetris\_RLenv (module)|hyperpage}{11}
+\indexentry{TetrisEnv (classe dans tetris\_RLenv)|hyperpage}{11}
+\indexentry{getState() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv)|hyperpage}{11}
+\indexentry{getStateCode() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv)|hyperpage}{11}
+\indexentry{render() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv)|hyperpage}{11}
+\indexentry{reset() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv)|hyperpage}{11}
+\indexentry{sampleAction() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv)|hyperpage}{11}
+\indexentry{step() (m\IeC {\'e}thode tetris\_RLenv.TetrisEnv)|hyperpage}{11}
+\indexentry{getrandbits() (dans le module tetris\_RLenv)|hyperpage}{11}
+\indexentry{random() (dans le module tetris\_RLenv)|hyperpage}{11}
+\indexentry{qRL\_optimizer (module)|hyperpage}{12}
+\indexentry{QRLOptimizer (classe dans qRL\_optimizer)|hyperpage}{12}
+\indexentry{getQIndexes() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer)|hyperpage}{12}
+\indexentry{initQValue() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer)|hyperpage}{12}
+\indexentry{learn() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer)|hyperpage}{12}
+\indexentry{play() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer)|hyperpage}{12}
+\indexentry{printQIndexes() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer)|hyperpage}{12}
+\indexentry{reinit() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer)|hyperpage}{12}
+\indexentry{update() (m\IeC {\'e}thode qRL\_optimizer.QRLOptimizer)|hyperpage}{12}
+\indexentry{argmax() (dans le module qRL\_optimizer)|hyperpage}{12}
+\indexentry{getrandbits() (dans le module qRL\_optimizer)|hyperpage}{12}
+\indexentry{random() (dans le module qRL\_optimizer)|hyperpage}{12}
+\indexentry{total\_size() (dans le module qRL\_optimizer)|hyperpage}{12}
+\indexentry{stats (module)|hyperpage}{13}
+\indexentry{Stats (classe dans stats)|hyperpage}{13}
+\indexentry{getAllStats() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{getEffectif() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{getMaxi() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{getMean() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{getMini() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{getQuartiles() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{getSigma() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{histogram() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{loadData() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{saveData() (m\IeC {\'e}thode stats.Stats)|hyperpage}{13}
+\indexentry{textutil (module)|hyperpage}{13}
+\indexentry{boxed() (dans le module textutil)|hyperpage}{13}
+\indexentry{center() (dans le module textutil)|hyperpage}{14}
+\indexentry{cleanLine() (dans le module textutil)|hyperpage}{14}
+\indexentry{dateNow() (dans le module textutil)|hyperpage}{14}
+\indexentry{mergeChains() (dans le module textutil)|hyperpage}{14}
+\indexentry{textColor() (dans le module textutil)|hyperpage}{14}

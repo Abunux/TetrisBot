@@ -1,0 +1,22 @@
+\babel@toc {french}{}
+\contentsline {chapter}{\numberline {1}Le moteur de jeu}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Module tetramino.py}{1}{section.1.1}
+\contentsline {section}{\numberline {1.2}Module board.py}{1}{section.1.2}
+\contentsline {section}{\numberline {1.3}Module tetris\_engine.py}{2}{section.1.3}
+\contentsline {chapter}{\numberline {2}Les agents}{5}{chapter.2}
+\contentsline {section}{\numberline {2.1}Module agent.py}{5}{section.2.1}
+\contentsline {section}{\numberline {2.2}Module agent\_human.py}{5}{section.2.2}
+\contentsline {section}{\numberline {2.3}Module agent\_random1.py}{6}{section.2.3}
+\contentsline {section}{\numberline {2.4}Module agent\_random2.py}{6}{section.2.4}
+\contentsline {section}{\numberline {2.5}Module agent\_filtering.py}{6}{section.2.5}
+\contentsline {section}{\numberline {2.6}Module agent\_evaluation.py}{6}{section.2.6}
+\contentsline {chapter}{\numberline {3}Algorithmes g\IeC {\'e}n\IeC {\'e}tiques}{9}{chapter.3}
+\contentsline {section}{\numberline {3.1}Module ag\_optimizer.py}{9}{section.3.1}
+\contentsline {chapter}{\numberline {4}Reinforcement learning}{11}{chapter.4}
+\contentsline {section}{\numberline {4.1}Module tetris\_RLenv.py}{11}{section.4.1}
+\contentsline {section}{\numberline {4.2}Module qRL\_optimizer.py}{12}{section.4.2}
+\contentsline {chapter}{\numberline {5}Divers}{13}{chapter.5}
+\contentsline {section}{\numberline {5.1}Module stats.py}{13}{section.5.1}
+\contentsline {section}{\numberline {5.2}Module textutil.py}{13}{section.5.2}
+\contentsline {chapter}{Index des modules Python}{15}{section*.164}
+\contentsline {chapter}{Index}{17}{section*.165}

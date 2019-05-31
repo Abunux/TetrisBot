@@ -1,0 +1,22 @@
+\chapter{Règles utilisées dans le projet}
+
+Les règles que nous allons utiliser sont très proches des règles officielles publiées sur le site \href{https://tetris.fandom.com/wiki/Tetris_Wiki}{https://tetris.fandom.com/wiki/Tetris\_Wiki}, à savoir :
+\begin{itemize}
+	\item La grille de jeu est composée de 10 colonnes et 22 lignes, plus deux lignes invisibles pour l'apparition de la pièce suivante. Lors de certaines phases de tests on pourra limiter les dimensions de la grille.
+	\item Les pièces sont les tétraminos standards. Lors de certaines phases de tests on pourra utiliser un jeu de pièces réduit au seul domino rectangulaire.
+	\item On utilise le principe du \og 7-bag Random Generator \fg{} : les 7 pièces du sac sont mélangées et tirées successivement. Lorsque le sac est vide on en recrée un nouveau.
+	\item Les pièces sont mises en jeu horizontalement sur la dernière ligne invisible et centrée en colonne (dans le cas d'une pièce ayant une largeur impaire, elle est centrée à gauche).
+	\item À chaque tour une seule action est effectuée (soit un déplacement, soit une rotation, soit rien) et la pièce est ensuite automatiquement descendue d'une ligne si c'est possible. Dans le cas contraire, une nouvelle pièce est mise en jeu.
+	\item Nous nous autorisons la possibilité de placer directement une pièce dans une colonne et une rotation donnée, à la condition que cette colonne soit effectivement accessible en un nombre indéfini de coup à partir de sa position de chute.
+	\item Lorsqu'une pièce ne peut pas tourner car elle se trouve au bord de la grille, le mouvement est annulé (on ne fait pas le \og floor kick \fg{}).
+	\item Les points sont comptabilisés selon le nombre de lignes faites en un coup :
+	\begin{itemize}
+		\item 1 ligne : 40 points
+		\item 2 ligne : 100 points
+		\item 3 ligne : 300 points
+		\item 4 ligne : 1200 points
+	\end{itemize}
+	On pourra également s'autoriser à prendre comme nombre de points le carré du nombre de lignes faites.
+	\item Dans la mesure où on se contente de faire jouer des agents, il n'y a pas de temps ni de niveaux.
+	
+\end{itemize}

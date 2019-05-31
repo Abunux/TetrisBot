@@ -1,0 +1,191 @@
+\chapter{Les algorithmes génétiques}
+Les algorithmes génétiques sont des algorithmes évolutionnistes initiés par John Holland dans les années 60 et popularisés par David Goldberg à la fin des années 80. Il s'agit de trouver une solution à un problème d'optimisation en faisant évoluer une population par analogie avec des concepts issus de la biologie comme le principe de sélection naturelle de Darwin, la recombinaison génétique et la mutation génétique. 
+
+\section{Principe général}
+On considère un entier $n\in\N^*$ et une fonction continue $f: [0\,; 1]^n \to \R_+$ qu'on cherche à maximiser. Comme $[0\,; 1]^n$ est compact, on sait que $f$ est bornée et atteint ses bornes. Ainsi, il existe au moins un élément $a\in [0\,; 1]^n$ tel que, pour tout $x\in [0\,; 1]^n$, $f(x) \leqslant f(a)$. Le but est ici de déterminer une valeur approchée de $a$ et de $f(a)$. \\
+
+On se donne un entier naturel non nul $N$ et une population $P_0$ de $N$ éléments choisis aléatoirement dans $[0\,; 1]^n$ i.e. une partie aléatoire $P_0=\{x_1, x_2, \ldots, x_N\} \subset [0\,; 1]^n$. On choisit un codage des éléments de $P_0$ qui sera assimilé à son génome. \\
+
+Pour tout entier $i\in\N$, à partir de la population $P_i$, qui constitue la génération $i$, on définit une nouvelle population $P_{i+1}$, qui constitue la génération $i+1$, de la manière suivante:
+\begin{itemize}
+	\item on conserve éventuellement une partie $A$ de cardinal $M \geqslant 0$ de la population $P_i$;
+	\item on choisit $N-M$ couples d'éléments (parent1, parent2) dans la population $P_i$;
+	\item chaque couple (parent1, parent2) engendre un ou deux \og enfants \fg{};
+	\item un \og enfant \fg{} subit éventuellement une mutation génétique (autrement dit, une modification aléatoire de son codage);
+	\item on réunit les $M$ éléments de $A$ et les $N-M$ meilleurs des nouveaux \og enfants \fg{} créés pour former la nouvelle génération. \\
+\end{itemize}
+
+Le choix des éléments de $A$ et des couples de \og parents \fg{} va se faire de façon à maximiser $f$. En revanche, les mutations génétiques sont purement aléatoires et ont pour but d'éviter que le processus ne converge vers un élément qui ne réalise qu'un maximum local.\\
+
+Nous examinons à présent en détails le déroulement de ces différentes étapes.
+
+\section{Codage}
+
+Les individus considérés ici sont des $n-$uplets de nombres réels appartenant à l'intervalle $[0\,;1]$. Dans la pratique, on ne travaille qu'avec des décimaux qu'on peut coder deux façons différentes.
+
+\subsection{Codage décimal}
+Dans ce codage, on utilise simplement la représentation par un flottant. Un élément de la population est donc un vecteur de $n$ flottants compris entre $0$ et $1$. Ainsi, le génome est ce vecteur de $n$ flottants et les $n$ gènes sont les $n$ flottants.
+
+\subsection{Codage binaire}
+
+On se donne un nombre entier naturel fixé $B$ et on définit les éléments $x_j$ de la population sous la forme de vecteurs de nombres décimaux codés en binaire sur $B$ bits. Ainsi, si $B=8$, on représentera chaque décimal composant le vecteur $x_j$ sous la forme d'un tableau du type $$[\varepsilon_0,~\varepsilon_1,~\varepsilon_2,~\varepsilon_3,~\varepsilon_4,~\varepsilon_5,~\varepsilon_6,~\varepsilon_7]$$
+avec $\varepsilon_k\in\{0\,;1\}$ pour tout $k\in\llbracket 0, 7\rrbracket$. Précisément, le tableau précédent code le nombre décimal 
+$$\sum\limits_{k=0}^7 \frac{\varepsilon_k}{2^{k+1}}.$$
+Ainsi, le tableau $[0,~1,~0,~0,~1,~1,~0,~0]$ représente le décimal $\dfrac{1}{2^2}+\dfrac{1}{2^5}+\dfrac{1}{2^6}=0{,}296875$.
+
+Avec ce codage, le génome d'un individu est un vecteur de $n$ tableaux binaires à $B$ éléments et chacun de ces $n\times B$ bits est un gène de l'individu.
+
+\section{Filtrage}
+
+On peut décider, à chaque nouvelle génération, de conserver -- ou non -- une partie de la génération des meilleurs individus de la génération précédente i.e. ceux qui maximisent la fonction $f$: on parle alors de filtrage de la population.
+
+Il existe plusieurs façon de \og filtrer \fg{}. Une possibilité est de fixer une pourcentage de la génération précédente, représentant l'\og élite \fg{}, que l'on conserve. Dans ce cas où on conserve $M$ éléments de la génération précédente, on ne doit créer que $N-M$ nouveaux éléments.
+
+Une autre possibilité est de créer une génération nouvelle partielle (contenant donc moins de $N$ individus), de réunir l'ancienne et la nouvelle génération et de ne conserver que les $N$ meilleurs éléments.
+
+On peut aussi décider de ne pas faire de filtrage et de renouveler entièrement la population en créant $N$ nouveaux éléments.
+
+\section{Reproduction}
+
+Pour créer les nouveaux éléments, on va sélectionner des couples de \og parents \fg{} et simuler une reproduction en réalisant un \og croisement \fg{} entre les génomes des parents. 
+
+\subsection{Sélection des parents}
+
+Pour sélection les parents, on dispose de deux méthodes.
+
+\subsubsection{Sélection proportionnelle à l'adaptation}
+
+On note $P=\{x_1,x_2,\ldots, x_N\}$ la population pour un certaine génération. On souhaite sélectionner les couples de parents parmi les individus ayant la meilleure adaptation i.e. les individus $x$ ayant les plus grandes valeurs de $f(x)$. Pour cela, on définit sur $P$ une probabilité $\mathbb{P}$ telle que, pour tout $j\in\llbracket 1, N \rrbracket$, $\mathbb{P}(\{x_j\})$ soit proportionnelle à $f(x_j)$. Autrement dit, en posant $S=\sum\limits_{j=1}^N f(x_j)$, on pose $\mathbb{P}(\{x_j\})=\frac{f(x_j)}{S}$ pour tout $i\in\llbracket 1, N\rrbracket$.
+
+On choisit ensuite un nombre aléatoire $r\in[0\,;1]$ et on sélectionne dans la population le premier indice $k$ tel que $\sum_{j=1}^k \mathbb{P}(\{x_j\}) \geqslant r$. 
+
+De façon imagée, cela revient à choisir $x_k$ par la \og méthode de la roulette \fg{}. On considère une roulette partagée en $N$ secteurs angulaires correspondant chacun à un $x_j$ et dont les aires sont respectivement proportionnelles aux $f(x_j)$. On fait alors tourner la roulette et on sélection le secteur (et donc le $x_k$) sur lequel la roulette s'arrête.
+
+\begin{center}
+	\definecolor{yqyqyq}{rgb}{0.5019607843137255,0.5019607843137255,0.5019607843137255}
+	\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+	\clip(-3.18,-3.74) rectangle (3.2,3.08);
+	\fill[line width=2.pt,fill=black,fill opacity=1.0] (0.,-3.) -- (-0.3,-3.5) -- (0.3,-3.5) -- cycle;
+	\draw [line width=1pt] (0.,0.)-- (2.8356850718282516,0.979229377321986);
+	\draw [line width=1pt] (0.,0.)-- (0.8694609743185135,2.871243217516952);
+	\draw [line width=1pt] (0.,0.)-- (-0.477072337850346,2.961824097487561);
+	\draw [line width=1pt] (0.,0.)-- (-1.1552603191980197,2.7686411098021515);
+	\draw [line width=1pt] (0.,0.)-- (-2.8337614140762395,0.9847823353881971);
+	\draw [line width=1pt] (0.,0.)-- (-2.330798482982948,-1.8887504948310108);
+	\draw [line width=1pt] (0.,0.)-- (-1.3660516087214765,-2.6709367275001976);
+	\draw [line width=1pt] (0.,0.)-- (1.2675370833801778,-2.719071485315543);
+	\draw [line width=1pt] (0.,0.)-- (1.8,-2.4);
+	\draw [line width=1pt] (0.,0.)-- (2.328950755767006,-1.8910283914347485);
+	\draw [line width=1pt] (0.,0.)-- (3.,0.);
+	\draw [shift={(0.,0.)},line width=0.4pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.5]  (0,0) --  plot[domain=0.:0.33250282818774335,variable=\t]({1.*3.*cos(\t r)+0.*3.*sin(\t r)},{0.*3.*cos(\t r)+1.*3.*sin(\t r)}) -- cycle ;
+	\draw [shift={(0.,0.)},line width=0.4pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.5]  (0,0) --  plot[domain=1.2767572268884126:1.7304984349741843,variable=\t]({1.*3.*cos(\t r)+0.*3.*sin(\t r)},{0.*3.*cos(\t r)+1.*3.*sin(\t r)}) -- cycle ;
+	\draw [shift={(0.,0.)},line width=0.4pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.5]  (0,0) --  plot[domain=1.9660981716800785:2.8071309194297247,variable=\t]({1.*3.*cos(\t r)+0.*3.*sin(\t r)},{0.*3.*cos(\t r)+1.*3.*sin(\t r)}) -- cycle ;
+	\draw [shift={(0.,0.)},line width=0.4pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.5]  (0,0) --  plot[domain=3.822609664036911:4.239623083066688,variable=\t]({1.*3.*cos(\t r)+0.*3.*sin(\t r)},{0.*3.*cos(\t r)+1.*3.*sin(\t r)}) -- cycle ;
+	\draw [shift={(0.,0.)},line width=0.4pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.5]  (0,0) --  plot[domain=5.148604448167147:5.355890089177974,variable=\t]({1.*3.*cos(\t r)+0.*3.*sin(\t r)},{0.*3.*cos(\t r)+1.*3.*sin(\t r)}) -- cycle ;
+	\draw [line width=0.8pt] (0.,0.)-- (2.7798385302537154,-1.1280504180739719);
+	\draw [shift={(0.,0.)},line width=0.4pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.5]  (0,0) --  plot[domain=5.6011906061720635:5.897691440250257,variable=\t]({1.*3.*cos(\t r)+0.*3.*sin(\t r)},{0.*3.*cos(\t r)+1.*3.*sin(\t r)}) -- cycle ;
+	\draw [line width=1pt] (0.,0.) circle (3.cm);
+	\draw (1.1,1.7) node[anchor=north west] {$x_1$};
+	\draw (-0.13,2.2) node[anchor=north west] {$x_2$};
+	\draw (-0.85,2.2) node[anchor=north west] {$x_3$};
+	\draw (-1.8,1.6) node[anchor=north west] {$x_4$};
+	\draw (-2.2,-0.1) node[anchor=north west] {$...$};
+	\draw (-1.5,-1.25) node[anchor=north west] {$...$};
+	\draw (-0.3,-1.8) node[anchor=north west] {$x_k$};
+	\draw (0.7,-1.5) node[anchor=north west] {$...$};
+	\draw (1.1,-1.3) node[anchor=north west] {$...$};
+	\draw (1.45,-0.85) node[anchor=north west] {$...$};
+	\draw (1.5,-0.1) node[anchor=north west] {$x_{N-1}$};
+	\draw (1.6,0.55) node[anchor=north west] {$x_{N}$};
+	\end{tikzpicture}
+\end{center}
+
+\subsubsection{Sélection par tournoi}
+
+Une autre façon de choisir un couple de parents est de choisir au hasard une partie $E$ de la population $P=\{x_1,x_2,\ldots, x_N\}$ et de conserver les deux meilleurs éléments de $E$ i.e. les deux éléments $a$ et $b$ de $E$ tels que, pour tout $x\in S$, $f(a) \geqslant f(b) \geqslant f(x)$.
+
+Cette méthode est appelée \textit{sélection par tournoi} car cela revient à organiser un tournoi entre les éléments de $E$ (le gagnant d'une partie entre deux éléments étant celui qui maximise $f$) et à conserver les deux vainqueurs du tournoi.
+
+\subsection{Reproduction}
+
+Une fois les deux parents choisis, on procède à la \og reproduction \fg{} pour engendrer un ou deux enfants, selon le codage choisi.
+
+\subsubsection{Reproduction par enjambement}
+
+La reproduction par enjambement ou par croisement (\textit{cross-over}) s'applique au codage binaire. Pour chaque entier $i$ entre $1$ et $n$, on construit la $i-$ème composante des vecteurs enfant1 et enfant2 de la manière suivante.
+
+On suppose que le codage binaire de la $i-$ème composante du parent1 est $[a_1,~a_2,\ldots, a_B]$ et le codage binaire de la $i-$ème composante du parent2 est $[b_1,~b_2,\ldots, b_B]$. On choisit aléatoirement un rang $k$ (propre à chaque $i$) entre $1$ et $B$ et alors
+\begin{itemize}
+	\item le codage binaire de la $i-$ème composante du premier \og enfant \fg{} est obtenu en prenant les $k$ premiers bits du parent1 et les $B-k$ derniers bits du parent2;
+	\item le codage binaire de la $i-$ème composante du second \og enfant \fg{} est obtenu en prenant les $k$ premiers bits du parent2 et les $B-k$ derniers bits du parent1.
+\end{itemize}
+
+\begin{center}
+	\definecolor{yqyqyq}{rgb}{0.5019607843137255,0.5019607843137255,0.5019607843137255}
+	\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1.0cm,y=1.0cm]
+	\clip(-0.875555555555557,-2.0511111111111076) rectangle (12.624444444444457,3.6288888888888806);
+	\fill[line width=1pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.25] (2.,2.5) -- (2.,2.) -- (5.3,2.) -- (5.3,2.5) -- cycle;
+	\fill[line width=1pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.25] (6.50444444444445,2.528888888888881) -- (6.5,2.) -- (8.9,2.) -- (8.9,2.5) -- cycle;
+	\fill[line width=1pt,color=yqyqyq,fill=yqyqyq,fill opacity=0.25] (6.518888888888892,-0.5122222222222308) -- (6.514444444444447,-1.0411111111111109) -- (12.2,-1.04111) -- (12.2,-0.54111) -- cycle;
+	\draw (-0.5,2.55) node[anchor=north west] {$[a_1,~a_2, \ldots, a_k,~a_{k+1},~a_{k+2},\ldots,~a_B]$};
+	\draw (6.4,2.55) node[anchor=north west] {$[b_1,~b_2, \ldots, b_k,~b_{k+1},~b_{k+2},\ldots,~b_B]$};
+	\draw (-0.5,-0.5) node[anchor=north west] {$[a_1,~a_2, \ldots, a_k,~b_{k+1},~b_{k+2},\ldots,~b_B]$};
+	\draw (6.4,-0.5) node[anchor=north west] {$[b_1,~b_2, \ldots, b_k,~a_{k+1},~a_{k+2},\ldots,~a_B]$};
+	\draw [->,line width=1pt,dash pattern=on 3pt off 3pt] (0.7844444444444448,1.788888888888883) -- (0.7644444444444448,-0.4111111111111123);
+	\draw [->,line width=1pt,dash pattern=on 3pt off 3pt] (7.744444444444452,1.748888888888883) -- (7.744444444444452,-0.27111111111111263);
+	\draw [->,line width=1pt] (3.4644444444444478,1.788888888888883) -- (10.324444444444454,-0.29111111111111265);
+	\draw [->,line width=1.2pt] (10.284444444444455,1.788888888888883) -- (3.544444444444448,-0.3111111111111122);
+	\draw (-0.4,3.4) node[anchor=north west] {$i-$ème composante du parent1};
+	\draw (6.4,3.4) node[anchor=north west] {$i-$ème composante du parent2};
+	\draw (-0.4,-1.2) node[anchor=north west] {$i-$ème composante de l'enfant1};
+	\draw (6.4,-1.2) node[anchor=north west] {$i-$ème composante de l'enfant2};
+	\end{tikzpicture}
+\end{center}
+
+\subsubsection{Reproduction par combinaison linéaire}
+
+Pour le codage décimal, étant donné deux vecteurs parents $p$ et $q$, on définit le vecteur enfant $e$ de $p$ et $q$ par
+$$e:=f(p)p+f(q)q.$$
+Autrement dit, pour tout entier $i$ entre $1$ et $n$, la $i-$ème coordonnée $e_i$ de $e$ est $e_i:=f(p)p_i+f(q)q_i$ où $p_i$ et $q_i$ sont respectivement les $i-$èmes coordonnées des vecteurs $p$ et $q$. 
+
+Dans le cas où on veut travailler avec des vecteurs normés, on divise de plus $e$ par sa norme. 
+
+\section{Mutation génétique}
+
+La mutation génétique apporte une modification aléatoire des \og enfants \fg{} qui évite que le processus ne stagne autour d'un maximum local de la fonction $f$. Le procédé de mutation dépend du codage mais dans tous les cas, il a lieu avec une probabilité $p$ fixée assez faible.
+
+\subsection{Mutation pour le codage binaire}
+
+Si le codage adopté est le codage binaire, le procédé de mutation consiste à changer de façon aléatoire la valeur d'un bit. Plus précisément, pour chaque bit de chaque composante d'un vecteur, on choisit aléatoirement un nombre aléatoire $r$ entre $0$ et $1$ et si $r<p$, on change le bit $b$ en $1-b$.
+
+Supposons, par exemple, que $B=8$, $p=0{,}1$ et que la première composante du vecteur soit $[0,~0,~1,~0,~1,~1,~0,~0]$. Si on obtient pour les valeurs de $r$ successivement 
+$$0{,}72, \quad 0{,}33, \quad 0{,}06, \quad 0{,}51, \quad 0{,}08, \quad 0{,}18, \quad 0{,}58 \quad \text{et} \quad 0{,}06,$$
+on va changer les bits 3, 5 et 8 de cette première composante, ce qui donne la nouvelle composante \og mutée \fg{}  $[0,~0,~\uline{0},~0,~\uline{0},~1,~0,~\uline{1}]$.
+\subsection{Mutation pour le codage décimal}
+
+Si le codage adopté est le codage décimal, on mute un vecteur en modifiant de façon aléatoire les composantes du vecteur. Plus précisément, on choisit un réel $r$ entre $0$ et $1$. Si $r<p$, on choisit un réel $\delta$ dans un intervalle fixé $[-\eta\,; \eta]$ (où $\eta >0$) et on modifie chaque composante $v_i$ du vecteur $v$ en $v_i+\delta$ à condition que $v_i+\delta$ reste dans l'intervalle $[0\,;1]$ (sinon, on ne change pas $v_i$). 
+
+Par exemple, supposons que $n=4$, $p=0{,}1$, $v=[0{,}12,~0{,}753,~0{,}179,~0{,}548]$ et $\eta=0{,}3$. Si on obtient un réel $r<0{,}1$, on choisit un nombre aléatoire dans $[-0{,}3\,;0{,}3]$, par exemple $\delta=-0{,}21$, et alors le vecteur muté est $v_{\text{muté}}=[0{,}12,~0{,}543,~0{,}179,~0{,}338]$.
+
+Dans le cas où on veut travailler avec des vecteurs normés, on divise de plus $v_{\text{muté}}$ par sa norme. 
+
+\section{Constitution de la nouvelle génération}
+
+La population de la nouvelle génération est finalement obtenue de la manière suivante:
+\begin{itemize}
+	\item si on a choisi une politique de filtrage par élitisme, on a conservé $M$ individus de la génération précédente. On leur rajoute les $N-M$ nouveaux individus créés en cas de codage décimal et on obtient la nouvelle génération de $N$ individus. Si le codage choisi est binaire, on a créé $2(N-M)$ nouveaux individus. On les ajoute au $M$ individus de la génération précédente puis on ne conserve que les $N$ meilleurs éléments parmi les $2(N-M)+M=2N-M$ individus obtenus.
+	\item si on a choisi un politique de filtrage par conservation des meilleurs, on créé une nouvelle population partielle contenant un nombre $M := \left\lfloor N\times t\right\rfloor$ d'individus où $t\in [0\,; 1]$ est un pourcentage fixé. On réunit ensuite l'ancienne génération et la nouvelle génération partielle et on ne conserve que les $N$ meilleurs éléments (au sens de la fonction $f$).
+	\item si on n'a pas choisi une politique de filtrage par élitisme, on n'a conservé aucun individu de la génération précédente et le principe est le même que dans le premier point mais avec, cette fois, $M=0$.
+\end{itemize}
+
+\section{Itération du procédé}
+
+Partant d'une population initiale aléatoire, on itère le procédé sur plusieurs générations en conservant à chaque étape le taille de la population initiale. On arrête l'itération au bout d'un certain nombre de générations et on détermine, dans la population finale, un élément $y$ qui maximise $f$. Si le nombre de générations est suffisant, $f(y)$ est une bonne approximation de $f(a)=\mathop{\max}_{x\in[0\,;1]^n} f(x)$. 
+
+
+
+
+
+
+
+

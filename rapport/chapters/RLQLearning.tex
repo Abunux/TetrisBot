@@ -1,0 +1,149 @@
+\chapter{Q-Learning par itérations des fonctions de valeur}
+\section{Principe général}
+
+On souhaite déterminer (ou au moins approcher) une politique $\pi_*$ optimale i.e. on souhaite déterminer une fonction de valeur état-action aussi proche que possible de $Q_*$. Pour cela, on considère une fonction $Q$ quelconque sur $\mathcal{S}\times\mathcal{A}$, par exemple la fonction nulle. Notons $p$ le nombre d'états et $q$ le nombre d'actions et énumérons les ensembles $\mathcal{S}$ et $\mathcal{A}$:
+$$\mathcal{S}=\{s_1, s_2, ..., s_{p}\} \qquad \text{et} \qquad \mathcal{A}=\{a_1, a_2, ..., a_{q}\}.$$
+Se donner une fonction $Q$ revient à se donner une matrice $\verb|Q|$ de taille $p\times q$ telle que, pour tout $(i,j)\in\llbracket 1, p\rrbracket \times \llbracket 1, q\rrbracket$, $Q(s_i, a_j)=\verb|Q|_{i,j}$. Ainsi, si initialement $Q$ est le fonction nulle alors $\verb|Q|$ la matrice nulle $O_{p,q}$.
+
+On va alors modifier de façon itérative la matrice $\verb|Q|$ de la manière suivante: si l'environnement se trouve dans l'état $s_k$, on choisit l'action $a_{\ell}$ qui maximise $Q$ i.e. on choisit l'indice $\ell$ tel que $\verb|Q|_{k,\ell}$ soit le plus grand élément de la ligne $k$ de $\verb|Q|$ (si plusieurs valeurs de $\ell$ sont possibles, on en prend une quelconque, par exemple, la plus petite).
+
+On effectue alors l'action $a_{\ell}$ et on note $r_{k,\ell}=R(s_k, a_{\ell})$ la récompense obtenue et $s_m$ l'état de l'environnement à l'issue de cette action. 
+
+On détermine ensuite le plus grand élément $e_{max}$ dans la ligne $m$ de $\verb|Q|$ i.e. $e_{max}=\mathop{\max}\limits_{\alpha\in\mathcal{A}} Q(s_{m}, \alpha)$ et on calcule $r+\gamma e_{max}$ i.e. $R(s_k, a_{\ell})+\gamma \mathop{\max}\limits_{\alpha\in\mathcal{A}} Q(s_{m},\alpha)$.
+
+On introduit un réel $\alpha\in]0\,;1[$ appelé \textit{facteur d'apprentissage} (qui pourra évoluer au cours de temps), et on va mettre à jour la matrice $\verb|Q|$ en remplaçant l'élément d'indice $(k, \ell)$ par
+$$(1-\alpha)\verb|Q|_{k, \ell} + \alpha(r+\gamma e_{max}).$$
+Autrement dit, on fait la substitution
+$$\verb|Q|_{k,\ell} \leftarrow (1-\alpha)\verb|Q|_{k,\ell} + \alpha(r_{k,\ell}+\gamma \mathop{\max}\limits_{j\in\llbracket 1, q\rrbracket} \verb|Q|_{m,j})$$
+soit, en termes de fonction,
+$$Q(s_k, a_{\ell}) \leftarrow (1-\alpha)Q(s_k, a_{\ell}) + \alpha(R(s_k, a_{\ell})+\gamma \mathop{\max}\limits_{\alpha\in\mathcal{A}} Q(s_{m},\alpha)).$$
+
+\`A ce niveau, deux problèmes se posent:
+\begin{enumerate}
+	\item si on prend initialement la matrice nulle, il n'y aura pas de choix pertinent pour démarrer car tous les coefficients seront égaux.
+	
+	On pourrait imaginer remplacer la matrice nulle par une matrice aléatoire quelconque. Cependant, se poserait alors un second problème
+	\item Si on réitère le procédé précédent, l'agent agira de façon uniquement déterministe à partir des données de la matrice \verb|Q|. De façon plus concrète, il n'évoluera qu'en fonction de son expérience et n'essayera pas d'actions aléatoires nouvelles qui pourraient donner de meilleurs résultats. De plus, il y a un risque dans ce cas que l'agent se contente de récompense \og minimale \fg{} et stagne dans une sorte de maximum local plutôt que de chercher à maximiser $Q$ sur l'ensemble des états et des actions possibles. 
+\end{enumerate}
+
+\section{Compromis exploitation/exploration}
+
+Pour palier ce problème, on va introduire un facteur permettant de trouver un compromis entre l'exploitation de l'expérience accumulée à travers l'actualisation de \verb|Q| et l'exploration de nouvelles actions non déterminées par la matrice \verb|Q|.
+
+Pour se faire, on se donne un réel $\varepsilon \in[0\,;1]$, appelé \textit{facteur d'exploration} et destiné à évoluer au cours du temps et, à chaque instant $n$, au lieu de choisir systématiquement l'action $a_{\ell}$ qui maximise la ligne $k$ de la matrice $\verb|Q|$, on choisit cette action avec une probabilité $1-\varepsilon$ et on choisit une action aléatoire avec une probabilité $\varepsilon$.
+
+\`A l'instant $0$, on prend $\varepsilon=1$ i.e. la première action est choisie de façon totalement aléatoire (ce qui compense le fait que la matrice \verb|Q| est initialisée à $O_{p,q}$) et, ensuite, on va faire progressivement diminuer $\varepsilon$ pour tenir compte du fait que plus le temps avance, plus l'agent à des données à exploiter issue de son expérience passée et moins il a intérêt à explorer de nouvelles actions. On peut, par exemple, utiliser une décroissance exponentielle de la forme
+$$\varepsilon_N = \varepsilon_{\min}+(\varepsilon_{\max}-\varepsilon_{\min})\mathrm{e}^{-\tau N}$$
+où $\varepsilon_N$ est le facteur d'exploration au temps $N$, $\varepsilon_{\min}$, $\varepsilon_{\max}$ et $\tau$ sont des paramètres représentant respectivement le facteur d'exploration minimum, le facteur d'exploration maximum et le taux de décroissance. En prenant $\varepsilon_{\max}=1$, on aura en particulier, $\varepsilon_0=1$.
+
+
+\section{Algorithme}
+
+Pour simplifier l'écriture, les états seront notés état 1, état 2, ..., état $p$ au lieu de $s_1$, $s_2$, ..., $s_p$ et les actions seront notées action 1, action 2, ..., action $q$ au lieu de $a_1$, $a_2$, ..., $a_q$.
+
+De plus, l'état 1 est considérée comme l'état initial de tout épisode et l'état $p$ comme l'état final de tout épisode. 
+
+\begin{tabular}{|l|}
+	\hline \\
+	\verb|Paramètres: facteur_actualisation, facteur_apprentissage, taux_decroissance,| \\
+	\hfill \verb|facteur_exploration_min, facteur_exploration_max| \\ 
+	\verb|temps = 0| \\
+	\verb|Initialiser la matrice Q à la matrice nulle de taille pxq| \\
+	\verb|k = 1| \\
+	\verb|Tant que k!= p :| \\
+	\hspace{1cm} \verb|facteur_exploration = facteur_exploration_min +| \\
+	\hfill \verb|(facteur_exploration_max - facteur_exploration_min)*| \\
+	\hfill \verb|exp(-taux_decroissance*temps)| \\
+	\hspace{1cm} \verb|Choisir un nombre réel x aléatoire entre 0 et 1| \\
+	\hspace{1cm} \verb|Si x < facteur_exploration :| \\
+	\hspace{2cm} \verb|Choisir une action l au hasard| \\
+	\hspace{1cm} \verb|Sinon :| \\
+	\hspace{2cm} \verb|Déterminer l'indice l d'un élément maximal de la ligne k de Q| \\
+	\hspace{1cm} \verb|Effectuer l'action l| \\
+	\hspace{1cm} \verb|Déterminer la récompense r associée à k et l| \\
+	\hspace{1cm} \verb|Déterminer le nouvel état k'| \\ 
+	\hspace{1cm} \verb|Déterminer le plus grand élément e_max de la ligne k' de Q| \\
+	\hspace{1cm} \verb|Q[k,l] = (1 - facteur_apprentissage)*Q[k,l] +| \\
+	\hfill \verb|facteur_apprentissage*(r + facteur_actualisation*e_max)| \\
+	\hspace{1cm} \verb|k = k'| \\
+	\hspace{1cm} \verb|temps = temps + 1| \\
+	\hline
+\end{tabular}  
+
+\section{Implémentation pour Tétris}
+
+\subsection{Limitations}
+
+Pour Tétris, les états sont a priori toutes les configurations possibles de la grille (y compris le tétramino en cours) soit $2^{10\times 22} \approx 1{,}7\cdot10^{66}$ états. Ceci est donc totalement impossible à gérer (et même à stocker) sur une machine.
+
+\bigskip
+
+Dans un premier temps, on peut dissocier le tétramino en cours des pièces accumulées en base de la grille et ne considérer que la hauteur de chacune des 10 colonnes (sans se soucier des trous) mais cela laisse encore $7\times10^{22}$ états possibles. 
+
+Bdolah \& Livnat \cite{BL00} ont proposé (sur une version simplifiée à $6$ colonnes et en utilisant $5$ pièces comportant au plus $2\times 2$ blocs) la simplification suivante:
+\begin{itemize}
+	\item on ne considère que les écarts entre les hauteurs des colonnes successives;
+	\item on borne ces écarts par la longueur de la plus grande pièce (c'est-à-dire tout écart supérieur à $4$ (resp. inférieur à $-4$) est remplacé par $4$ (resp. $-4$)).
+\end{itemize}
+Ainsi, avec leur version simplifiée, ils avaient $5$ écarts possibles et ces écarts prenaient leurs valeurs dans $\{-2, -1, 0, 1, 2\}$ (car la plus grande pièce était un carré de côté 2) ce qui leur donnait $5^5=3125$ états possibles (pour les seules colonnes).
+
+En adaptant cette approche à la version standard de Tétris, cela donne $7 \times 9^{9}\approx 2{,}7\cdot 10^9$ états possibles pour l'environnement. Cela parait difficilement gérable...
+
+\bigskip
+
+En conséquence, nous avons décidé de n'implémenter l'algorithme précédent non pas sur l'ensemble des états mais seulement sur un échantillon aléatoire de couples état-action obtenus lors d'une phase d'entraînement (en s'inspirant de la notion de mémoire de reprise -- voir le chapitre suivant).
+
+Ainsi, on fait fonctionner l'algorithme sur un nombre déterminé d'épisodes et on crée une $Q-$table contenant les couples état-action rencontrés. Ensuite, lors de la phase de jeu, l'agent joue selon la $Q-$table s'il est dans une configuration qui y figure et de manière aléatoire sinon.
+
+\bigskip
+
+Cette limitation ne peut être efficace avec le jeu de Tétris usuel. Nous ne l'avons fait fonctionner qu'avec un jeu d'un seul domino (au lieu des 7 tétraminos) sur une grille de taille modeste.
+
+\subsection{Les classes QRLOptimizer et TetrisEnv}
+
+\subsubsection{La classe QRLOptimizer}
+
+L'optimisation par reinforcement learning est implémenté par la classe \pyth{QRLOptimizer}.
+
+Celle-ci prend en paramètres notamment:
+\begin{itemize}
+	\item \pyth{width}: largeur de la grille;
+	\item \pyth{height}: hauteur de la grille;
+	\item \pyth{alpha}: facteur d'apprentissage $\alpha$;
+	\item \pyth{gamma}: facteur d'actualisation $\gamma$;
+	\item \pyth{epsilon\_min}: valeur minimale du facteur d'exploration $\varepsilon_{\min}$;
+	\item \pyth{epsilon\_max}: valeur maximale du facteur d'exploration $\varepsilon_{\max}$;
+	\item \pyth{epsilon\_delta}: valeur de décrémentation du facteur d'exploration $\tau$;
+	\item \pyth{max\_episodes}: nombre maximal d'épisodes lors de l'entraînement;
+	\item \pyth{max\_blocks}: nombre maximal de blocs lors d'un épisode.
+\end{itemize}
+
+\subsubsection{La classe TetrisEnv}
+
+Pour l'implémentation du Q-Learning, la classe \pyth{QRLOptimizer} utilise un environnement dédié à travers la classe \pyth{TetrisEnv}.
+
+Cet environnement définit notamment l'ensemble des actions
+\begin{center}
+\pyth{'L', 'R', 'D', 'H', 'T', 'N'}
+\end{center}
+au paragraphe \textbf{4.4} du chapitre 3 (p. \pageref{commande_de_jeu}). Il permet également de récupérer l'état de la grille grâce à la méthode \pyth{getStateCode(self)}. Cette dernière fait elle-même appel à la méthode \pyth{encodeToInt(self)} de la classe \pyth{Board} qui renvoie une représentation de la grille sous forme d'un nombre entier binaire.
+
+La classe \pyth{TetrisEnv} définit également la fonction récompense (\pyth{reward}): nous avons choisi pour celle-ci le carré du nombre de lignes supprimées à la suite de l'action effectuée.
+
+\subsubsection{Apprentissage}
+L'apprentissage se fait en jouant un certain nombre de parties et en remplissant une $Q-$table qui prend la forme d'un dictionnaire dont les clés sont les états et les valeurs associées sont les valeurs de la fonction $Q$ pour les différentes actions possibles.
+
+Au cours des parties successives d'apprentissage, soit l'état est déjà présent et alors il est mis à jour grâce à l'équation de Bellamn soit il ne figure pas encore dans le dictionnaire et, dans ce cas, on le rajoute en initialisant les coefficients des différentes actions à $0$.
+
+La méthode \pyth{learn(self)} prend en charge la réalisation de cet apprentissage en mettant en {\oe}uvre le principe du compromis exploitation/exploration et en mettant à jour la $Q-$table via la méthode \pyth{update(self, s, a)} qui implémente l'équation de Bellman.
+
+Une fois l'apprentissage terminé, la méthode \pyth{printQIndexes(self)} permet de visualiser la fréquence des cellules apparues lors de l'entraînement à l'aide d'une coloration en niveau de gris sur la grille.
+
+\subsubsection{Phase de jeu}
+La méthode \pyth{play(self)} prend en charge la phase de jeu à l'aide de la $Q-$table. Si l'état rencontré lors de la phase de jeu est apparu lors de la phase d'entraînement alors l'agent joue selon la $Q-$table et, sinon, il joue de façon aléatoire. 
+
+
+
+
+
+

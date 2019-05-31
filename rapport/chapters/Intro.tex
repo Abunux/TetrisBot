@@ -1,0 +1,53 @@
+\chapter*{Introduction}
+\addcontentsline{toc}{chapter}{Introduction}
+
+Ce projet a été réalisé entre novembre 2018 et mai 2019 dans le cadre du DU CCIE de l'université d'Aix-Marseille et, plus précisément, pour le module \og Projet mathématiques et informatique \fg{} sous la direction de M. Tristan Colombo. Le but est d'implémenter des agents qui jouent de manière autonome au célèbre jeu Tétris et d'essayer de les optimiser afin qu'ils y jouent le mieux possible.
+
+\bigskip
+
+La réalisation du projet s'est essentiellement déroulée en trois phases.
+
+\bigskip
+
+La première phase a consisté à la réalisation complète du moteur de jeu. Plutôt que de partir d'une base existante ou de reprendre un code \og tout fait \fg{}, nous avons entièrement programmé \og notre \fg{} version de Tétris en respectant (presque) toutes les règles officielles du jeu disponibles à l'adresse \href{https://tetris.fandom.com/wiki/Tetris_Wiki}{https://tetris.fandom.com/wiki/Tetris\_Wiki}. Nous avons choisi une conception orientée objet afin d'avoir un moteur offrant une grande adaptabilité pour les différents procédés d'optimisation.
+
+Nous avons défini un mode \textit{humain} qui permet de jouer en utilisant le clavier pour déplacer et retourner les pièces comme dans un jeu de Tétris usuel et qui a permis de tester le moteur. Nous avons également programmé, dès la phase de conception du moteur, plusieurs agents simples:
+\begin{itemize}
+	\item un agent purement aléatoire qui joue totalement au hasard (et donc de façon catastrophique);
+	\item un agent par filtrage qui choisit parmi les coups possibles celui qui est optimal selon différents critères possibles (créer le moins de trous possibles, créer le plus de lignes possibles, augmenter le moins possibles la hauteur des colonnes, etc.);
+	\item un agent par évaluation de coups qui cherche à maximiser une fonction d'évaluation de qualité du coup dépendant de plusieurs variables pondérées par différents paramètres.
+\end{itemize}
+
+\bigskip
+
+La deuxième phase à consister à implémenter une optimisation par algorithme génétique. Le but était de déterminer les \og meilleurs \fg{} paramètres pour l'agent par évaluation de coups.
+
+Dans cette phase, différentes voies ont été envisagées pour ce qui est du codage choisi, du mode de sélection des \og parents \fg{}, du mode de reproduction et de création de la nouvelle génération.
+
+Les résultats obtenus ont été très satisfaisants, avec des agents parvenant à jouer des centaines de milliers de pièces d'affilée. Certaines limitations sont cependant apparues notamment en raison du caractère aléatoire de la fonction d'évaluation de coups.
+
+\bigskip
+
+La troisième et dernière phase a consisté à implémenter une optimisation à l'aide d'apprentissage par renforcement (\textit{reinforcement learning}). Une longue période  de documentation et de maîtrise des concepts et des techniques a été nécessaire. 
+
+Nous avons choisi d'implémenter un apprentissage mettant en jeu un Q-Learning par itération de fonctions de valeur. Cette méthode demande idéalement de pouvoir stocker une matrice modélisant tous les états et toutes les actions possibles pour l'agent pour chaque état. Ceci s'est avéré impossible pour un jeu présentant autant de configurations possibles que Tétris. En conséquence, nous avons décidé d'une part d'implémenter sur un jeu de pièces réduit à un seul domino plutôt que sur le jeu de Tétris usuel à 7 pièces et ensuite nous avons limités la phase d'apprentissage à un échantillon aléatoire d'états plutôt que d'essayer de stocker en mémoire tous les états possibles.
+
+Nous obtenons un agent qui fonctionne mais dans un cadre assez limité.
+
+Pour contourner ce problème, il est nécessaire de faire appel aux toutes dernières techniques d'apprentissage profond (\textit{Deep Learning}) utilisant notamment des réseaux de neurones. Ceci a été abordé sur le plan théorique et algorithmique mais sans être implémenté pour notre moteur.
+
+\bigskip
+
+Le plan de ce rapport reprend pour l'essentiel ces trois grandes phases. 
+
+Dans la première partie, après avoir retracé l'historique de la genèse et du développement du jeu Tétris, nous décrivons les règles suivies, l'implémentation du moteur de jeu et des premiers agents. 
+
+Dans la deuxième partie, nous présentons le fonctionnement général des algorithmes génétiques avec les différents choix possibles puis nous détaillons l'implémentation que nous avons mise en {\oe}uvre pour Tétris. 
+
+Enfin, la troisième partie est consacré au reinforcement learning. Après avoir rappelé les bases mathématiques concernant les processus de décision markoviens qui conduisent aux équations de Bellman, nous présentons le principe général de Q-Learning par itérations de fonctions de valeur et l'implémentation que nous en avons fait sur un jeu simplifié. Nous terminons cette partie par une ouverture sur le deep-Q-Learning en détaillant, du point de vue théorique, comment les réseaux de neurones peuvent être utilisés pour \og apprendre \fg{} à un agent à jouer à un jeu qui, tel Tétris, présente beaucoup trop de configurations pour être stockées en mémoire.
+
+\bigskip
+
+
+
+

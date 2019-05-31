@@ -1,0 +1,59 @@
+\BOOKMARK [0][-]{chapter*.2}{Introduction}{}% 1
+\BOOKMARK [-1][-]{part.1}{Partie 1 Le moteur de jeu}{}% 2
+\BOOKMARK [0][-]{chapter.1}{Le jeu T\351tris}{part.1}% 3
+\BOOKMARK [1][-]{section.1.1}{L'origine du jeu}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{Le principe du jeu}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.3}{Diffusion du jeu}{chapter.1}% 6
+\BOOKMARK [1][-]{section.1.4}{Les raisons du succ\350s}{chapter.1}% 7
+\BOOKMARK [1][-]{section.1.5}{Peut-on gagner \340 T\351tris?}{chapter.1}% 8
+\BOOKMARK [0][-]{chapter.2}{R\350gles utilis\351es dans le projet}{part.1}% 9
+\BOOKMARK [0][-]{chapter.3}{Impl\351mentation du moteur de jeu}{part.1}% 10
+\BOOKMARK [1][-]{section.3.1}{Structures de donn\351es}{chapter.3}% 11
+\BOOKMARK [1][-]{section.3.2}{La classe Tetramino}{chapter.3}% 12
+\BOOKMARK [1][-]{section.3.3}{La classe Board}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.4}{La classe TetrisEngine}{chapter.3}% 14
+\BOOKMARK [0][-]{chapter.4}{Les agents}{part.1}% 15
+\BOOKMARK [1][-]{section.4.1}{G\351n\351ralit\351s}{chapter.4}% 16
+\BOOKMARK [1][-]{section.4.2}{Joueur humain en mode texte}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.3}{Agent al\351atoire}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.4}{Agent par filtrage}{chapter.4}% 19
+\BOOKMARK [1][-]{section.4.5}{Agent par \351valuation des coups}{chapter.4}% 20
+\BOOKMARK [-1][-]{part.2}{Partie 2 Optimisation par algorithmes g\351n\351tiques}{}% 21
+\BOOKMARK [0][-]{chapter.5}{Les algorithmes g\351n\351tiques}{part.2}% 22
+\BOOKMARK [1][-]{section.5.1}{Principe g\351n\351ral}{chapter.5}% 23
+\BOOKMARK [1][-]{section.5.2}{Codage}{chapter.5}% 24
+\BOOKMARK [1][-]{section.5.3}{Filtrage}{chapter.5}% 25
+\BOOKMARK [1][-]{section.5.4}{Reproduction}{chapter.5}% 26
+\BOOKMARK [1][-]{section.5.5}{Mutation g\351n\351tique}{chapter.5}% 27
+\BOOKMARK [1][-]{section.5.6}{Constitution de la nouvelle g\351n\351ration}{chapter.5}% 28
+\BOOKMARK [1][-]{section.5.7}{It\351ration du proc\351d\351}{chapter.5}% 29
+\BOOKMARK [0][-]{chapter.6}{Impl\351mentation pour T\351tris}{part.2}% 30
+\BOOKMARK [1][-]{section.6.1}{La classe AGOptimizer}{chapter.6}% 31
+\BOOKMARK [1][-]{section.6.2}{Fonction d'\351valuation}{chapter.6}% 32
+\BOOKMARK [1][-]{section.6.3}{Codage}{chapter.6}% 33
+\BOOKMARK [1][-]{section.6.4}{Initilisation de la population}{chapter.6}% 34
+\BOOKMARK [1][-]{section.6.5}{Reproduction}{chapter.6}% 35
+\BOOKMARK [1][-]{section.6.6}{Mutation}{chapter.6}% 36
+\BOOKMARK [1][-]{section.6.7}{Cr\351ation de la nouvelle g\351n\351ration}{chapter.6}% 37
+\BOOKMARK [1][-]{section.6.8}{R\351sultats et limites}{chapter.6}% 38
+\BOOKMARK [-1][-]{part.3}{Partie 3 Optimisation par reinforcement learning}{}% 39
+\BOOKMARK [0][-]{chapter.7}{Processus de d\351cision markovien}{part.3}% 40
+\BOOKMARK [1][-]{section.7.1}{Mod\351lisation}{chapter.7}% 41
+\BOOKMARK [1][-]{section.7.2}{\311quations de Bellman pour les fonctions de valeur}{chapter.7}% 42
+\BOOKMARK [0][-]{chapter.8}{Q-Learning par it\351rations des fonctions de valeur}{part.3}% 43
+\BOOKMARK [1][-]{section.8.1}{Principe g\351n\351ral}{chapter.8}% 44
+\BOOKMARK [1][-]{section.8.2}{Compromis exploitation/exploration}{chapter.8}% 45
+\BOOKMARK [1][-]{section.8.3}{Algorithme}{chapter.8}% 46
+\BOOKMARK [1][-]{section.8.4}{Impl\351mentation pour T\351tris}{chapter.8}% 47
+\BOOKMARK [0][-]{chapter.9}{Vers le deep-Q-learning}{part.3}% 48
+\BOOKMARK [1][-]{section.9.1}{Fonction d'erreur}{chapter.9}% 49
+\BOOKMARK [1][-]{section.9.2}{Entra\356nement par m\351moire de reprise}{chapter.9}% 50
+\BOOKMARK [1][-]{section.9.3}{Stabilisation par duplication du r\351seau}{chapter.9}% 51
+\BOOKMARK [1][-]{section.9.4}{Algorithme}{chapter.9}% 52
+\BOOKMARK [-1][-]{part.4}{Partie 4 R\351sultats et conclusion}{}% 53
+\BOOKMARK [0][-]{chapter.10}{R\351sultats}{part.4}% 54
+\BOOKMARK [1][-]{section.10.1}{Agents par filtrage}{chapter.10}% 55
+\BOOKMARK [1][-]{section.10.2}{Algorithmes g\351n\351tiques}{chapter.10}% 56
+\BOOKMARK [1][-]{section.10.3}{Optimisation par Q-Learning}{chapter.10}% 57
+\BOOKMARK [0][-]{chapter.11}{Conclusion}{part.4}% 58
+\BOOKMARK [0][-]{chapter.11}{Bibliographie}{part.4}% 59

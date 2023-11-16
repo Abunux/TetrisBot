@@ -90,10 +90,10 @@ def menuFiltering():
 
 
 def menuEvaluation():
-    c1 = inputFloat("Coeff 0 (nb_lines)", 0.8)
-    c2 = inputFloat("Coeff 1 (sum_heights)", 0.6)
-    c3 = inputFloat("Coeff 2 (nb_holes)", 0.4)
-    c4 = inputFloat("Coeff 3 (bumpiness)", 0.2)
+    c1 = inputFloat("Coeff 0 (nb_lines)", 0.3908)
+    c2 = inputFloat("Coeff 1 (sum_heights)", 0.4556)
+    c3 = inputFloat("Coeff 2 (nb_holes)", 0.7771)
+    c4 = inputFloat("Coeff 3 (bumpiness)", 0.1892)
     coeffs = [c1, c2, c3, c4]
     return AgentEvaluation(eval_coeffs=coeffs)
 
